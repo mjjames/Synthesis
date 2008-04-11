@@ -1,0 +1,205 @@
+﻿
+/**** default wrapper ****/
+body 
+{
+	font-family: Arial, Sans-Serif;
+	background: #dbe5f3;
+	font-size: 75%;
+}
+
+#wrapper
+{
+	border: solid 5px white;
+	border-width: 0 5px 5px 5px;
+	background: #bed2ee;
+}
+
+#header
+{
+	background: #8799FF;
+	border-bottom: solid 5px white;
+}
+
+#navbar ul
+{
+	border: solid 1px white;
+	border-width: 1px 0;
+}
+
+#navbar ul li
+{
+	border-right: solid 1px white;
+	font-size: 1em;
+	color: #fff;
+}
+
+#navbar ul li a
+{
+	color: #fff;
+	text-decoration: none;
+	text-align: center;
+	
+}
+
+#navbar ul li a:hover
+{
+	text-decoration: underline;
+}
+
+#copyrightinfo
+{
+	color: White;
+	font-size: 0.85em;	
+}
+
+#copyrightinfo a
+{
+	color: White;
+	text-decoration: none;
+}
+
+#copyrightinfo a:hover
+{
+	text-decoration: underline;	
+}
+
+h1.listingTitle
+{
+	font-size: 1.5em;
+	color: #fff;
+	font-weight: normal;
+	text-transform:capitalize;
+	line-height:normal;
+}
+
+/**** pageListing ****/
+
+.addPage
+{
+	text-align: right;	
+	color: #fff;
+	font-weight: bold;
+}
+
+.backUp, .addBanner
+{
+	text-align: left;
+	color: #fff;
+	font-weight: bold;
+}
+
+.backUp:hover, .addBanner:hover, .addPage:hover
+{
+	color: #f5f5f5;
+}
+.pageListing
+{
+	
+}
+
+.pageListHeader
+{
+	
+}
+.pageListRow
+{
+}
+
+.pageListRowAlternate
+{
+}
+
+.pageListFooter
+{
+}
+
+
+/**** edit / add page ****/
+
+#pageStatus
+{
+ color: #fff;   
+ font-weight: bold;
+ font-size: 1.5em;   
+}
+
+span.label
+{
+ font-weight: bold;
+ text-transform: capitalize;
+ font-size: 1em;
+ color: #fff; 
+
+}
+
+.editTextArea
+{
+    font: arial;
+}
+
+h4.title
+{
+    background: #849AFF;
+    color: #fff;
+    text-align: center;
+    border-bottom: 2px solid #fff;
+}
+
+span.thumbnail
+{
+	border: 1px solid #ABADB3;
+    background: #fff;
+}
+div.previewbanner
+{
+    border: 2px solid #fff;
+    background: #fff;
+}
+
+.listingTable
+{
+    border-color: #fff;
+}
+
+.listingTable th
+{
+    background: #8799FF;
+}
+
+.listingTable th a
+{
+    color: #fff;
+}
+
+.listingTable th a:hover
+{
+    color: #dedede;
+}
+
+.listingTable td a
+{
+    color: #333;
+}
+
+.listingTable td a:hover{
+    color: #000;
+}
+
+.addBanner, .user
+{
+    text-align: right;
+}
+
+#leftCol{
+	border-right: 2px solid #fff;
+	border-bottom: 2px solid #fff;
+	height: 100%;
+}
+
+#leftCol a{
+	color: #fff;
+}
+
+#leftCol a:hover{
+	text-decoration: underline;
+}

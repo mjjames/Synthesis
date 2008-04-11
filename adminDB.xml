@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tables>
+    <table id="pages">
+        <defaults>
+            <field id="page_key" label="primary_key" type="hidden"/>
+            <field id="page_fkey" label="foreign key" type="hidden" />
+            <field id="pageid" label="page id" type="text" maxlength="12"/>
+            <field id="navtitle" label="Navigation Title" type="text" />
+            <field id="accesskey" label="accesskey" type="text" maxlength="1" />
+            <field id="metadescription" label="Meta Description" type="text" rows="4" />
+            <field id="metakeywords" label="Meta Keywords" type="text" rows="4" />
+            <field id="title" label="Page Title" type="text" />
+            <field id="body" label="Content" type="rte" />
+            <field id="thumbnailimage" label="Thumbnail" type="file" preview="enabled" />
+            <field id="showinnav" label="Main Navigation" type="checkbox" />
+            <field id="showinfeaturednav" label="Side Navigation" type="checkbox" />
+            <field id="showonhome" label="Show on HomePage" type="checkbox" />
+            <field id="showinfooter" label="Footer Navigation" type="checkbox" />
+            <field id="active" label="Active" type="checkbox" />
+            <field id="sortorder" label="Main Nav SortOrder" type="text" maxlength="2" />
+            <field id="linkurl" label="Link to Another Page" type="text" />
+        </defaults>
+        <tabs>
+            <tab id="main" label="Contents">
+                <field id="page_key" />
+                <field id="page_fkey" />
+                <field id="navtitle" />
+                <field id="title" />
+                <field id="body" />
+                <field id="linkurl" />
+                <field id="active" />
+            </tab>
+            <tab id="nav" label="Navigations">
+                <field id="showinnav" />
+                <field id="sortorder" />
+                <field id="showinfooter"/>
+                <field id="accesskey" />
+            </tab>
+            <tab id="seo" label ="SEO">
+                <field id="metadescription" />
+                <field id="metakeywords" />
+            </tab>
+            <tab id="uploads" label="Uploads">
+                <field id="thumbnailimage"/>
+            </tab>
+            <tab id="mjjames" label="MJJames Only">
+                <field id="pageid" />
+            </tab>
+        </tabs>
+    </table>
+</tables>

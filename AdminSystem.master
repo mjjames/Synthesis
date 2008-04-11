@@ -1,0 +1,43 @@
+<%@ Master Language="C#" %>
+<%@ Register TagPrefix="mjjames" Namespace="mjjames" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head runat="server">
+    <title>mjjames - Administration System - Version 1.2 Beta</title>
+    <link rel="stylesheet" type="text/css" href="~/styles/web.css" />
+</head>
+<body>
+    <div id="wrapper">
+        <form id="form1" runat="server">
+        <div id="header">
+                  
+            <div id="headerimage">
+                <img src="../images/logo.png" alt=""/>
+            </div>
+            <div id="banner">
+                <!--<p class="user">Current User: <asp:LoginName ID="loginName" runat="server"  CssClass="loginName" /> </p> -->
+            </div>
+            <div id="navbar">
+	            <mjjames:adminToolbar runat="server" id="adminToolbar" accesslevel="1"/>
+		        
+            </div>
+        </div>
+        <div id="body">
+            <asp:contentplaceholder id="ContentPlaceHolder1" runat="server" >
+            </asp:contentplaceholder>
+        </div>
+        <div id="footer">
+            <div id="footernav">
+                
+            </div>
+            <div id="copyrightinfo">
+                &copy; <%=DateTime.Now.Year %> <a href="http://mjjames.co.uk">mjjames Technologies</a>
+            </div>
+            <br class="clear"/>
+        </div>
+        </form>
+    </div>
+</body>
+</html>

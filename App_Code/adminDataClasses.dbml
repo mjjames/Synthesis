@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="tedgiffords" Class="adminDataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=ENTERPRISE\SQLExpress;Initial Catalog=tedgiffords;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="tedgiffordsConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.page" Member="pages">
+    <Type Name="page">
+      <Column Name="page_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="page_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="pageid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="navtitle" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="accesskey" Type="System.Char" DbType="NChar(1)" CanBeNull="true" />
+      <Column Name="metadescription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="metakeywords" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="body" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="thumbnailimage" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="showinnav" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="showinfeaturednav" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="showonhome" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="showinfooter" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="sortorder" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="linkurl" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.banners" Member="banners">
+    <Type Name="banner">
+      <Column Name="bannerdid" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="image" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="alttext" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="url" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="category" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="randomness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.lookup" Member="lookups">
+    <Type Name="lookup">
+      <Column Name="lookup_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="lookup_id" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="value" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="active" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

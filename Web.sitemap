@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+	<siteMapNode url="" title="Admin Home"  description="Site Administration Home Page">
+		<siteMapNode url="" title="Page Administration"  description="Site Content Administration">
+			<siteMapNode url="~/editpage.aspx" title="Edit Page" description="Allows You To Edit &amp; Insert New Pages" />
+		</siteMapNode>
+		<siteMapNode url="~/media.aspx" title="Media"  description="Upload and Administer Media" />
+	</siteMapNode>
+</siteMap>

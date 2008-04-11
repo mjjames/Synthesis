@@ -1,0 +1,252 @@
+﻿.clear
+{
+	clear:both;
+}
+
+body
+{
+	
+}
+#wrapper
+{
+	position: relative;
+	width: 90%;
+	margin: auto;
+}
+
+#header
+{
+	position: relative;
+	padding: 0 0em;
+	width: 100%;
+}
+#headerimage
+{
+	float: left;
+	width: 40%;
+}
+
+#banner
+{
+	padding-left: 41%;
+	width: 38%;
+}
+
+#navbar
+{
+	clear:both;
+	position: relative;
+	width:100%;
+	margin: 0;
+	padding: 0;
+}
+
+#navbar ul
+{
+	margin: 0;
+	padding: 0;
+	line-height: 2em;
+}
+
+#navbar ul li
+{
+	position: relative;
+	display: inline;
+	margin: 0;
+	padding: 0.4em 10px;
+	list-style: none;
+}
+
+#navbar ul li a
+{
+	margin: 0;
+	padding: 0;
+}
+
+
+#body
+{
+	position: relative;
+	width: auto;
+	padding: 0.25em	 0.5em;
+	min-height: 400px;
+}
+
+#footer
+{
+	clear: both;
+	position: relative;
+	width: 100%;
+}
+
+
+#copyrightinfo
+{
+	position: relative;
+	float: right;
+	width: 45%;
+	text-align: right;
+	margin: 0.25em;
+}
+
+
+h1.listingTitle
+{
+	padding:0;
+	margin: 0;
+}
+
+/* pageListing */
+
+.addPage
+{
+	position: relative;
+	width: 50%;
+	float: right;
+	margin: 1em 0 0.5em;
+	
+}
+
+.backUp, .pageBanner
+{
+	position: relative;
+	width: 50%;
+	float: left;
+	margin: 1em 0 0.5em;
+}
+
+
+.pageListHeader
+{
+	
+}
+.pageListRow
+{
+}
+
+.pageListRowAlternate
+{
+}
+
+.pageListFooter
+{
+}
+
+/**** edit / add page ****/
+
+.backListing
+{
+    float: left;
+    color: #fff;
+    font-weight: bold;
+}
+
+.subPages
+{
+    float: right;
+    color: #fff;
+    font-weight: bold;
+}
+
+.row
+{
+    clear:both;
+    position: relative;
+}
+
+span.label
+{
+ position: relative;
+ width: 12em;   
+ font-weight: bold;
+ display: block;
+ float: left;
+ text-transform: capitalize;
+ font-size: 1em;
+ color: #fff; 
+
+}
+
+span.field
+{
+    float: left;
+}
+
+.editLabel
+{
+}
+
+div.banners
+{
+    margin-top: 0.5em;
+}
+
+div .previewbanner
+{
+    width: 600px;
+    margin: 1em auto;
+}
+
+span.thumbnail
+{
+	margin: 0.25em 0;
+	padding:0.25em;
+}
+
+.previewThumbnailIMG
+{
+    width: 124px;
+}
+
+h4.title
+{
+    padding:0;
+    margin:0;
+    display: block;
+    position: relative;
+    clear: both;
+    width: 100%;
+}
+
+.treeView{
+    clear: both;
+    margin-top: 1em;  
+	width: 25%;  
+	float: left;
+}
+
+.listingTable
+{
+	position: relative;
+	width: 90%;
+}
+
+.listingTable td, .listingTable th
+{
+    padding: 0.25em;
+}
+
+
+.addBanner
+{
+    float:right;
+    position:relative;
+    width:50%;   
+}
+
+#colContainer{
+	position: relative;
+	clear:both;
+	width: 100%;
+	margin-top: 1em;  
+}
+
+#leftCol{
+	width: 20%;
+	float: left;
+}
+
+#rightCol{
+	width: 78%;
+	padding-left: 21%;
+}

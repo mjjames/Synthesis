@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Segoe UI" Size="9" />
+  <Class Name="mjjames.adminToolbar" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>App_Code\adminControls.cs</FileName>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAIAAAAEQAAIAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ASPNET2Configuration" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>App_Code\ASPNET2Configuration.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ASPNET2ConfigurationState" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>App_Code\ASPNET2ConfigurationState.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAABAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ASPNET2ConfigurationStateCollection" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>App_Code\ASPNET2ConfigurationStateCollection.cs</FileName>
+      <HashCode>AAACAAAAAAAAAAAACAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>

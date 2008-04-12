@@ -1,17 +1,9 @@
-using System;
-using System.Data;
 using System.Configuration;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
 
 /// <summary>
-/// Summary description for ASPNET2ConfigurationState
+/// Summary description for AdminToolboxState
 /// </summary>
-public class ASPNET2ConfigurationState : ConfigurationElement
+public class AdminToolboxState : ConfigurationElement
 {
     [ConfigurationProperty("name", IsRequired = true)]
     public string name

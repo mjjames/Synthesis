@@ -54,14 +54,15 @@ namespace mjjames
             String strLink = "";
             String strName = "";
             String strAccessLevel = "";
-            if (ASPNET2Configuration.GetConfig().adminControls.Count == 0)
+			AdminToolbox ourToolBox = AdminToolbox.GetConfig();
+            if (ourToolBox == null)
             {
                 // Web Config is broken need to have some handler code here
 				throw new Exception("Web.Config is missing MJJames ToolBars");
             }
             else
             {
-                foreach (ASPNET2ConfigurationState control in ASPNET2Configuration.GetConfig().adminControls)
+                foreach (AdminToolboxState control in ourToolBox.adminControls)
                 {
                     strName = control.name.ToString();
                     strLink = control.url.ToString();

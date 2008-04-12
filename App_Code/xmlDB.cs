@@ -52,12 +52,26 @@ namespace mjjames.admin
 		/// </summary>
 		public xmlDB()
 		{
-			sXMLFile = (string)ConfigurationManager.AppSettings["adminConfigxml"];
-			string sFilePath = HttpContext.Current.Server.MapPath(sXMLFile);
-			xdXML = XDocument.Load(sFilePath);
-			HttpContext.Current.Trace.Write("adminConfigxml: " + sFilePath);
+			sXMLFile = (string)ConfigurationManager.AppSettings["adminConfigXML"];
+			try
+			{
+				if (sXMLFile == null)
+				{
+					throw new Exception("Error: No Admin Config XML Specified");
+				}
+				string sFilePath = HttpContext.Current.Server.MapPath(sXMLFile);
+
+				xdXML = XDocument.Load(sFilePath);
+				HttpContext.Current.Trace.Write("adminConfigxml: " + sFilePath);
+
+				adminDC = new adminDataClassesDataContext();
+			}
+			catch (Exception e)
+			{
+				HttpContext.Current.Response.Write(e.Message);
+				HttpContext.Current.Response.End();
+			}
 			
-			adminDC = new adminDataClassesDataContext();
 		}
 
 		private void buildAdminTable()
@@ -157,6 +171,7 @@ namespace mjjames.admin
 							ourControl.TextMode = TextBoxMode.MultiLine;
 							ourControl.Rows = iRows;
 							ourControl.Wrap = true;
+							ourControl.Columns = 40;
 						}
 					}
 					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
@@ -181,6 +196,7 @@ namespace mjjames.admin
 					fckEditor.FormatSource = true;
 					fckEditor.EnableSourceXHTML = true;
 					fckEditor.Config["HtmlEncodeOutput"] = "true";
+					fckEditor.Height = Unit.Pixel(450);
 
 					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
 					if (iPKey > 0 && ourProperty != null)
@@ -197,7 +213,7 @@ namespace mjjames.admin
 					ourCheckBox.ID = "control" + field.ID;
 					ourCheckBox.CssClass = "field";
 
-					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(bool));
+					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(bool?));
 					if (iPKey > 0 && ourProperty != null)
 					{
 						bool ourValue = (bool)ourProperty.GetValue(ourPage, null);
@@ -218,6 +234,7 @@ namespace mjjames.admin
 						ourHidden.Value = "" + ourValue;
 						HttpContext.Current.Trace.Warn("Rendering Control Value: " + ourHidden.Value);
 					}
+					ourLabel.CssClass = "hidden";
 					ourContainer.Controls.Add(ourHidden);
 					break;
 
@@ -264,6 +281,9 @@ namespace mjjames.admin
 							imagePreview.ID = "image" + field.ID;
 							imagePreview.Width = 200;
 							imagePreview.ImageUrl = null;
+							imagePreview.BorderColor = System.Drawing.Color.Black;
+							imagePreview.BorderStyle = BorderStyle.Ridge;
+							imagePreview.BorderWidth = Unit.Pixel(2);
 
 							string strDir = ConfigurationManager.AppSettings["uploaddir"];
 							imagePreview.ImageUrl = strDir + ourFileValue;

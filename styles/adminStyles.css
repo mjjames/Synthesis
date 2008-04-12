@@ -1,205 +1,181 @@
 ﻿
 /**** default wrapper ****/
-body 
-{
+body {
 	font-family: Arial, Sans-Serif;
 	background: #dbe5f3;
 	font-size: 75%;
 }
 
-#wrapper
-{
+#wrapper {
 	border: solid 5px white;
 	border-width: 0 5px 5px 5px;
 	background: #bed2ee;
 }
 
-#header
-{
+#header {
 	background: #8799FF;
 	border-bottom: solid 5px white;
 }
 
-#navbar ul
-{
+#navbar ul {
 	border: solid 1px white;
 	border-width: 1px 0;
 }
 
-#navbar ul li
-{
+#navbar ul li {
 	border-right: solid 1px white;
 	font-size: 1em;
 	color: #fff;
 }
 
-#navbar ul li a
-{
+#navbar ul li a {
 	color: #fff;
 	text-decoration: none;
 	text-align: center;
-	
 }
 
-#navbar ul li a:hover
-{
+#navbar ul li a:hover {
 	text-decoration: underline;
 }
 
-#copyrightinfo
-{
+#copyrightinfo {
 	color: White;
-	font-size: 0.85em;	
+	font-size: 0.85em;
 }
 
-#copyrightinfo a
-{
+#copyrightinfo a {
 	color: White;
 	text-decoration: none;
 }
 
-#copyrightinfo a:hover
-{
-	text-decoration: underline;	
+#copyrightinfo a:hover {
+	text-decoration: underline;
 }
 
-h1.listingTitle
-{
+h1.listingTitle, h2 {
 	font-size: 1.5em;
 	color: #fff;
 	font-weight: normal;
-	text-transform:capitalize;
-	line-height:normal;
+	text-transform: capitalize;
+	line-height: normal;
+	background:#8799FF none repeat scroll 0% 50%;
+	border-color:white;
+	border-style:solid;
+	border-width:2px 0pt;
+}
+
+h2{
+	font-size:1.25em;
 }
 
 /**** pageListing ****/
 
-.addPage
-{
-	text-align: right;	
+.addPage, .subPages {
+	text-align: right;
 	color: #fff;
 	font-weight: bold;
 }
 
-.backUp, .addBanner
-{
+.backUp, .addBanner, .backListing {
 	text-align: left;
 	color: #fff;
 	font-weight: bold;
 }
 
-.backUp:hover, .addBanner:hover, .addPage:hover
-{
+.backUp:hover, .addBanner:hover, .addPage:hover, .backListing:hover, .subPages:hover {
 	color: #f5f5f5;
 }
-.pageListing
-{
-	
+.pageListing {
 }
 
-.pageListHeader
-{
-	
+.pageListHeader {
 }
-.pageListRow
-{
+.pageListRow {
 }
 
-.pageListRowAlternate
-{
+.pageListRowAlternate {
 }
 
-.pageListFooter
-{
+.pageListFooter {
 }
 
 
 /**** edit / add page ****/
 
-#pageStatus
-{
- color: #fff;   
- font-weight: bold;
- font-size: 1.5em;   
+#pageStatus {
+	color: #fff;
+	font-weight: bold;
+	font-size: 1.5em;
 }
 
-span.label
-{
- font-weight: bold;
- text-transform: capitalize;
- font-size: 1em;
- color: #fff; 
 
+.label {
+	text-transform: capitalize;
+	font-size: 1em;
 }
 
-.editTextArea
-{
-    font: arial;
+.editTextArea {
+	font: arial;
 }
 
-h4.title
-{
-    background: #849AFF;
-    color: #fff;
-    text-align: center;
-    border-bottom: 2px solid #fff;
+h4.title {
+	background: #849AFF;
+	color: #fff;
+	text-align: center;
+	border-bottom: 2px solid #fff;
 }
 
-span.thumbnail
-{
+span.thumbnail {
 	border: 1px solid #ABADB3;
-    background: #fff;
+	background: #fff;
 }
-div.previewbanner
-{
-    border: 2px solid #fff;
-    background: #fff;
-}
-
-.listingTable
-{
-    border-color: #fff;
+div.previewbanner {
+	border: 2px solid #fff;
+	background: #fff;
 }
 
-.listingTable th
-{
-    background: #8799FF;
+.listingTable {
+	border-color: #fff;
 }
 
-.listingTable th a
-{
-    color: #fff;
+.listingTable th {
+	background: #8799FF;
 }
 
-.listingTable th a:hover
-{
-    color: #dedede;
+.listingTable th a {
+	color: #fff;
 }
 
-.listingTable td a
-{
-    color: #333;
+.listingTable th a:hover {
+	color: #dedede;
 }
 
-.listingTable td a:hover{
-    color: #000;
+.listingTable td a {
+	color: #333;
 }
 
-.addBanner, .user
-{
-    text-align: right;
+.listingTable td a:hover {
+	color: #000;
 }
 
-#leftCol{
+.addBanner, .user {
+	text-align: right;
+}
+
+#leftCol {
 	border-right: 2px solid #fff;
 	border-bottom: 2px solid #fff;
 	height: 100%;
 }
 
-#leftCol a{
+#leftCol a {
 	color: #fff;
 }
 
-#leftCol a:hover{
+#leftCol a:hover {
 	text-decoration: underline;
+}
+
+.previewImg{
+	border: 2px solid back;	
 }

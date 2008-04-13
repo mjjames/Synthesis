@@ -21,7 +21,6 @@ using System.Reflection;
 
 
 
-[System.Data.Linq.Mapping.DatabaseAttribute(Name="tedgiffords")]
 public partial class adminDataClassesDataContext : System.Data.Linq.DataContext
 {
 	
@@ -41,7 +40,7 @@ public partial class adminDataClassesDataContext : System.Data.Linq.DataContext
   #endregion
 	
 	public adminDataClassesDataContext() : 
-			base(global::System.Configuration.ConfigurationManager.ConnectionStrings["tedgiffordsConnectionString"].ConnectionString, mappingSource)
+			base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString, mappingSource)
 	{
 		OnCreated();
 	}

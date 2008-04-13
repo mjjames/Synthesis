@@ -4,5 +4,26 @@
         <name>jQueryWebControl</name>
     </assembly>
     <members>
+        <member name="M:mjjames.WebControls.jQuery.Render(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            render method
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="P:mjjames.WebControls.jQuery.Type">
+            <summary>
+            Allows you to specify which jQuery version you want, normal, min, packed - includes a basic check to ensure we dont try to load an invalid type
+            </summary>
+        </member>
+        <member name="P:mjjames.WebControls.jQuery.Path">
+            <summary>
+            Allows you to specify the location of the jQuery files
+            </summary>
+        </member>
+        <member name="P:mjjames.WebControls.jQuery.Version">
+            <summary>
+            Specifies the version of jQuery to load 1.2.2 etc
+            </summary>
+        </member>
     </members>
 </doc>

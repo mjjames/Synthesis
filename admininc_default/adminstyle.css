@@ -1,0 +1,17 @@
+﻿#header{
+	background: #fff;
+}
+
+#navbar ul
+{
+	border: solid 1px #8799FF;
+	border-width: 1px;
+}
+
+#navbar ul li{
+	border-color: #8799FF;
+}
+
+#navbar ul li a{
+	color: #8799FF;
+}

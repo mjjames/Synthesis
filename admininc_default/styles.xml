@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Styles>
+	<Style name="Image on Left" element="img">
+		<Attribute name="style" value="float: left; padding: 5px; margin-right: 5px" />
+	</Style>
+	<Style name="Image on Right" element="img">
+		<Attribute name="style" value="float: right; padding: 5px; margin-left: 5px" />
+	</Style>
+	<Style name="Bold" element="span">
+		<Attribute name="style" value="font-weight: bold;" />
+	</Style>
+	<Style name="Italic" element="em" />
+	<Style name="Clear Float" element="p">
+		<Attribute name="style" value="clear: both;" />
+	</Style>
+</Styles>

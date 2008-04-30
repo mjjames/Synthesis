@@ -6,16 +6,9 @@ namespace mjjames
     using System.Web.UI.HtmlControls;
     using System.Web.UI.WebControls;
     using System.Text; //string builder
-    using System.Collections;
-    using System.Drawing;
 
-    using System.Collections.Specialized;
-    using System.Configuration;
-    using System.Web.Configuration;
-    using System.Collections.Generic;
-    using System.Configuration.Provider;
 
-    public class adminToolbar : WebControl
+	public class adminToolbar : WebControl
     {
         private int intAccessLevel = 0; //lets default to show nothing
 
@@ -27,24 +20,12 @@ namespace mjjames
 
         protected override void CreateChildControls()
         {
-            StringBuilder strToolbox;
-            strToolbox = new StringBuilder();
-            strToolbox.AppendLine("<ul class=\"adminToolbar\">");
-            strToolbox.AppendLine("<li class=\"home\">");
-            strToolbox.AppendLine("<a href=\"./\" accesskey=\"1\" title=\"Home\"> Home </a>");
-            strToolbox.AppendLine("</li>");
+			HtmlGenericControl ul = new HtmlGenericControl("ul");
+			ul.Attributes.Add("class", "adminToolbar");
+			ul.Controls.Add(makeLinkItem("Home", "~/"));
 
-            LiteralControl lcToolbox = new LiteralControl();
-
-            lcToolbox.Text = strToolbox.ToString();
-
-            Controls.Add(lcToolbox);  //add our ul and home link
-            Controls.Add(buildToolbar());
-            strToolbox = new StringBuilder();
-            strToolbox.AppendLine("</ul>");
-            LiteralControl lcToolbox2 = new LiteralControl();
-            lcToolbox2.Text = strToolbox.ToString();
-            Controls.Add(lcToolbox2); //close it all up
+			ul.Controls.Add(buildToolbar());
+            Controls.Add(ul);  //add our ul and home link
         }
 
 
@@ -76,16 +57,17 @@ namespace mjjames
             return ccConfigControls;
         }
 
-        private LiteralControl makeLinkItem(string linkText, string linkURL)
+        private HtmlControl makeLinkItem(string linkText, string linkURL)
         {
-            StringBuilder strToolboxLink;
-            strToolboxLink = new StringBuilder();
-            strToolboxLink.AppendLine("<li>");
-            strToolboxLink.AppendLine("<a href=\"" + linkURL + "\" title=\"" + linkText + "\">" + linkText + "</a>");
-            strToolboxLink.AppendLine("</li>");
-            LiteralControl lcLink = new LiteralControl();
-            lcLink.Text = strToolboxLink.ToString();
-            return lcLink;
+			HtmlGenericControl hc = new HtmlGenericControl("li");
+			
+            HyperLink hl = new HyperLink();
+			hl.Text = linkText;
+			hl.NavigateUrl = linkURL;
+
+			hc.Controls.Add(hl);
+            
+            return hc;
         }
     }
 }

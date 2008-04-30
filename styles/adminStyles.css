@@ -52,7 +52,7 @@ body {
 	text-decoration: underline;
 }
 
-h1.listingTitle, h2 {
+h1.listingTitle, h2{
 	font-size: 1.5em;
 	color: #fff;
 	font-weight: normal;
@@ -66,6 +66,10 @@ h1.listingTitle, h2 {
 
 h2{
 	font-size:1.25em;
+}
+
+.signout{
+	color: #8799FF;
 }
 
 /**** pageListing ****/
@@ -178,4 +182,20 @@ div.previewbanner {
 
 .previewImg{
 	border: 2px solid back;	
+}
+
+/* login */
+
+#loginWrapper{
+	border: 1px solid #fff;
+	color: #000;
+}
+
+#centerBG{
+	opacity: 0.30;
+	background:#fff;
+}
+
+#centerBG{
+	filter:alpha(opacity="30");
 }

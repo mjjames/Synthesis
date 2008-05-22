@@ -41,7 +41,7 @@
     </asp:SqlDataSource>
     
     <h1 class="listingTitle">
-        Current Banners
+       Banner Manager: Banner Listing
     </h1>
     
     <asp:LinkButton ID="buttonAddBanner" runat="server"  CssClass="addBanner"

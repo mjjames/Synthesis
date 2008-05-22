@@ -8,7 +8,7 @@
 	<div id="adminContent">
 		<p>        
 			Please choose an area to administer using the navigation bar.<br />
-			<strike>more help and information use the Help button on any page.(Not Currently Available)</strike>         
+			for more help and information refer to the <a href="help/admintool.pdf" title="MJJames Admin Tool User Guide">user guide </a>or <strike>use the Help button on any page.(Not Currently Available)</strike>         
 		</p>
 		<p> For all Bug Requests and for support please visit your <a href="http://development.mjjames.co.uk/bugtracker/">bug tracker</a> and submit a report.</p>
 	</div>

@@ -58,10 +58,16 @@
             <asp:BoundField DataField="url" HeaderText="Linked to URL" SortExpression="url" />
             <asp:BoundField DataField="category" HeaderText="Banner Category" SortExpression="category" />
             <asp:BoundField DataField="randomness" HeaderText="Randomness" SortExpression="randomness" />
-            <asp:CommandField ShowDeleteButton="True"   />
+            <asp:CommandField ShowDeleteButton="True"  ControlStyle-CssClass="buttonDelete"  />
         </Columns>
     </asp:GridView>
-
+    <mjjames:jsLoader id="jquery" runat="server" JSLibrary="jquery" />
+	<script type="text/javascript">
+		$(".buttonDelete").click(function(){
+			var bDelete = confirm("Are You Sure You Want To Delete This Banner?");
+			return bDelete;
+		});
+	</script>
 
 </asp:Content>
 

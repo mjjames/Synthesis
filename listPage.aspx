@@ -29,21 +29,21 @@
 				<asp:LinkButton ID="linkbuttonBack" runat="server" CssClass="backUp" ToolTip="Up a Level" PostBackUrl="~/editPage_ajax.aspx" Visible="true" EnableViewState="False">
 					&lt; &lt; Up a Level
 				</asp:LinkButton>
-				<asp:LinkButton ID="buttonAddPage" runat="server" CssClass="addPage" ToolTip="Add a New Page" PostBackUrl="~/editpage_ajax.aspx">
+				<asp:LinkButton ID="buttonAddPage" runat="server" CssClass="addPage" ToolTip="Add a New Page" PostBackUrl="~/editpage_ajax.aspx" Enabled="false" Visible="false">
 					Add Page
 				</asp:LinkButton>
 			</div>
 			<asp:GridView ID="pageListing" runat="server" AllowPaging="True" AllowSorting="True"
 				AutoGenerateColumns="False" DataKeyNames="page_key,page_fkey" DataSourceID="SqlDataSource1"
 				OnSelectedIndexChanged="GridView1_SelectedIndexChanged" EnableViewState="False"
-				DataMember="DefaultView" CssClass="listingTable">
+				DataMember="DefaultView" CssClass="listingTable" On>
 				<Columns>
 					<asp:CommandField ShowSelectButton="True" SelectText="Edit" />
 					<asp:BoundField DataField="navtitle" HeaderText="Nav Title" SortExpression="navtitle" />
 					<asp:BoundField DataField="title" HeaderText="Page Title" SortExpression="title" />
 					<asp:BoundField DataField="sortorder" HeaderText="Page Sort Order" SortExpression="sortorder" />
 					<asp:BoundField DataField="active" HeaderText="Active" SortExpression="active" />
-					<asp:CommandField ShowDeleteButton="True" />
+					<asp:CommandField ShowDeleteButton="True" ControlStyle-CssClass="buttonDelete"  />
 				</Columns>
 				<EmptyDataTemplate>
 					Currently there are no pages within this section
@@ -55,4 +55,11 @@
 			</asp:GridView>
 		</div>
 	</div>
+    <mjjames:jsLoader id="jquery" runat="server" JSLibrary="jquery" />
+	<script type="text/javascript">
+		$(".buttonDelete").click(function(){
+			var bDelete = confirm("Are You Sure You Want To Delete This Page?");
+			return bDelete;
+		});
+	</script>
 </asp:Content>

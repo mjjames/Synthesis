@@ -20,6 +20,8 @@ public partial class listPage : System.Web.UI.Page
         {
 			if(!buttonAddPage.PostBackUrl.Contains("fkey=")){
 				buttonAddPage.PostBackUrl = buttonAddPage.PostBackUrl + "?fkey=" + Request.QueryString["fkey"];
+				buttonAddPage.Enabled = true;
+				buttonAddPage.Visible = true;
 			}
 			if (!linkbuttonBack.PostBackUrl.Contains("id="))
 			{

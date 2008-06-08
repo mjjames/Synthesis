@@ -23,8 +23,8 @@ namespace mjjames.admin
 		private string sXMLFile;
 		private XDocument xdXML;
 		private adminDataClassesDataContext adminDC;
-		private int iPKey;
-		private int iFKey;
+		private int _iPKey;
+		private int _iFKey;
 		private AdminTable atTable;
 
 		/// <summary>
@@ -40,12 +40,12 @@ namespace mjjames.admin
 		/// <summary>
 		/// provide the tables primary key for databinding
 		/// </summary>
-		public int PrimaryKey { set { iPKey = value; } get { return iPKey; } }
+		public int PrimaryKey { set { _iPKey = value; } get { return _iPKey; } }
 
 		/// <summary>
 		/// provides the tables foreign key for linking
 		/// </summary>
-		public int ForeignKey { set { iFKey = value; } get { return iFKey; } }
+		public int ForeignKey { set { _iFKey = value; } get { return _iFKey; } }
 
 		/// <summary>
 		/// constructor
@@ -126,7 +126,7 @@ namespace mjjames.admin
 		/// <summary>
 		/// Renders a WebControl for the field specified
 		/// </summary>
-		/// <param name="node">XMLNode to render a control for</param>
+		/// <param name="field">XMLNode to render a control for</param>
 		/// <param name="ourPage"></param>
 		/// <returns>PlaceHolder containing rendered control</returns>
 		private PlaceHolder RenderControl(AdminField field, page ourPage)
@@ -175,7 +175,7 @@ namespace mjjames.admin
 						}
 					}
 					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
-					if (iPKey > 0 && ourProperty != null)
+					if (_iPKey > 0 && ourProperty != null)
 					{
 						string ourValue = (string)ourProperty.GetValue(ourPage, null);
 						ourControl.Text = "" + ourValue;
@@ -199,7 +199,7 @@ namespace mjjames.admin
 					fckEditor.Height = Unit.Pixel(450);
 
 					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
-					if (iPKey > 0 && ourProperty != null)
+					if (_iPKey > 0 && ourProperty != null)
 					{
 						string ourValue = (string)ourProperty.GetValue(ourPage, null);
 						fckEditor.Value = HttpContext.Current.Server.HtmlDecode("" + ourValue);
@@ -214,7 +214,7 @@ namespace mjjames.admin
 					ourCheckBox.CssClass = "field";
 
 					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(bool?));
-					if (iPKey > 0 && ourProperty != null)
+					if (_iPKey > 0 && ourProperty != null)
 					{
 						bool ourValue = (bool)ourProperty.GetValue(ourPage, null);
 						ourCheckBox.Checked = ourValue;
@@ -228,9 +228,9 @@ namespace mjjames.admin
 					ourHidden.ID = "control" + field.ID;
 					HttpContext.Current.Trace.Warn("Rendering ControlID: "+ ourHidden.ID);
 					ourProperty = ourPage.GetType().GetProperty(field.ID);
-					if (iPKey > 0 &&  ourProperty != null)
+					if (_iPKey > 0 &&  ourProperty != null)
 					{
-						string ourValue = (ourProperty.GetValue(ourPage, null) + "").ToString();
+						string ourValue = (ourProperty.GetValue(ourPage, null) + "");
 						ourHidden.Value = "" + ourValue;
 						HttpContext.Current.Trace.Warn("Rendering Control Value: " + ourHidden.Value);
 					}
@@ -265,7 +265,7 @@ namespace mjjames.admin
 					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
 					string ourFileValue = "";
 
-					if (iPKey > 0 && ourProperty != null)
+					if (_iPKey > 0 && ourProperty != null)
 					{
 						ourFileValue = (string)ourProperty.GetValue(ourPage, null);
 						fileHidden.Value = ourFileValue;
@@ -406,14 +406,17 @@ namespace mjjames.admin
 						select p;
 
 			page ourPage = new page();
-			if (iPKey > 0)
+			if (_iPKey > 0)
 			{
-				ourPage = pages.Single(p => p.page_key == iPKey);
+				ourPage = pages.Single(p => p.page_key == _iPKey);
 			}
 
-			if (iFKey > 0)
+			if (_iFKey > 0)
 			{
-				ourPage.page_fkey = iFKey;
+				ourPage.page_fkey = _iFKey;
+			}else
+			{
+			    _iFKey = ourPage.page_fkey.Value;
 			}
 			
 
@@ -475,7 +478,7 @@ namespace mjjames.admin
 			ourPage.Controls.Add(saveButton);
 			ourPage.Controls.Add(cancelButton);
 			
-			if (iPKey > 0) //this is optional
+			if (_iPKey > 0) //this is optional
 			{
 				Button deleteButton = new Button();
 				deleteButton.Text = "Delete";
@@ -493,8 +496,8 @@ namespace mjjames.admin
 		/// <summary>
 		/// Finds a Control recursively. Note finds the first match and exists
 		/// </summary>
-		/// <param name="ContainerCtl"></param>
-		/// <param name="IdToFind"></param>
+		/// <param name="Root"></param>
+		/// <param name="Id"></param>
 		/// <returns></returns>
 
 		public static Control FindControlRecursive(Control Root, string Id)
@@ -534,11 +537,8 @@ namespace mjjames.admin
 
 						return int.Parse("" + ourTextBox.Text);
 					}
-					else
-					{
-						return Convert.ChangeType(ourTextBox.Text, ourType);
-					}
-					break;
+			        return Convert.ChangeType(ourTextBox.Text, ourType);
+			        break;
 				case "rte":
 					FCKeditor ourFCK = (FCKeditor)ourControl;
 					return ourFCK.Value;
@@ -589,7 +589,7 @@ namespace mjjames.admin
 			var pages = from p in adminDC.pages
 						select p;
 
-			page ourPage = pages.Single(p => p.page_key == iPKey);
+			page ourPage = pages.Single(p => p.page_key == _iPKey);
 			e.Result = ourPage;
 		}
 
@@ -623,9 +623,9 @@ namespace mjjames.admin
 			Button ourSender = (Button)sender;
 			adminDataClassesDataContext ourPageDataContext = new adminDataClassesDataContext();
 			page ourPageData = new page();
-			if (iPKey > 0)
+			if (_iPKey > 0)
 			{
-				ourPageData = ourPageDataContext.pages.Single(p => p.page_key == iPKey);
+				ourPageData = ourPageDataContext.pages.Single(p => p.page_key == _iPKey);
 			}
 			
 			var ourfields = from fields in atTable.Tabs
@@ -655,10 +655,10 @@ namespace mjjames.admin
 				}
 			}
 			
-			if (iPKey == 0)
+			if (_iPKey == 0)
 			{
 				ourPageDataContext.pages.InsertOnSubmit(ourPageData);
-				ourPageData.page_fkey = iFKey;
+				ourPageData.page_fkey = _iFKey;
 			}
 
 			Label labelStatus = (Label)FindControlRecursive(ourSender.Page,("labelStatus"));
@@ -673,16 +673,16 @@ namespace mjjames.admin
 				if (ourChanges.Inserts.Count > 0)
 				{
 					labelStatus.Text = "Page Inserted";
-					iPKey = ourPageData.page_key;
-					iFKey = (int)ourPageData.page_fkey;
+					_iPKey = ourPageData.page_key;
+					_iFKey = (int)ourPageData.page_fkey;
 					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "page_key");
 					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "controlpage_key");
-					ourControlPKey.Value = iPKey.ToString();
+					ourControlPKey.Value = _iPKey.ToString();
 					HiddenField ourControlFKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "controlpage_fkey");
-					ourControlFKey.Value = iFKey.ToString();
+					ourControlFKey.Value = _iFKey.ToString();
 					try
 					{
-						ourPKey.Value = iPKey.ToString();
+						ourPKey.Value = _iPKey.ToString();
 					}
 					catch
 					{
@@ -698,7 +698,7 @@ namespace mjjames.admin
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = "Page Update Failed: " + ex.ToString();
+				labelStatus.Text = "Page Update Failed: " + ex;
 			}
 		}
 
@@ -713,9 +713,9 @@ namespace mjjames.admin
 			Button ourSender = (Button)sender;
 			adminDataClassesDataContext ourPageDataContext = new adminDataClassesDataContext();
 			page ourPageData = new page();
-			if (iPKey > 0)
+			if (_iPKey > 0)
 			{
-				ourPageData = ourPageDataContext.pages.Single(p => p.page_key == iPKey);
+				ourPageData = ourPageDataContext.pages.Single(p => p.page_key == _iPKey);
 			}
 			Label labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
 			try
@@ -737,7 +737,7 @@ namespace mjjames.admin
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = "Page Removal Failed: " + ex.ToString();
+				labelStatus.Text = "Page Removal Failed: " + ex;
 			}
 		}
 	}

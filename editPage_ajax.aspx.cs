@@ -6,6 +6,7 @@ using System.Web.UI.HtmlControls;
 
 public partial class editPage_ajax : System.Web.UI.Page
 {
+    private int _iPageFKey;
     protected void Page_Load(object sender, EventArgs e)
     {
 		if (ConfigurationManager.AppSettings["SiteName"] != null)
@@ -20,7 +21,7 @@ public partial class editPage_ajax : System.Web.UI.Page
 		if (Request.QueryString.GetValues("id") != null && Request.QueryString["id"].Length > 0)
 		{
 			page_key.Value = Request.QueryString["id"];
-			buttonSubPages.Visible = true;
+			linkbuttonSubPages.Visible = true;
 			
 		}
 		if (page_key.Value.Length > 0)
@@ -29,23 +30,15 @@ public partial class editPage_ajax : System.Web.UI.Page
 		}
 		
 		//page.ForeignKey = 1;
-		if (Request.QueryString.GetValues("fkey") != null && Request.QueryString.GetValues("fkey").Length > 0)
+		if (Request.QueryString.GetValues("fkey") != null && Request.QueryString["fkey"].Length > 0)
 		{
 			page.ForeignKey = int.Parse(Request.QueryString["fkey"]);
 		}
 		placeholderTabs.Controls.Add(page.GeneratePage());
-		
+        _iPageFKey = page.ForeignKey;
+        ///ToDo This isnt working
+        ///
+        linkbuttonBack.PostBackUrl = string.Format("~/listpage.aspx?fkey={0}", _iPageFKey);
+        linkbuttonSubPages.PostBackUrl = string.Format("~/listpage.aspx?fkey={0}", int.Parse(Request.QueryString["id"].ToString()));
     }
-
-	protected void showSubPages(Object sender, EventArgs e)
-	{
-		Response.Redirect("~/listpage.aspx?fkey=" + Request.QueryString["id"]);
-	}
-	protected void showPageList(Object sender, EventArgs e)
-	{
-		Response.Redirect("~/listpage.aspx?fkey=" + Request.QueryString["fkey"]);
-	}
-
-
-
 }

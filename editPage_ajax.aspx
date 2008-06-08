@@ -24,13 +24,12 @@
 				<asp:Label ID="labelStatus" Text="Editing" runat="server" CssClass="status"></asp:Label>
 			</h2>
 			<div class="listingTable">
-				<asp:LinkButton ID="linkbuttonBack" runat="server" Style="position: relative" ToolTip="Back to Page Listing" PostBackUrl="#" Visible="true" EnableViewState="False" CausesValidation="false" OnClick="showPageList" CssClass="backListing">
+				<asp:LinkButton ID="linkbuttonBack" runat="server" Style="position: relative" ToolTip="Back to Page Listing" PostBackUrl="#" Visible="true" EnableViewState="False" CausesValidation="false" CssClass="backListing">
 					 &lt; &lt; Back to Page Listing
 				</asp:LinkButton>	
-				<asp:LinkButton ID="buttonSubPages" runat="server" Style="position: relative" CausesValidation="false" OnClick="showSubPages" ToolTip="Show SubPages" PostBackUrl="#" Visible="false" EnableViewState="False" CssClass="subPages">
+				<asp:LinkButton ID="linkbuttonSubPages" runat="server" Style="position: relative" CausesValidation="false" ToolTip="Show SubPages" PostBackUrl="#" Visible="false" EnableViewState="False" CssClass="subPages">
 					Sub Pages &gt; &gt;
 				</asp:LinkButton>
-			
 			</div>		
 			<div id="pageEditor" class="listingTable">
 				<asp:PlaceHolder ID="placeholderTabs" runat="server" />

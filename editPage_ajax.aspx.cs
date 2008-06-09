@@ -9,18 +9,20 @@ public partial class editPage_ajax : System.Web.UI.Page
     private int _iPageFKey;
     protected void Page_Load(object sender, EventArgs e)
     {
+        string sID = "";
+
 		if (ConfigurationManager.AppSettings["SiteName"] != null)
 		{
 			HtmlHead head = (HtmlHead)Page.Header;
-			head.Title = ConfigurationManager.AppSettings["SiteName"].ToString() + ": Admin - Edit Page";
+			head.Title = ConfigurationManager.AppSettings["SiteName"] + ": Admin - Edit Page";
 		}
-        mjjames.admin.xmlDB page = new mjjames.admin.xmlDB();
-        page.TableName = "pages";
-		
-		
-		if (Request.QueryString.GetValues("id") != null && Request.QueryString["id"].Length > 0)
+        mjjames.admin.xmlDB page = new mjjames.admin.xmlDB {TableName = "pages"};
+
+
+        if (Request.QueryString.GetValues("id") != null && Request.QueryString["id"].Length > 0)
 		{
-			page_key.Value = Request.QueryString["id"];
+            sID = Request.QueryString["id"];
+		    page_key.Value = sID;
 			linkbuttonSubPages.Visible = true;
 			
 		}
@@ -39,6 +41,6 @@ public partial class editPage_ajax : System.Web.UI.Page
         ///ToDo This isnt working
         ///
         linkbuttonBack.PostBackUrl = string.Format("~/listpage.aspx?fkey={0}", _iPageFKey);
-        linkbuttonSubPages.PostBackUrl = string.Format("~/listpage.aspx?fkey={0}", int.Parse(Request.QueryString["id"].ToString()));
+        linkbuttonSubPages.PostBackUrl = string.Format("~/listpage.aspx?fkey={0}", sID);
     }
 }

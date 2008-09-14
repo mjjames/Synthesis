@@ -63,12 +63,11 @@ namespace mjjames.admin
 
 				xdXML = XDocument.Load(sFilePath);
 				HttpContext.Current.Trace.Write("adminConfigxml: " + sFilePath);
-
 				adminDC = new adminDataClassesDataContext();
 			}
 			catch (Exception e)
 			{
-				HttpContext.Current.Response.Write(e.Message);
+				HttpContext.Current.Response.Write(string.Format("<h1>{0}</h1><p>{1}</p><p>{2}</p>", "XML DB Error", e.Message, e.InnerException));
 				HttpContext.Current.Response.End();
 			}
 			
@@ -196,7 +195,56 @@ namespace mjjames.admin
 					fckEditor.FormatSource = true;
 					fckEditor.EnableSourceXHTML = true;
 					fckEditor.Config["HtmlEncodeOutput"] = "true";
-					fckEditor.Height = Unit.Pixel(450);
+
+					UnitType unit = UnitType.Percentage;
+
+					if(field.Attributes.ContainsKey("unit")){
+						unit = (UnitType) Enum.Parse(typeof(UnitType), field.Attributes["unit"]);
+					}
+
+
+					if(field.Attributes.ContainsKey("width")){
+						switch(unit){
+						
+							case UnitType.Percentage:
+									fckEditor.Width = Unit.Percentage(double.Parse(field.Attributes["width"]));
+							break;
+							case UnitType.Pixel:
+									fckEditor.Width = Unit.Pixel(int.Parse(field.Attributes["width"]));
+							break;
+
+							default:
+								fckEditor.Width = Unit.Percentage(100);
+							break;
+
+						}
+						
+					}
+					else{
+						fckEditor.Width = Unit.Percentage(100);
+					}
+
+					
+					if(field.Attributes.ContainsKey("height")){
+						switch(unit){
+						
+							case UnitType.Percentage:
+									fckEditor.Height = Unit.Percentage(double.Parse(field.Attributes["height"]));
+							break;
+							case UnitType.Pixel:
+									fckEditor.Height = Unit.Pixel(int.Parse(field.Attributes["height"]));
+							break;
+
+							default:
+								fckEditor.Height = Unit.Percentage(100);
+							break;
+
+						}
+						
+					}
+					else{
+						fckEditor.Height = Unit.Pixel(450);
+					}
 
 					ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
 					if (_iPKey > 0 && ourProperty != null)
@@ -414,9 +462,10 @@ namespace mjjames.admin
 			if (_iFKey > 0)
 			{
 				ourPage.page_fkey = _iFKey;
-			}else
+			}
+			else
 			{
-			    _iFKey = ourPage.page_fkey.Value;
+			    _iFKey = ourPage.page_fkey == null ? 0 : ourPage.page_fkey.Value;
 			}
 			
 

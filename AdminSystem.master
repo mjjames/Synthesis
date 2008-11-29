@@ -6,6 +6,7 @@
 <head id="Head1" runat="server">
     <title>mjjames - Administration System - Version 1.2 Beta</title>
     <link rel="stylesheet" type="text/css" href="~/styles/web.css" />
+    <mjjames:jsLoader ID="jquery" runat="server" JSLibrary="jquery" />
 </head>
 <body>
     <div id="wrapper">

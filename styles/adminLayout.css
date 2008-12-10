@@ -225,8 +225,7 @@ h4.title {
 }
 
 #rightCol h2 {
-	width: 14em;
-	overflow: visible;
+	display: inline-block;
 }
 
 .previewImg {

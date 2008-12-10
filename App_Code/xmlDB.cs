@@ -74,11 +74,13 @@ namespace mjjames.admin
 		}
 
 		private void buildAdminTable()
-		{
+		{ 
 			var xmlQuery = from table in xdXML.Descendants("table")
 						   where table.Attribute("id").Value == sTableName
 						   select new AdminTable
 						   {
+							   bEmailButton = bool.Parse(table.Attribute("emailbutton") != null ? table.Attribute("emailbutton").Value : "false"),
+							   ID = table.Attribute("id").Value ,
 							   Defaults = (from fields in table.Element("defaults").Elements("field")
 										   select new AdminField
 										   {
@@ -274,7 +276,6 @@ namespace mjjames.admin
 				case "hidden":
 					HiddenField ourHidden = new HiddenField();
 					ourHidden.ID = "control" + field.ID;
-					HttpContext.Current.Trace.Warn("Rendering ControlID: "+ ourHidden.ID);
 					ourProperty = ourPage.GetType().GetProperty(field.ID);
 					if (_iPKey > 0 &&  ourProperty != null)
 					{
@@ -524,8 +525,19 @@ namespace mjjames.admin
 			cancelButton.CommandName = "cancelEdit";
 			cancelButton.Click += cancelEdit;
 
+			if (atTable.bEmailButton)
+			{
+				Button emailButton = new Button();
+				emailButton.Text = "Email";
+				emailButton.CommandName = "emailButton";
+				emailButton.Click += saveEdit;
+				emailButton.Click += emailNewsletter;
+				ourPage.Controls.Add(emailButton);
+			}
+
 			ourPage.Controls.Add(saveButton);
 			ourPage.Controls.Add(cancelButton);
+
 			
 			if (_iPKey > 0) //this is optional
 			{
@@ -534,9 +546,7 @@ namespace mjjames.admin
 				deleteButton.CommandName = "deleteEdit";
 				deleteButton.Click += deleteEdit;
 				ourPage.Controls.Add(deleteButton);
-			}
-			
-			
+			}	
 
 			return ourPage;
 		}
@@ -635,11 +645,23 @@ namespace mjjames.admin
 		/// <param name="e"></param>
 		protected void PageLinqDataSource_Selecting(object sender, LinqDataSourceSelectEventArgs e)
 		{
-			var pages = from p in adminDC.pages
-						select p;
+			switch(atTable.ID){
+				case "pages":
+					var pages = from p in adminDC.pages
+								select p;
 
-			page ourPage = pages.Single(p => p.page_key == _iPKey);
-			e.Result = ourPage;
+					page ourPage = pages.Single(p => p.page_key == _iPKey);
+					e.Result = ourPage;
+				break;
+				case "newsletters":
+					var newsletters = from n in adminDC.Newsletters
+									  select n;
+					Newsletter ourNewsletter = newsletters.Single( n => n.newsletter_key ==  _iPKey);
+					e.Result = ourNewsletter;
+				break;
+
+			}
+			
 		}
 
 		/// <summary>
@@ -671,16 +693,28 @@ namespace mjjames.admin
 		{
 			Button ourSender = (Button)sender;
 			adminDataClassesDataContext ourPageDataContext = new adminDataClassesDataContext();
-			page ourPageData = new page();
-			if (_iPKey > 0)
+			var ourData = new object();
+			switch (atTable.ID)
 			{
-				ourPageData = ourPageDataContext.pages.Single(p => p.page_key == _iPKey);
+				case "pages":
+					ourData = new page();
+					if (_iPKey > 0)
+					{
+						ourData = ourPageDataContext.pages.Single(p => p.page_key == _iPKey);
+					}
+					break;
+				case "newsletters":
+					ourData = new Newsletter();
+					if (_iPKey > 0)
+					{
+						ourData = ourPageDataContext.Newsletters.Single(n => n.newsletter_key == _iPKey);
+					}
+					break;
 			}
-			
 			var ourfields = from fields in atTable.Tabs
 						 select new {
 							 ID = fields.ID							
-						 };
+						 };	
 			
 			foreach (AdminTab tab in atTable.Tabs)
 			{
@@ -693,11 +727,15 @@ namespace mjjames.admin
 						
 						if (ourControl != null)
 						{
-							PropertyInfo ourProperty = ourPageData.GetType().GetProperty(field.ID);
+							PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
 							if (ourProperty != null)
 							{
 								HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
-								ourProperty.SetValue(ourPageData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+								ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+							}
+							else
+							{
+								HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
 							}
 						}
 					}
@@ -706,8 +744,17 @@ namespace mjjames.admin
 			
 			if (_iPKey == 0)
 			{
-				ourPageDataContext.pages.InsertOnSubmit(ourPageData);
-				ourPageData.page_fkey = _iFKey;
+				switch (atTable.ID)
+				{
+					case "pages":
+						ourPageDataContext.pages.InsertOnSubmit((page)ourData);
+						((page)ourData).page_fkey = _iFKey;
+						break;
+					case "newsletters":
+						ourPageDataContext.Newsletters.InsertOnSubmit((Newsletter)ourData);
+						break; 
+				}
+				
 			}
 
 			Label labelStatus = (Label)FindControlRecursive(ourSender.Page,("labelStatus"));
@@ -721,33 +768,48 @@ namespace mjjames.admin
 
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = "Page Inserted";
-					_iPKey = ourPageData.page_key;
-					_iFKey = (int)ourPageData.page_fkey;
-					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "page_key");
-					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "controlpage_key");
-					ourControlPKey.Value = _iPKey.ToString();
-					HiddenField ourControlFKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "controlpage_fkey");
-					ourControlFKey.Value = _iFKey.ToString();
+					labelStatus.Text = String.Format("{0} Inserted", atTable.ID);
+					string strPKeyField = String.Empty;
+				
+					switch (atTable.ID)
+					{
+						case "pages":
+							_iPKey = ((page)ourData).page_key;
+							_iFKey = (int)((page)ourData).page_fkey;
+							HiddenField ourControlFKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "controlpage_fkey");
+							ourControlFKey.Value = _iFKey.ToString();
+							strPKeyField = "page_key";
+							break;
+						case "newsletters":
+							_iPKey = ((Newsletter)ourData).newsletter_key;
+							strPKeyField = "newsletter_key";
+							break;
+					}
+
+					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, strPKeyField);
+					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control"+ strPKeyField);
+					
+
 					try
 					{
+						ourControlPKey.Value = _iPKey.ToString();
 						ourPKey.Value = _iPKey.ToString();
 					}
 					catch
 					{
-						throw new Exception("Page doesn't contain a hidden control called page_fkey");
+						throw new Exception(String.Format("{0} doesn't contain a hidden control called page_key", atTable.ID));
 					}
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = "Page Updated";
+					labelStatus.Text = String.Format("{0} Updated", atTable.ID);
 				}
 				
 				
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = "Page Update Failed: " + ex;
+				labelStatus.Text = String.Format("{0} Update Failed: {1}", atTable.ID, ex);
 			}
 		}
 
@@ -789,11 +851,37 @@ namespace mjjames.admin
 				labelStatus.Text = "Page Removal Failed: " + ex;
 			}
 		}
+
+		/// <summary>
+		/// Take the content, build the newsletter and send it to the emailer
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		protected void emailNewsletter(object sender, EventArgs e)
+		{
+
+		}
 	}
 
 
 	public class AdminTable
 	{
+		private bool _bEmailButton = false;
+		/// <summary>
+		/// Indicates whether to render the "email the content" button
+		/// </summary>
+		public bool bEmailButton
+		{
+			get
+			{
+				return _bEmailButton;
+			}
+			set
+			{
+				_bEmailButton = value;
+			}
+		}
+		public string ID { get; set; }
 		public List<AdminField> Defaults { set; get; }
 		public List<AdminTab> Tabs { set; get; }
 	}

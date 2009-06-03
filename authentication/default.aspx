@@ -1,5 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true"
-	CodeFile="default.aspx.cs" Inherits="login" Title="Untitled Page"  EnableEventValidation="true"%>
+﻿<%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" Inherits="login" Title="Untitled Page"  EnableEventValidation="true" Codebehind="default.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 	<h1 class="listingTitle">

@@ -1,5 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true"
-	CodeFile="dbusers.aspx.cs" Inherits="dbusers" Title="User Administration" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" Inherits="dbusers" Title="User Administration" Codebehind="dbusers.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 	<asp:UpdatePanel ID="UpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">

@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="Abellandscapes.co.uk" EntityNamespace="mjjames.AdminSystem.DataEntities" ContextNamespace="mjjames.AdminSystem.DataContexts" Class="adminDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Abellandscapes.co.uk;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="Abellandscapes_co_ukConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.testimonies" Member="testimonies">
+    <Type Name="testimony">
+      <Column Name="testimony_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="project_fkey" Type="System.Int32" DbType="Int NULL" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="video_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="project_testimony" Member="project" ThisKey="project_fkey" OtherKey="project_key" Type="project" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.banners" Member="banners">
+    <Type Name="banner">
+      <Column Name="bannerdid" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="image" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="alttext" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="url" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="category" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="randomness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.lookup" Member="lookups">
+    <Type Name="lookup">
+      <Column Name="lookup_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="lookup_id" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="value" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="active" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="lookup_media" Member="medias" ThisKey="lookup_key" OtherKey="mediatype_lookup" Type="media" />
+      <Association Name="lookup_media_link" Member="media_links" ThisKey="lookup_key" OtherKey="linktype_lookup" Type="media_link" />
+    </Type>
+  </Table>
+  <Table Name="dbo.media" Member="medias">
+    <Type Name="media">
+      <Column Name="media_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="filename" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="mediatype_lookup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="media_media_link" Member="media_links" ThisKey="media_key" OtherKey="media_fkey" Type="media_link" />
+      <Association Name="lookup_media" Member="lookup" ThisKey="mediatype_lookup" OtherKey="lookup_key" Type="lookup" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.media_links" Member="media_links">
+    <Type Name="media_link">
+      <Column Name="medialink_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="media_fkey" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="link_fkey" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="linktype_lookup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="lookup_media_link" Member="lookup" ThisKey="linktype_lookup" OtherKey="lookup_key" Type="lookup" IsForeignKey="true" />
+      <Association Name="media_media_link" Member="media" ThisKey="media_fkey" OtherKey="media_key" Type="media" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NewsletterReciprients" Member="NewsletterReciprients">
+    <Type Name="NewsletterReciprient">
+      <Column Name="reciprient_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="confirmed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Newsletters" Member="Newsletters">
+    <Type Name="Newsletter">
+      <Column Name="newsletter_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="subject" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="body" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="date_sent" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="date_created" AutoSync="Never" Type="System.DateTime" DbType="DateTime" IsDbGenerated="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.projects" Member="projects">
+    <Type Name="project">
+      <Column Name="project_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="start_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="end_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="include_in_rss" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="photogallery_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="video_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="project_testimony" Member="testimonies" ThisKey="project_key" OtherKey="project_fkey" Type="testimony" />
+    </Type>
+  </Table>
+  <Table Name="dbo.pages" Member="pages">
+    <Type Name="page">
+      <Column Name="page_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="page_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="pageid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="navtitle" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="accesskey" Type="System.Char" DbType="NChar(1)" CanBeNull="true" />
+      <Column Name="metadescription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="metakeywords" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="body" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="thumbnailimage" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="showinnav" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="showinfeaturednav" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="showonhome" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="showinfooter" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="sortorder" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="linkurl" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="lastmodified" AutoSync="Never" Type="System.DateTime" DbType="DateTime NOT NULL" IsReadOnly="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="page_url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="password" Type="System.String" DbType="nvarchar(12)" CanBeNull="true" />
+      <Column Name="passwordprotect" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.articles" Member="articles">
+    <Type Name="article">
+      <Column Name="article_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="body" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="showonhome" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="shortdescription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="thumbnailimage" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="sortorder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="start_date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="end_date" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="include_in_feed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="virtualurl" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.offers" Member="offers">
+    <Type Name="offer">
+      <Column Name="offer_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="offer_start" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="offer_end" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="showonhome" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="showinfeed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="shortdescription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="thumbnailimage" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.getFeatured" Method="getFeatured">
+    <Parameter Name="maxnumber" Type="System.Int32" DbType="Int" />
+    <Parameter Name="randomize" Type="System.Byte" DbType="TinyInt" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.proc_GetSiteMap" Method="proc_GetSiteMap">
+    <Parameter Name="filter" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="urlprefix" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="urlwriting" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

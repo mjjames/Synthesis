@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tables>
+    <table id="newsletters">
+        <defaults>
+            <field id="newsletter_key" label="primary_key" type="hidden"/>
+            <field id="subject" label="Subject" type="text" />
+            <field id="body" label="Content" type="rte" />
+			<field id="date_created" label="Created" type="datetime" />
+			<field id="date_sent" label="Sent" type="datetime" />
+        </defaults>
+        <tabs>
+            <tab id="main" label="Contents">
+				<field id="newsletter_key" />
+				<field id="subject"  />
+				<field id="body" />
+				<field id="date_created" />
+				<field id="date_sent"  />
+            </tab>
+            <tab id="nav" label="Prayer Requests">
+    
+            </tab>
+            <tab id="seo" label ="Articles">
+                
+            </tab>
+        </tabs>
+    </table>
+</tables>

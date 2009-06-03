@@ -9,7 +9,7 @@ hr.clear {
 	padding: 0;
 }
 
-.hidden {
+body * .hidden {
 	display: none;
 }
 
@@ -101,6 +101,7 @@ h1.listingTitle, h2 {
 	text-align: right;
 	top: 0pt;
 	width: 5em;
+	z-index: 100;
 }
 
 /* pageListing */
@@ -190,7 +191,8 @@ h4.title {
 .listingTable {
 	position: relative;
 	width: 90%;
-	margin-bottom: 0.5em;
+	margin: 0.5em 0;
+	overflow: visible;
 }
 
 .listingTable td, .listingTable th {
@@ -212,7 +214,7 @@ h4.title {
 	z-index: 0;
 }
 
-#leftCol {
+#leftCol, .leftCol {
 	width: 20%;
 	float: left;
 	position: relative;
@@ -263,6 +265,121 @@ h4.title {
 }
 
 .submit{
-	width: auto%;
+	width: auto;
 	margin-left: 17.5em;
+}
+
+/* photogallery admin */
+
+div.row div
+{
+	clear: both;
+}
+
+
+.photogallery
+{
+	clear: both;
+	margin: 0;
+	padding: 0.5em 0;
+}
+
+.photogallery .photo
+{
+	width: 160px;
+	float: left;
+	margin-right: 1%;
+	padding: 0.5em;
+}
+
+.photo p.title, .photo p.description
+{
+	margin: 0;
+	padding: 0;
+}
+
+.photo img
+{
+	margin: 0.5em auto;
+	padding: 0;
+	display: block;
+}
+
+.photogallery .insertphoto
+{
+	clear: both;
+	margin-top: 0.5em;
+	padding: 0.5em;
+}
+
+.photogallery .insertphoto label
+{
+	clear: both;
+}
+
+span.buttons
+{
+	display: block;
+	margin-top: 0.5em;
+}
+
+span.buttons .submit
+{
+	margin: 0;
+}
+
+ul.photogallery li.editphoto
+{
+	width: 320px; /* double normal width */
+}
+
+.editphoto label
+{
+	float: none;
+}
+
+.editphoto
+{
+	position: relative;
+}
+
+.insertphoto 
+{
+	width: 230px;
+}
+
+.insertphoto input, .insertphoto textarea
+{
+	width: 220px;
+}
+
+.editphoto input, .editphoto textarea
+{
+	width: 155px;
+}
+
+.previewWrapper
+{
+	position: absolute;
+	width: 155px;
+	top: 0.5em;
+	right: 0;
+}
+
+.editphoto span.buttons input, .insertphoto span.buttons input
+{
+	width: auto;
+}
+
+
+/* calendar */
+div.ajax__calendar div
+{
+	clear: none;
+}
+
+/* recycle bin */
+
+#leftCol p.description{
+	padding: 0.5em 0.25em;
 }

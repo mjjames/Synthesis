@@ -1,9 +1,9 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default" Title="Untitled Page" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" Inherits="_Default" Title="Untitled Page" Codebehind="Default.aspx.cs" %>
 
 
 <asp:Content ID="homePage" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 	<h1 class="listingTitle">
-		Welcome to your Websites Admin Area - Version 1.2
+		Welcome to your Websites Admin Area - Version 1.5
 	</h1>
 	<div id="adminContent">
 		<p>        

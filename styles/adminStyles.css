@@ -100,6 +100,11 @@ h2{
 .pageListRowAlternate {
 }
 
+.selectedRow
+{
+	background: #DBE5F3;
+}
+
 .pageListFooter {
 }
 
@@ -166,17 +171,17 @@ div.previewbanner {
 	text-align: right;
 }
 
-#leftCol {
+#leftCol, .leftCol {
 	border-right: 2px solid #fff;
 	border-bottom: 2px solid #fff;
 	height: 100%;
 }
 
-#leftCol a {
+#leftCol a, .leftCol a {
 	color: #fff;
 }
 
-#leftCol a:hover {
+#leftCol a:hover, .leftCol a:hover {
 	text-decoration: underline;
 }
 
@@ -198,4 +203,49 @@ div.previewbanner {
 
 #centerBG{
 	filter:alpha(opacity="30");
+}
+
+/* photogallery admin */
+
+
+
+.photogallery 
+{
+	list-style: none;
+	
+}
+
+.photo
+{
+	list-style: none;
+	border: 1px solid #BED2EE;	
+	text-align: center;
+	font-size: 0.85em;
+}
+
+.photo img
+{
+	border: 1px solid #BED2EE;
+}
+
+span.buttons
+{
+	text-align: right;
+}
+
+span.buttons input
+{
+	vertical-align: middle;
+}
+
+.editphoto
+{
+	text-align: left;
+}
+
+/** calendar **/
+
+div.ajax__calendar div.ajax__calendar_header
+{
+	background: #DBE5F3;
 }

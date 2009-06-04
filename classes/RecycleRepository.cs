@@ -18,7 +18,7 @@ namespace mjjames.AdminSystem.classes
 		public List<RecyledItem> GetRecycledItems()
 		{
 			List<RecyledItem> items = (from r in _adc.v_recyleditems
-									   where r.DBName.Equals(_admin.Mapping.DatabaseName)
+									   where r.DBName.Equals(_admin.Connection.Database)
 									   select new RecyledItem
 									   {
 										   ItemKey = r.Key,

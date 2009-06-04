@@ -171,7 +171,7 @@ namespace mjjames.AdminSystem
 				title = oldTestimony.title,
 				url = oldTestimony.url,
 				video_id = oldTestimony.video_id,
-				DBName = adminDC.Mapping.DatabaseName
+				DBName = adminDC.Connection.Database
 			};
 			
 			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();

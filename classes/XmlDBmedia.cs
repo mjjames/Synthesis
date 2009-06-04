@@ -73,7 +73,7 @@ namespace mjjames.AdminSystem
 				media_key = oldMedia.media_key,
 				mediatype_lookup = oldMedia.mediatype_lookup,
 				title = oldMedia.title,
-				DBName = adminDC.Mapping.DatabaseName
+				DBName = adminDC.Connection.Database
 			};
 			
 			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();

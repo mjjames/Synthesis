@@ -347,7 +347,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>49171</DevelopmentServerPort>
           <DevelopmentServerVPath>/admin</DevelopmentServerVPath>
-          <IISUrl>http://abellandscapes.laptop.mj/admin</IISUrl>
+          <IISUrl>http://mjjames.laptop.mj/admin</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

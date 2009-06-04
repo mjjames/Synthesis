@@ -70,7 +70,7 @@ namespace mjjames.AdminSystem
 				title = a.title,
 				url = a.url,
 				virtualurl = a.virtualurl,
-				DBName = adminDC.Mapping.DatabaseName
+				DBName = adminDC.Connection.Database
 			};
 									
 			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();

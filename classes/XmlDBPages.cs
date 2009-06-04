@@ -92,7 +92,7 @@ namespace mjjames.AdminSystem
 			archivePage.sortorder = ourPage.sortorder;
 			archivePage.thumbnailimage = ourPage.thumbnailimage;
 			archivePage.title = ourPage.title;
-			archivePage.DBName = adminDC.Mapping.DatabaseName;
+			archivePage.DBName = adminDC.Connection.Database;
 			
 			archiveDC.pages.InsertOnSubmit(archivePage);
 			archiveDC.SubmitChanges();

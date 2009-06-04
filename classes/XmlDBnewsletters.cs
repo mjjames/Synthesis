@@ -226,7 +226,7 @@ namespace mjjames.AdminSystem
 				date_sent = oldNews.date_sent,
 				newsletter_key = oldNews.newsletter_key,
 				subject = oldNews.subject,
-				DBName = adminDC.Mapping.DatabaseName
+				DBName = adminDC.Connection.Database
 			};
 			
 			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();

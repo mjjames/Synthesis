@@ -175,7 +175,7 @@ namespace mjjames.AdminSystem
 				title = oldOffer.title,
 				url = oldOffer.url,
 				thumbnailimage = oldOffer.thumbnailimage,
-				DBName = adminDC.Mapping.DatabaseName
+				DBName = adminDC.Connection.Database
 			};
 			
 			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();

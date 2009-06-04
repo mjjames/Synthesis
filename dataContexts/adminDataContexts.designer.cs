@@ -20,7 +20,6 @@ namespace mjjames.AdminSystem.DataContexts
 	using System.Linq.Expressions;
 	
 	
-	[System.Data.Linq.Mapping.DatabaseAttribute(Name="Abellandscapes.co.uk")]
 	public partial class adminDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -64,7 +63,7 @@ namespace mjjames.AdminSystem.DataContexts
     #endregion
 		
 		public adminDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["Abellandscapes_co_ukConnectionString"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

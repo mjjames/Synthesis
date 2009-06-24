@@ -305,6 +305,11 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="help\admintool.pdf" />
+    <Content Include="fckplugins\OnlineVideo\fckplugin.js" />
+    <Content Include="fckplugins\OnlineVideo\lang\en.js" />
+    <Content Include="fckplugins\OnlineVideo\onlinevideo.gif" />
+    <Content Include="fckplugins\OnlineVideo\onlinevideo.html" />
+    <Content Include="fckplugins\OnlineVideo\onlinevideo.js" />
     <Content Include="RecycleBin.aspx" />
     <Content Include="sitemaps\newsletters.sitemap" />
   </ItemGroup>
@@ -325,9 +330,19 @@
     <None Include="dataContexts\archiveDataContexts.dbml.layout">
       <DependentUpon>archiveDataContexts.dbml</DependentUpon>
     </None>
+    <None Include="fckplugins\OnlineVideo\lang\.svn\all-wcprops" />
+    <None Include="fckplugins\OnlineVideo\lang\.svn\entries" />
+    <None Include="fckplugins\OnlineVideo\lang\.svn\format" />
+    <None Include="fckplugins\OnlineVideo\lang\.svn\text-base\en.js.svn-base" />
+    <None Include="fckplugins\OnlineVideo\lang\.svn\text-base\ja.js.svn-base" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="fckplugins\OnlineVideo\lang\.svn\prop-base\" />
+    <Folder Include="fckplugins\OnlineVideo\lang\.svn\props\" />
+    <Folder Include="fckplugins\OnlineVideo\lang\.svn\tmp\prop-base\" />
+    <Folder Include="fckplugins\OnlineVideo\lang\.svn\tmp\props\" />
+    <Folder Include="fckplugins\OnlineVideo\lang\.svn\tmp\text-base\" />
     <Folder Include="javascript\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

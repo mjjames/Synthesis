@@ -50,14 +50,14 @@
         <elementListCompartment Id="41f2c655-7389-40eb-b07e-94f4c6e6b5a6" absoluteBounds="0.765, 4.46, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2.75 : 1.85659912109375); (3.5 : 1.85659912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 1.85659912109375); (3.5 : 1.85659912109375)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/adminDataContext/lookup/lookup_media" />
       <nodes>
         <classShapeMoniker Id="99584598-7d58-461d-88bd-94a85036ed5d" />
         <classShapeMoniker Id="3dbea215-b4a3-4327-9ecf-78978d105ccb" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(1.75 : 2.8381982421875); (1.75 : 3.0881982421875); (5.875 : 3.0881982421875); (5.875 : 1.91429768880208); (6.25 : 1.91429768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(1.75 : 2.8381982421875); (1.75 : 3.0881982421875); (5.875 : 3.0881982421875); (5.875 : 1.91429768880208); (6.25 : 1.91429768880208)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/adminDataContext/lookup/lookup_media_link" />
       <nodes>
         <classShapeMoniker Id="99584598-7d58-461d-88bd-94a85036ed5d" />
@@ -71,7 +71,7 @@
         <classShapeMoniker Id="639800bf-34ca-4524-b36f-a3e736d1c2a0" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 5.32774983723958); (3.5 : 5.32774983723958)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 5.32774983723958); (3.5 : 5.32774983723958)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/adminDataContext/project/project_testimony" />
       <nodes>
         <classShapeMoniker Id="2270e110-4845-4f25-8a9b-6ddb21ba966c" />

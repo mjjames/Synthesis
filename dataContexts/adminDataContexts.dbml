@@ -113,7 +113,7 @@
       <Column Name="lastmodified" AutoSync="Never" Type="System.DateTime" DbType="DateTime NOT NULL" IsReadOnly="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="page_url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="password" Type="System.String" DbType="nvarchar(12)" CanBeNull="true" />
-      <Column Name="passwordprotect" Type="System.Boolean" DbType="bit" CanBeNull="false" />
+      <Column Name="passwordprotect" Type="System.Boolean" DbType="bit" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.articles" Member="articles">

@@ -1,5 +1,8 @@
 /*
-*  MJJames Video Embed - YouTube, Vimeo, Flickr
+* FCKEditor OnlineVideo Plugin
+* Publisher Host (c) Creative Commons 2008
+* http://creativecommons.org/licenses/by-sa/3.0/
+* Author: Michael James | http://www.mjjames.co.uk
 */
 
 var dialog = window.parent;
@@ -18,38 +21,17 @@ dialog.AddTab('Info', oEditor.FCKLang.DlgInfoTab);
 // Get the selected flash embed (if available).
 var oFakeImage = FCK.Selection.GetSelectedElement();
 var oEmbed;
+var ePreview;
 
 if (oFakeImage) {
-	if (oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fckflash'))
+	if (oFakeImage.tagName == 'IMG' && oFakeImage.getAttribute('_fckflash')) {
 		oEmbed = FCK.GetRealElement(oFakeImage);
-	else
+	}
+	else {
 		oFakeImage = null;
+	}
 }
 
-
-window.onload = function() {
-	// Translate the dialog box texts.
-	oEditor.FCKLanguageManager.TranslatePage(document);
-
-	// Load the selected element information (if any).
-	LoadSelection();
-
-
-	dialog.SetAutoSize(true);
-	// Activate the "OK" button.
-	dialog.SetOkButton(true);
-	SelectField('txtUrl');
-}
-
-//onload get the exising url and prepopulate the txt field
-function LoadSelection() {
-	if (!oEmbed) return;
-	GetE('txtUrl').value = GetVideoURLFromEmbedSrc(oEmbed.getAttribute('src'));
-	GetE('txtWidth').value = GetAttribute(oEmbed, 'width', '');
-	GetE('txtHeight').value = GetAttribute(oEmbed, 'height', '');
-	//update the preview video
-	UpdatePreview();
-}
 
 function GetVideoURLFromEmbedSrc(url) {
 	var embedUrl;
@@ -76,17 +58,13 @@ function GetVideoURLFromEmbedSrc(url) {
 		embedUrl = 'http://vimeo.com/' + id; 
 	}
 	if (url.indexOf("flickr.com/") > -1) {
-		id = url.slice(url.search("/photos/"));
-
-		if (bHQ) {
-			embedUrl = 'http://www.flickr.com/photos/' + id + '?likes_hd=1';
-		}
-		else {
-			embedUrl = 'http://www.flickr.com/photos/' + id + '?likes_hd=0';
-		}
+		id = url.slice(url.lastIndexOf('/') + 1);
+		embedUrl = "http://flickr.com/photo.gne?id=" + id;
 	}
 	return embedUrl;
 }
+
+
 
 function GetVideoURL(url) {
 	var embedUrl;
@@ -114,37 +92,63 @@ function GetVideoURL(url) {
 		//vimeo hd is not supported by a param its automatic
 		embedUrl = 'http://vimeo.com/moogaloop.swf?clip_id=' + id + '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=&amp;fullscreen=1';
 	}
+	
 	if (url.indexOf("flickr.com/") > -1) {
-		id = url.slice(url.search("/photos/"));
-
-		if (bHQ) {
-			embedUrl = 'http://www.flickr.com/photos/' + id + '?likes_hd=1';
-		}
-		else {
-			embedUrl = 'http://www.flickr.com/photos/' + id + '?likes_hd=0';
-		}
+		embedUrl="http://www.flickr.com/apps/video/stewart.swf?v=71377";
 	}
 	return embedUrl;
 }
 
-var ePreview;
 
-function SetPreviewElement(previewEl) {
-	ePreview = previewEl;
 
-	if (GetE('txtUrl').value.length > 0)
-		UpdatePreview();
+/*
+	Updates the Embed Object with the video parameters
+	@e - embed object
+*/
+function UpdateEmbed(e) {
+
+	var url = GetE('txtUrl').value;
+	var embedUrl = GetVideoURL(url);
+
+	if (url.indexOf("flickr.com/") > -1) {
+		if (url.charAt(url.length - 1) == '/') {
+			url = url.substring(0, url.length - 1);
+		}
+		if (url.indexOf("photo.gne") > -1) {
+			id = url.replace("http://flickr.com/photo.gne?id=", "");
+		}
+		else {
+			id = url.slice(url.lastIndexOf('/') + 1);
+		}
+		
+		SetAttribute(e, "flashvars", "intl_lang=en-us&photo_id=" + id);
+	}
+	
+	
+	SetAttribute(e, 'src', embedUrl);
+
+	SetAttribute(e, 'type', 'application/x-shockwave-flash');
+	SetAttribute(e, 'pluginspage', 'http://www.macromedia.com/go/getflashplayer');
+
+	SetAttribute(e, "width", GetE('txtWidth').value === '' ? 360 : GetE('txtWidth').value);
+	SetAttribute(e, "height", GetE('txtHeight').value === '' ? 150 : GetE('txtHeight').value);
+	SetAttribute(e, "allowscriptaccess", "always");
+	SetAttribute(e, "allowfullscreen", "true");
 }
 
+
 function UpdatePreview() {
-	if (!ePreview)
+	if (!ePreview) {
 		return;
+	}
 
-	while (ePreview.firstChild)
+	while (ePreview.firstChild) {
 		ePreview.removeChild(ePreview.firstChild);
+	}
 
-	if (GetE('txtUrl').value.length == 0)
+	if (GetE('txtUrl').value.length === 0) {
 		ePreview.innerHTML = '&nbsp;';
+	}
 	else {
 		var oDoc = ePreview.ownerDocument || ePreview.document;
 		var e = oDoc.createElement('EMBED');
@@ -154,10 +158,35 @@ function UpdatePreview() {
 	}
 }
 
+function LoadSelection() {
+	if (!oEmbed) {
+		return;
+	}
+	var url = oEmbed.getAttribute('src');
+	if (url.indexOf("flickr.com/") > -1) {
+		url = oEmbed.getAttribute('flashvars').replace("intl_lang=en-us&photo_id=", "http://flickr.com/");
+	}
+
+	GetE('txtUrl').value = GetVideoURLFromEmbedSrc(url);
+	GetE('txtWidth').value = GetAttribute(oEmbed, 'width', '');
+	GetE('txtHeight').value = GetAttribute(oEmbed, 'height', '');
+	//update the preview video
+	UpdatePreview();
+}
+
+
+function SetPreviewElement(previewEl) {
+	ePreview = previewEl;
+
+	if (GetE('txtUrl').value.length > 0) {
+		UpdatePreview();
+	}
+}
+
 //#### The OK button was hit.
 function Ok() {
 	var url = GetE('txtUrl').value;
-	if (url.length == 0) {
+	if (url.length === 0) {
 		dialog.SetSelectedTab('Info');
 		GetE('txtUrl').focus();
 
@@ -193,21 +222,17 @@ function Ok() {
 	return true;
 }
 
-/*
-Updates the Embed Object with the video parameters
-@e - embed object
-*/
-function UpdateEmbed(e) {
+//onload get the exising url and prepopulate the txt field
+window.onload = function() {
+	// Translate the dialog box texts.
+	oEditor.FCKLanguageManager.TranslatePage(document);
 
-	var embedUrl = GetVideoURL(GetE('txtUrl').value);
+	// Load the selected element information (if any).
+	LoadSelection();
 
-	SetAttribute(e, 'src', embedUrl);
 
-	SetAttribute(e, 'type', 'application/x-shockwave-flash');
-	SetAttribute(e, 'pluginspage', 'http://www.macromedia.com/go/getflashplayer');
-
-	SetAttribute(e, "width", GetE('txtWidth').value == '' ? 360 : GetE('txtWidth').value);
-	SetAttribute(e, "height", GetE('txtHeight').value == '' ? 150 : GetE('txtHeight').value);
-	SetAttribute(e, "allowscriptaccess", "always");
-	SetAttribute(e, "allowfullscreen", "true");
-}
+	dialog.SetAutoSize(true);
+	// Activate the "OK" button.
+	dialog.SetOkButton(true);
+	SelectField('txtUrl');
+};

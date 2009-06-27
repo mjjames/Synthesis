@@ -2146,7 +2146,7 @@ namespace mjjames.AdminSystem.DataEntities.Archive
 		
 		private string _page_url;
 		
-		private bool _passwordprotect;
+		private System.Nullable<bool> _passwordprotect;
 		
 		private string _password;
 		
@@ -2196,7 +2196,7 @@ namespace mjjames.AdminSystem.DataEntities.Archive
     partial void OnlastmodifiedChanged();
     partial void Onpage_urlChanging(string value);
     partial void Onpage_urlChanged();
-    partial void OnpasswordprotectChanging(bool value);
+    partial void OnpasswordprotectChanging(System.Nullable<bool> value);
     partial void OnpasswordprotectChanged();
     partial void OnpasswordChanging(string value);
     partial void OnpasswordChanged();
@@ -2628,7 +2628,7 @@ namespace mjjames.AdminSystem.DataEntities.Archive
 		}
 		
 		[Column(Storage="_passwordprotect", DbType="Bit NOT NULL")]
-		public bool passwordprotect
+		public System.Nullable<bool> passwordprotect
 		{
 			get
 			{

@@ -20,6 +20,7 @@ namespace mjjames.AdminSystem.DataContexts
 	using System.Linq.Expressions;
 	
 	
+	[System.Data.Linq.Mapping.DatabaseAttribute(Name="Abellandscapes.co.uk")]
 	public partial class adminDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -2029,7 +2030,7 @@ namespace mjjames.AdminSystem.DataEntities
 		
 		private string _password;
 		
-		private bool _passwordprotect;
+		private System.Nullable<bool> _passwordprotect;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2073,7 +2074,7 @@ namespace mjjames.AdminSystem.DataEntities
     partial void Onpage_urlChanged();
     partial void OnpasswordChanging(string value);
     partial void OnpasswordChanged();
-    partial void OnpasswordprotectChanging(bool value);
+    partial void OnpasswordprotectChanging(System.Nullable<bool> value);
     partial void OnpasswordprotectChanged();
     #endregion
 		
@@ -2472,7 +2473,7 @@ namespace mjjames.AdminSystem.DataEntities
 		}
 		
 		[Column(Storage="_passwordprotect", DbType="bit")]
-		public bool passwordprotect
+		public System.Nullable<bool> passwordprotect
 		{
 			get
 			{

@@ -121,7 +121,7 @@
       <Column Name="linkurl" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="lastmodified" AutoSync="Never" Type="System.DateTime" DbType="DateTime NOT NULL" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="page_url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="passwordprotect" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="passwordprotect" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="true" />
       <Column Name="password" Type="System.String" DbType="NVarChar(12)" CanBeNull="true" />
     </Type>
   </Table>

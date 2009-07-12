@@ -149,6 +149,7 @@ h1.listingTitle, h2 {
 .row {
 	clear: both;
 	position: relative;
+	display: block;
 }
 
 .label {

@@ -30,9 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxControlToolkit, Version=3.0.20229.20843, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+    <Reference Include="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\AjaxControlExtender\AjaxControlToolkit.dll</HintPath>
+      <HintPath>..\..\..\Resources\AjaxControlToolkit\AjaxControlToolkit.dll</HintPath>
     </Reference>
     <Reference Include="FlickrNet, Version=2.1.5.19851, Culture=neutral, PublicKeyToken=2491df59efa5d132">
       <SpecificVersion>False</SpecificVersion>
@@ -150,6 +150,7 @@
     <None Include="classes\XmlDB.cs.old" />
     <Compile Include="classes\RecycleRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />
+    <Compile Include="classes\SystemSettings.cs" />
     <Compile Include="classes\XmlDBmedia.cs" />
     <Compile Include="classes\XmlDBarticles.cs" />
     <Compile Include="classes\XmlDBnewsletters.cs" />
@@ -240,6 +241,13 @@
     <Compile Include="subscriptionmanagement.aspx.designer.cs">
       <DependentUpon>subscriptionmanagement.aspx</DependentUpon>
     </Compile>
+    <Compile Include="SystemSettings.aspx.cs">
+      <DependentUpon>SystemSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SystemSettings.aspx.designer.cs">
+      <DependentUpon>SystemSettings.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="admininc_defaults\adminsettings.config" />
@@ -312,6 +320,7 @@
     <Content Include="fckplugins\OnlineVideo\onlinevideo.js" />
     <Content Include="RecycleBin.aspx" />
     <Content Include="sitemaps\newsletters.sitemap" />
+    <Content Include="SystemSettings.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -362,7 +371,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>49171</DevelopmentServerPort>
           <DevelopmentServerVPath>/admin</DevelopmentServerVPath>
-          <IISUrl>http://mjjames.laptop.mj/admin</IISUrl>
+          <IISUrl>http://abellandscapes.laptop.mj/admin</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

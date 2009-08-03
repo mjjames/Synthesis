@@ -80,7 +80,6 @@ namespace mjjames.AdminSystem.Configuration
 		{
 			try
 			{
-
 				//due to .net only allowing add or remove operations, to update the app settings we have to remove them and then readd....
 				string file = _configuration.AppSettings.SectionInformation.ConfigSource;
 				_configuration.Sections.Remove("appSettings");

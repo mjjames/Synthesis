@@ -190,7 +190,7 @@ namespace mjjames.AdminSystem
 				Control ourControl = (Control)ourType.GetType().GetMethod("generateControl").Invoke(ourType, controlParams);
 				ourContainer.Controls.Add(ourControl);
 			}
-			catch (TypeLoadException e)
+			catch (TypeLoadException)
 			{
 				HttpContext.Current.Trace.Warn("Unknown ControlType: " + field.Type);
 				bRenderControl = false;

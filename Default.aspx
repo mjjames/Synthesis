@@ -3,8 +3,7 @@
 
 <asp:Content ID="homePage" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 	<h1 class="listingTitle">
-		Welcome to your Websites Admin Area - Version 1.5
-	</h1>
+		Welcome to your Websites Admin Area - Version 1.6 Beta	</h1>
 	<div id="adminContent">
 		<p>        
 			Please choose an area to administer using the navigation bar.<br />

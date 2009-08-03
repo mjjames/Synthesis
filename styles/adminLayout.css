@@ -152,14 +152,20 @@ h1.listingTitle, h2 {
 	display: block;
 }
 
-.label {
+.label, .labelwide {
 	position: relative;
 	width: 12em;
 	display: block;
 	float: left;
 }
 
-.field {
+.labelwide {
+	width: 16em;
+}
+
+
+input.textbox{
+	width: 300px;
 }
 
 div.banners {

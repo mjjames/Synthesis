@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Xml.Linq;
 using mjjames.Imaging;
-using mjjames.flickr;
-using FlickrNet;
 using System.Drawing;
 using System.IO;
 
@@ -45,22 +37,19 @@ public partial class loadimage : System.Web.UI.Page
 	/// <summary>
 	/// Tries to load an image resized image from cache, if not resizes image and caches it	
 	/// </summary>
-	/// <param name="sPhotoID">flickr image id</param>
-	/// <param name="sCache">cache folder</param>
 	private void LoadImage(string sPhotoURL, string sAction, string sHeight,  string sWidth, string sCache)
 	{
 		Image newImage;
-		string sImageCacheKey = String.Empty;
 		string sFileName = Path.GetFileName(sPhotoURL); //cache key only needs filename
 
 
-		sImageCacheKey = sAction + "-" + sHeight + "-" + sWidth + "-" + sFileName;
+		string sImageCacheKey = sAction + "-" + sHeight + "-" + sWidth + "-" + sFileName;
 
 		try
 		{
 			newImage = Image.FromFile(Server.MapPath(sCache + "/" + sImageCacheKey));
 		}
-		catch (Exception e)
+		catch (Exception)
 		{
 			Resizer resize = new Resizer();
 
@@ -99,9 +88,9 @@ public partial class loadimage : System.Web.UI.Page
 		Response.ContentType = "image/jpeg";
 	
 		Response.BufferOutput = true;
-		MemoryStream MemStream = new MemoryStream(); 
-		newImage.Save(MemStream, System.Drawing.Imaging.ImageFormat.Jpeg);
-		MemStream.WriteTo(Response.OutputStream);
+		MemoryStream memStream = new MemoryStream(); 
+		newImage.Save(memStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+		memStream.WriteTo(Response.OutputStream);
 		Response.Cache.SetExpires(DateTime.Now.AddMonths(1));
 		Response.Cache.SetCacheability(HttpCacheability.Public);
 		Response.Cache.SetNoServerCaching();
@@ -111,8 +100,7 @@ public partial class loadimage : System.Web.UI.Page
 
 	private Image LoadErrorImage(string sAction, string sHeight, string sWidth)
 	{
-		Image newImage;
-		newImage = Image.FromFile(Server.MapPath("/images/noimage.jpg"));
+		Image newImage = Image.FromFile(Server.MapPath("/images/noimage.jpg"));
 
 		Resizer resize = new Resizer();
 

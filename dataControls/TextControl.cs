@@ -52,7 +52,7 @@ namespace mjjames.AdminSystem.dataControls
 			PropertyInfo ourProperty;
 			TextBox ourControl = new TextBox();
 			ourControl.ID = "control" + field.ID;
-			ourControl.CssClass = "field";
+			ourControl.CssClass = "field textbox";
 			if (field.Attributes.ContainsKey("maxlength"))
 			{
 				int iMaxLength = int.Parse(field.Attributes["maxlength"]);
@@ -76,6 +76,7 @@ namespace mjjames.AdminSystem.dataControls
 			string ourValue = string.Empty;
 			if(field.Attributes.ContainsKey("format") && field.Attributes["format"].Equals("number", StringComparison.InvariantCultureIgnoreCase)){
 				ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(int?));
+				ourControl.CssClass = "field number"; //if we of number type then we must overwrie the css class
 				if (iPKey > 0 && ourProperty != null)
 				{
 					ourValue = ourProperty.GetValue(ourPage, null) != null ? (ourProperty.GetValue(ourPage, null) as int?).ToString() : string.Empty;

@@ -66,7 +66,7 @@ namespace mjjames.AdminSystem
 		protected override void saveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			adminDataContext ourPageDataContext = new adminDataContext();
+			AdminDataContext ourPageDataContext = new AdminDataContext();
 			testimony ourData = new testimony();
 			if (_iPKey > 0)
 			{

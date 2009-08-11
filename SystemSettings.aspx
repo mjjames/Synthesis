@@ -32,7 +32,7 @@
 			<h2 runat="server" id="settingLabel">
 				Choose a Setting To Edit</h2>
 			<asp:UpdatePanel ID="upSettings" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional">
-				<ContentTemplate>
+				<contenttemplate>
 					<asp:Panel runat="server" ID="panelInfo">
 						<p>
 							Please choose a system setting from the menu on the left.
@@ -384,23 +384,25 @@
 									<asp:DropDownList runat="server" CssClass="field" OnDataBinding="SetAccessLevel">
 										<asp:ListItem Text="None" Value="0" />
 										<asp:ListItem Text="All" Value="1" />
-										<asp:ListItem Text="System Admin" Value="2" />
-										<asp:ListItem Text="Editor" Value="3" />
-										<asp:ListItem Text="Site Admin" Value="4" />
+										<asp:ListItem Text="Article Editor" Value="2" />
+										<asp:ListItem Text="Content Editor" Value="3" />
+										<asp:ListItem Text="Editor" Value="4" />
+										<asp:ListItem Text="Site Admin" Value="5" />
+										<asp:ListItem Text="System Admin" Value="6" />
 									</asp:DropDownList>
 								</span>
 							</ItemTemplate>
 						</asp:ListView>
 						<asp:LinkButton runat="server" ID="lbSaveNavgation" OnClick="SaveNavigationSettings" Text="Save" />
 					</asp:Panel>
-				</ContentTemplate>
+				</contenttemplate>
 			</asp:UpdatePanel>
 			<asp:UpdateProgress ID="_updateProgress1" runat="server" AssociatedUpdatePanelID="upSettings"
 				DisplayAfter="500">
-				<ProgressTemplate>
+				<progresstemplate>
 					<p class="loading">
 						Loading ...</p>
-				</ProgressTemplate>
+				</progresstemplate>
 			</asp:UpdateProgress>
 		</div>
 	</div>

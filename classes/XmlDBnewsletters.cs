@@ -7,13 +7,13 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using mjjames.AdminSystem.dataentities;
-using mjjames.core.dataentites;
 using System.Configuration;
-using mjjames.core;
 using System.Collections.Generic;
 using System.Net.Mail;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
+using mjjames.core;
+using mjjames.core.dataentites;
 
 /// <summary>
 /// Summary description for xmlDB
@@ -23,16 +23,6 @@ namespace mjjames.AdminSystem
 {
 	public class XmlDBnewsletters : XmlDBBase
 	{
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public XmlDBnewsletters()
-			: base()
-		{
-
-		}
-
-
 		#region datasources
 
 		/// <summary>
@@ -41,8 +31,6 @@ namespace mjjames.AdminSystem
 		/// <returns>a general object that needs casting to the correct type on use</returns>
 		protected override object GetData()
 		{
-			object ourData = new object();
-			
 			Newsletter ourOffer = new Newsletter();
 			if (_iPKey > 0)
 			{
@@ -50,7 +38,7 @@ namespace mjjames.AdminSystem
 							  where p.newsletter_key == _iPKey
 							  select p).SingleOrDefault();
 			}
-			ourData = ourOffer;
+			object ourData = ourOffer;
 
 			return ourData;
 		}
@@ -71,18 +59,12 @@ namespace mjjames.AdminSystem
 		protected override void saveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			adminDataContext ourPageDataContext = new adminDataContext();
+			AdminDataContext ourPageDataContext = new AdminDataContext();
 			Newsletter ourData = new Newsletter();
 			if (_iPKey > 0)
 			{
 				ourData = ourPageDataContext.Newsletters.Single(p => p.newsletter_key == _iPKey);
 			}
-
-			var ourfields = from fields in atTable.Tabs
-							select new
-							{
-								ID = fields.ID
-							};
 
 			foreach (AdminTab tab in atTable.Tabs)
 			{
@@ -91,20 +73,18 @@ namespace mjjames.AdminSystem
 				{
 					foreach (AdminField field in tab.Fields)
 					{
-						Control ourControl = (Control)ourTab.FindControl("control" + field.ID);
+						Control ourControl = ourTab.FindControl("control" + field.ID);
 
-						if (ourControl != null)
+						if (ourControl == null) continue;
+						PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
+						if (ourProperty != null)
 						{
-							PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
-							if (ourProperty != null)
-							{
-								HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
-								ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
-							}
-							else
-							{
-								HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
-							}
+							HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
+							ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+						}
+						else
+						{
+							HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
 						}
 					}
 				}
@@ -128,12 +108,11 @@ namespace mjjames.AdminSystem
 				if (ourChanges.Inserts.Count > 0)
 				{
 					labelStatus.Text = String.Format("{0} Inserted", atTable.ID);
-					string strPKeyField = String.Empty;
 
 
-					_iPKey = ((Newsletter)ourData).newsletter_key;
+					_iPKey = ourData.newsletter_key;
 
-					strPKeyField = TablePrimaryKeyField;
+					string strPKeyField = TablePrimaryKeyField;
 
 					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
 					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
@@ -180,17 +159,17 @@ namespace mjjames.AdminSystem
 			string fromname = ConfigurationManager.AppSettings["SiteName"] ?? String.Empty;
 
 			Newsletter ourNewsletter = (Newsletter) GetData();
-			email newsletter = new email();
-	
-			newsletter.fromemail = fromemail;
-			newsletter.fromname = fromname;
-			newsletter.subject = ourNewsletter.subject ?? String.Empty;
-			newsletter.body = ourNewsletter.body ?? String.Empty;
-			newsletter.reciprients = getReciprients();
-			newsletter.unsubscribelink = ConfigurationManager.AppSettings["NewsletterUnSubscribe"];
-			
-			emailer mailer = new emailer();
-			mailer.email = newsletter;
+			email newsletter = new email
+			                   	{
+			                   		fromemail = fromemail,
+			                   		fromname = fromname,
+			                   		subject = ourNewsletter.subject ?? String.Empty,
+			                   		body = ourNewsletter.body ?? String.Empty,
+			                   		reciprients = GetReciprients(),
+			                   		unsubscribelink = ConfigurationManager.AppSettings["NewsletterUnSubscribe"]
+			                   	};
+
+			Emailer mailer = new Emailer {Email = newsletter};
 
 			if (mailer.SendMail())
 			{
@@ -207,9 +186,9 @@ namespace mjjames.AdminSystem
 		}
 		#endregion
 
-		private List<MailAddress> getReciprients(){
+		private List<MailAddress> GetReciprients(){
 			List<MailAddress> reciprients = (from r in adminDC.NewsletterReciprients
-											 where r.active == true && r.confirmed == true
+											 where r.active && r.confirmed
 											 select new MailAddress(r.email, r.name)).ToList();
 			return reciprients;
 		}
@@ -220,7 +199,8 @@ namespace mjjames.AdminSystem
 									where n.newsletter_key == iKey
 									select n).SingleOrDefault();
 			
-			DataEntities.Archive.Newsletter archiveNews = new mjjames.AdminSystem.DataEntities.Archive.Newsletter(){
+			DataEntities.Archive.Newsletter archiveNews = new DataEntities.Archive.Newsletter
+			                                              	{
 				body = oldNews.body,
 				date_created = oldNews.date_created,
 				date_sent = oldNews.date_sent,
@@ -229,7 +209,7 @@ namespace mjjames.AdminSystem
 				DBName = adminDC.Connection.Database
 			};
 			
-			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();
+			DataContexts.Archive.archiveDataContext archiveDC = new DataContexts.Archive.archiveDataContext();
 			
 			archiveDC.Newsletters.InsertOnSubmit(archiveNews);
 			adminDC.Newsletters.DeleteOnSubmit(oldNews);

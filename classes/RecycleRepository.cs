@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using mjjames.AdminSystem.dataEntities;
-using System.Data.Linq;
 
 namespace mjjames.AdminSystem.classes
 {
 	public class RecycleRepository
 	{
-		private DataContexts.Archive.archiveDataContext _adc = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();
-		private DataContexts.adminDataContext _admin = new mjjames.AdminSystem.DataContexts.adminDataContext();
+		private readonly DataContexts.Archive.archiveDataContext _adc = new DataContexts.Archive.archiveDataContext();
+		private readonly DataContexts.AdminDataContext _admin = new DataContexts.AdminDataContext();
 
 		/// <summary>
 		/// Returns all the RecycledItems for a given dbname
@@ -30,7 +28,7 @@ namespace mjjames.AdminSystem.classes
 
 		internal void PermenantDelete(int id, string tableName)
 		{
-			string sqlQuery = String.Format("DELETE FROM [{0}] WHERE [{1}_archive_key] = {2}", tableName, tableName, id.ToString());
+			string sqlQuery = String.Format("DELETE FROM [{0}] WHERE [{1}_archive_key] = {2}", tableName, tableName, id);
 			_adc.ExecuteCommand(sqlQuery);
 		}
 

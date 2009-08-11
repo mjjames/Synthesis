@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace mjjames.AdminSystem {
+namespace mjjames.AdminSystem.Authentication {
     
     
-    public partial class DBUsers {
+    public partial class ResetPassword {
         
         /// <summary>
         /// ScriptManager1 control.
@@ -23,15 +23,6 @@ namespace mjjames.AdminSystem {
         protected global::System.Web.UI.ScriptManager ScriptManager1;
         
         /// <summary>
-        /// UpdatePanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel;
-        
-        /// <summary>
         /// leftCol control.
         /// </summary>
         /// <remarks>
@@ -39,24 +30,6 @@ namespace mjjames.AdminSystem {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl leftCol;
-        
-        /// <summary>
-        /// labelDBUser control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelDBUser;
-        
-        /// <summary>
-        /// dbuserDropDownList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList dbuserDropDownList;
         
         /// <summary>
         /// settingLabel control.
@@ -68,57 +41,111 @@ namespace mjjames.AdminSystem {
         protected global::System.Web.UI.WebControls.Literal settingLabel;
         
         /// <summary>
-        /// CreateUserWizard control.
+        /// _ChangePassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CreateUserWizard CreateUserWizard;
+        protected global::System.Web.UI.WebControls.Panel _ChangePassword;
         
         /// <summary>
-        /// CreateUserWizardStep1 control.
+        /// _lblPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CreateUserWizardStep CreateUserWizardStep1;
+        protected global::System.Web.UI.WebControls.Label _lblPassword;
         
         /// <summary>
-        /// CompleteWizardStep1 control.
+        /// _txtPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CompleteWizardStep CompleteWizardStep1;
+        protected global::System.Web.UI.WebControls.TextBox _txtPassword;
         
         /// <summary>
-        /// ChangePassword control.
+        /// _valRequired control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ChangePassword ChangePassword;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator _valRequired;
         
         /// <summary>
-        /// _UserLising control.
+        /// _lblConfirmPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListView _UserLising;
+        protected global::System.Web.UI.WebControls.Label _lblConfirmPassword;
         
         /// <summary>
-        /// _upProgress control.
+        /// _txtConfirmPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdateProgress _upProgress;
+        protected global::System.Web.UI.WebControls.TextBox _txtConfirmPassword;
+        
+        /// <summary>
+        /// _RequiredFieldValidator1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator _RequiredFieldValidator1;
+        
+        /// <summary>
+        /// _savePassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button _savePassword;
+        
+        /// <summary>
+        /// _regexPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator _regexPassword;
+        
+        /// <summary>
+        /// _comparePassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator _comparePassword;
+        
+        /// <summary>
+        /// _Summary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary _Summary;
+        
+        /// <summary>
+        /// _Status control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal _Status;
     }
 }

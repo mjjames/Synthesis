@@ -93,6 +93,7 @@ h2{
 }
 
 .pageListHeader {
+
 }
 .pageListRow {
 }
@@ -144,11 +145,12 @@ div.previewbanner {
 }
 
 .listingTable {
-	border-color: #fff;
+	
 }
 
 .listingTable th {
 	background: #8799FF;
+	color: #fff;
 }
 
 .listingTable th a {
@@ -248,4 +250,10 @@ span.buttons input
 div.ajax__calendar div.ajax__calendar_header
 {
 	background: #DBE5F3;
+}
+
+/* user authentication */
+
+.passwordHint{
+	float: right;
 }

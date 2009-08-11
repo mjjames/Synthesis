@@ -20,7 +20,7 @@ public partial class AdminSystem : System.Web.UI.MasterPage
 			signout.Visible = true;
 			adminToolbar.Visible = true;
 		}
-		
+
 	}
 
 	protected void btnSignOut_ServerClick(object sender, System.EventArgs e)
@@ -29,4 +29,16 @@ public partial class AdminSystem : System.Web.UI.MasterPage
 		Response.Redirect("/admin/authentication/default.aspx", true);
 	}
 
+	protected void SetAccessLevel(object sender, EventArgs e)
+	{
+		//Nasty stuff this, I can only check if users are in roles so dodgy ifs to set the access level
+		int accessLevel = 0; //by default block all access
+
+		if (Page.User.IsInRole("Article Editor")) accessLevel = 2;
+		if (Page.User.IsInRole("Content Editor")) accessLevel = 3;
+		if (Page.User.IsInRole("Editor")) accessLevel = 4;
+		if (Page.User.IsInRole("Site Admin")) accessLevel = 5;
+		if (Page.User.IsInRole("System Admin")) accessLevel = 6;
+		adminToolbar.AccessLevel = accessLevel;
+	}
 }

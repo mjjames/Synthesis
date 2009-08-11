@@ -20,7 +20,7 @@
 					CssClass="signout" Text="Sign Out" />
 			</div>
 			<div id="navbar">
-				<mjjames:AdminToolbar runat="server" ID="adminToolbar" AccessLevel="1" Visible="false" />
+				<mjjames:AdminToolbar runat="server" ID="adminToolbar" AccessLevel="0" Visible="false" OnInit="SetAccessLevel" />
 			</div>
 		</div>
 		<div id="body">

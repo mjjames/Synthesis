@@ -19,7 +19,7 @@
 			</div>
 		</div>
 		<div id="rightCol">
-			<asp:LinqDataSource ID="ldsReciprients" runat="server" ContextTypeName="mjjames.AdminSystem.DataContexts.adminDataContext"
+			<asp:LinqDataSource ID="ldsReciprients" runat="server" ContextTypeName="mjjames.AdminSystem.DataContexts.AdminDataContext"
 				EnableInsert="True" EnableUpdate="True" OrderBy="name" TableName="NewsletterReciprients"
 				AutoPage="true" EnableDelete="True" AutoSort="true" >
 			</asp:LinqDataSource>

@@ -9,8 +9,6 @@ using System.Xml;
 using System.Xml.Linq;
 using AjaxControlToolkit;
 using mjjames.AdminSystem.dataentities;
-using mjjames.core;
-using mjjames.core.dataentites;
 using mjjames.AdminSystem.DataContexts;
 
 /// <summary>
@@ -24,7 +22,7 @@ namespace mjjames.AdminSystem
 		protected string sTableName;
 		protected string sXMLFile;
 		protected XDocument xdXML;
-		protected adminDataContext adminDC;
+		protected AdminDataContext adminDC;
 		protected int _iPKey;
 		protected int _iFKey;
 		protected AdminTable atTable;
@@ -87,7 +85,7 @@ namespace mjjames.AdminSystem
 
 				xdXML = XDocument.Load(sFilePath);
 				HttpContext.Current.Trace.Write("adminConfigxml: " + sFilePath);
-				adminDC = new adminDataContext();
+				adminDC = new AdminDataContext();
 			}
 			catch (Exception e)
 			{
@@ -537,7 +535,7 @@ namespace mjjames.AdminSystem
 		{
 
 			Button ourSender = (Button)sender;
-			adminDataContext ourPageDataContext = new adminDataContext();
+			AdminDataContext ourPageDataContext = new AdminDataContext();
 			
 			Label labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
 			try

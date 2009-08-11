@@ -15,7 +15,7 @@ namespace mjjames.AdminSystem
 	public class PhotoInfoData
 	{
 
-		private adminDataContext adminDC = new adminDataContext();
+		private AdminDataContext adminDC = new AdminDataContext();
 		
 		/// <summary>
 		/// Gets the key for the provided LookupID

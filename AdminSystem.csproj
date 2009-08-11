@@ -156,12 +156,14 @@
       <DependentUpon>default.aspx</DependentUpon>
     </Compile>
     <None Include="classes\XmlDB.cs.old" />
+    <Compile Include="classes\ApplicationUser.cs" />
     <Compile Include="classes\NavigationSettings.cs" />
     <Compile Include="classes\RecycleRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />
     <Compile Include="classes\SystemSettings.cs" />
     <Compile Include="classes\TwitterAuth.cs" />
     <Compile Include="classes\TwitterAuthentication.cs" />
+    <Compile Include="classes\UserAdministration.cs" />
     <Compile Include="classes\XmlDBmedia.cs" />
     <Compile Include="classes\XmlDBarticles.cs" />
     <Compile Include="classes\XmlDBnewsletters.cs" />
@@ -172,6 +174,9 @@
     <Compile Include="classes\generic.cs" />
     <Compile Include="classes\PhotoInfoData.cs" />
     <Compile Include="classes\XmlDBBase.cs" />
+    <Compile Include="dataContexts\adminDataContexts.cs">
+      <DependentUpon>adminDataContexts.dbml</DependentUpon>
+    </Compile>
     <Compile Include="dataContexts\adminDataContexts.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -259,6 +264,13 @@
     <Compile Include="SystemSettings.aspx.designer.cs">
       <DependentUpon>SystemSettings.aspx</DependentUpon>
     </Compile>
+    <Compile Include="authentication\ResetPassword.aspx.cs">
+      <DependentUpon>ResetPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="authentication\ResetPassword.aspx.designer.cs">
+      <DependentUpon>ResetPassword.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="admininc_defaults\adminsettings.config" />
@@ -332,6 +344,7 @@
     <Content Include="RecycleBin.aspx" />
     <Content Include="sitemaps\newsletters.sitemap" />
     <Content Include="SystemSettings.aspx" />
+    <Content Include="authentication\ResetPassword.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -347,6 +360,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="authentication\web.config" />
     <None Include="dataContexts\archiveDataContexts.dbml.layout">
       <DependentUpon>archiveDataContexts.dbml</DependentUpon>
     </None>

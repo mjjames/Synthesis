@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
@@ -6,6 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
+using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
@@ -140,6 +142,32 @@ namespace mjjames.AdminSystem
 					catch
 					{
 						throw new Exception(String.Format("{0} doesn't contain a hidden control called {1}", atTable.ID, TablePrimaryKeyField));
+					}
+
+					if (Convert.ToBoolean(ConfigurationManager.AppSettings["twitterPublishOffers"]) && ourData.active)
+					{
+						TwitterPublisher tp = new TwitterPublisher(ConfigurationManager.AppSettings["twitterConsumerKey"],
+																	ConfigurationManager.AppSettings["twitterConsumerSecret"],
+																	ConfigurationManager.AppSettings["twitterAuthenticationToken"],
+																	ConfigurationManager.AppSettings["twitterAuthenticationTokenSecret"]);
+
+						ourPageDataContext.Refresh(RefreshMode.OverwriteCurrentValues, ourData);
+
+						string url = String.Format("http://{0}/offers/{1}", ConfigurationManager.AppSettings["DomainName"], ourData.url);
+
+						int length = ourData.title.Length;
+						if (length > 100)
+						{
+							length = 100;
+						}
+						string message = String.Format("{0} - {1}", ourData.title.Substring(0, length), url);
+						
+						if (!tp.PublishMessage(message))
+						{
+							labelStatus.Text += " - Twitter Update Failed";
+						}
+						labelStatus.Text += " - Twitter Update Succeeded";
+
 					}
 				}
 				if (ourChanges.Updates.Count > 0)

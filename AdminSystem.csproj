@@ -163,6 +163,7 @@
     <Compile Include="classes\SystemSettings.cs" />
     <Compile Include="classes\TwitterAuth.cs" />
     <Compile Include="classes\TwitterAuthentication.cs" />
+    <Compile Include="classes\TwitterPublisher.cs" />
     <Compile Include="classes\UserAdministration.cs" />
     <Compile Include="classes\XmlDBmedia.cs" />
     <Compile Include="classes\XmlDBarticles.cs" />

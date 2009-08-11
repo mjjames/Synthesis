@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -11,21 +10,9 @@ using mjjames.AdminSystem.dataentities;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class datetimeControl
+	public class DatetimeControl
 	{
-		private int _iPKey;
-
-		public int iPKey
-		{
-			get
-			{
-				return _iPKey;
-			}
-			set
-			{
-				_iPKey = value;
-			}
-		}
+		public int iPKey { get; set; }
 
 		public static object getDataValue(Control ourControl, Type ourType)
 		{
@@ -42,11 +29,9 @@ namespace mjjames.AdminSystem.dataControls
 		{
 			WebControl container = new WebControl(HtmlTextWriterTag.Div);
 
-			PropertyInfo ourProperty;
-			TextBox ourDateText = new TextBox();
-			ourDateText.ID = "control" + field.ID;
+			TextBox ourDateText = new TextBox {ID = "control" + field.ID};
 
-			ourProperty = ourPage.GetType().GetProperty(field.ID);
+			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID);
 			DateTime ourValue = new DateTime();
 			if (iPKey > 0 && ourProperty != null && (ourProperty.GetValue(ourPage, null) != null))
 			{
@@ -65,12 +50,14 @@ namespace mjjames.AdminSystem.dataControls
 				
 			}
 
-			CalendarExtender datetimeCalendar = new CalendarExtender();
-			datetimeCalendar.Animated = true;
-			datetimeCalendar.ID = "calendar" + field.ID;
-			datetimeCalendar.PopupPosition = CalendarPosition.TopRight;
-			datetimeCalendar.TargetControlID = "control" + field.ID;
-			datetimeCalendar.Format = "dd/MM/yyyy";
+			CalendarExtender datetimeCalendar = new CalendarExtender
+			                                    	{
+			                                    		Animated = true,
+			                                    		ID = "calendar" + field.ID,
+			                                    		PopupPosition = CalendarPosition.TopRight,
+			                                    		TargetControlID = "control" + field.ID,
+			                                    		Format = "dd/MM/yyyy"
+			                                    	};
 
 			container.Controls.Add(ourDateText);
 			container.Controls.Add(datetimeCalendar);

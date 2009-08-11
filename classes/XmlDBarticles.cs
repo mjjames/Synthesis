@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
@@ -6,6 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
+using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
@@ -37,7 +39,7 @@ namespace mjjames.AdminSystem
 		protected override object GetData()
 		{
 			object ourData = new object();
-			
+
 			article ourArticle = new article();
 			if (_iPKey > 0)
 			{
@@ -53,10 +55,11 @@ namespace mjjames.AdminSystem
 		public override void ArchiveData(int iKey)
 		{
 			article a = (from art in adminDC.articles
-									where art.article_key == iKey
-									select art).SingleOrDefault();
-									
-			DataEntities.Archive.article oldArticle = new mjjames.AdminSystem.DataEntities.Archive.article(){
+						 where art.article_key == iKey
+						 select art).SingleOrDefault();
+
+			DataEntities.Archive.article oldArticle = new mjjames.AdminSystem.DataEntities.Archive.article()
+			{
 				active = a.active,
 				article_key = a.article_key,
 				body = a.body,
@@ -72,11 +75,11 @@ namespace mjjames.AdminSystem
 				virtualurl = a.virtualurl,
 				DBName = adminDC.Connection.Database
 			};
-									
+
 			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();
 			archiveDC.articles.InsertOnSubmit(oldArticle);
 			archiveDC.SubmitChanges();
-			
+
 			adminDC.articles.DeleteOnSubmit(a);
 			adminDC.SubmitChanges();
 		}
@@ -111,25 +114,21 @@ namespace mjjames.AdminSystem
 			foreach (AdminTab tab in atTable.Tabs)
 			{
 				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
-				if (ourTab != null)
+				if (ourTab == null) continue;
+				foreach (AdminField field in tab.Fields)
 				{
-					foreach (AdminField field in tab.Fields)
-					{
-						Control ourControl = (Control)ourTab.FindControl("control" + field.ID);
+					Control ourControl = (Control)ourTab.FindControl("control" + field.ID);
 
-						if (ourControl != null)
-						{
-							PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
-							if (ourProperty != null)
-							{
-								HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
-								ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
-							}
-							else
-							{
-								HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
-							}
-						}
+					if (ourControl == null) continue;
+					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
+					if (ourProperty != null)
+					{
+						HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
+						ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+					}
+					else
+					{
+						HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
 					}
 				}
 			}
@@ -145,7 +144,6 @@ namespace mjjames.AdminSystem
 				ChangeSet ourChanges = ourPageDataContext.GetChangeSet();
 
 				labelStatus.Text = "Nothing to Save";
-
 				ourPageDataContext.SubmitChanges();
 
 				if (ourChanges.Inserts.Count > 0)
@@ -155,7 +153,7 @@ namespace mjjames.AdminSystem
 
 
 					_iPKey = ((article)ourData).article_key;
-				
+
 					strPKeyField = TablePrimaryKeyField;
 
 					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
@@ -170,11 +168,37 @@ namespace mjjames.AdminSystem
 					{
 						throw new Exception(String.Format("{0} doesn't contain a hidden control called {1}", atTable.ID, TablePrimaryKeyField));
 					}
+
+					if (Convert.ToBoolean(ConfigurationManager.AppSettings["twitterPublishArticles"]) && ourData.active)
+					{
+						TwitterPublisher tp = new TwitterPublisher(ConfigurationManager.AppSettings["twitterConsumerKey"],
+																	ConfigurationManager.AppSettings["twitterConsumerSecret"],
+																	ConfigurationManager.AppSettings["twitterAuthenticationToken"],
+																	ConfigurationManager.AppSettings["twitterAuthenticationTokenSecret"]);
+
+						ourPageDataContext.Refresh(RefreshMode.OverwriteCurrentValues,ourData);
+
+						string url = String.Format("http://{0}{1}", ConfigurationManager.AppSettings["DomainName"], ourData.url);
+
+						int length = ourData.title.Length;
+						if (length > 100)
+						{
+							length = 100;
+						}
+						string message = String.Format("{0} - {1}", ourData.title.Substring(0, length), url);
+						if (!tp.PublishMessage(message))
+						{
+							labelStatus.Text += " - Twitter Update Failed";
+						}
+						labelStatus.Text += " - Twitter Update Succeeded";
+
+					}
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
 					labelStatus.Text = String.Format("{0} Updated", atTable.ID);
 				}
+
 
 
 			}

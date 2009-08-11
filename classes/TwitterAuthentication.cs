@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Dimebrain.TweetSharp.Core.OAuth;
 using Dimebrain.TweetSharp.Extensions;
 using Dimebrain.TweetSharp.Fluent;
 using Dimebrain.TweetSharp.Model;
@@ -12,8 +8,8 @@ namespace mjjames.AdminSystem.classes
 	public class TwitterAuthentication
 	{
 		private OAuthToken _requestToken = new OAuthToken();
-		private string _consumerKey;
-		private string _consumerSecret;
+		private readonly string _consumerKey;
+		private readonly string _consumerSecret;
 		
 		public TwitterAuthentication(string consumerKey, string consumerSecret)
 		{
@@ -46,9 +42,8 @@ namespace mjjames.AdminSystem.classes
 		
 		private static TwitterAuth GetResponse(string response)
 		{
-			TwitterAuth auth = new TwitterAuth();
-			auth.User = response.AsUser();
-			
+			TwitterAuth auth = new TwitterAuth {User = response.AsUser()};
+
 			if (auth.User == null)
 			{
 				auth.Error = response.AsError();

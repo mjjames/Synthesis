@@ -16,7 +16,7 @@
 				<img src="/images/logo.png" alt="" runat="server" />
 			</div>
 			<div id="banner">
-				<asp:LinkButton runat="server" ID="signout" Visible="false" OnClick="btnSignOut_ServerClick"
+				<asp:LinkButton runat="server" ID="signout" Visible="false" CausesValidation="false" OnClick="btnSignOut_ServerClick"
 					CssClass="signout" Text="Sign Out" />
 			</div>
 			<div id="navbar">

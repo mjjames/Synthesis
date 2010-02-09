@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -41,7 +42,7 @@ namespace mjjames.AdminSystem.Authentication
 			{
 				Guid userID = new Guid(Request["u"]);
 
-				user = (from u in new AdminDataContext().aspnet_Users
+				user = (from u in new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString).aspnet_Users
 				            where u.UserId.Equals(userID)
 				            select u).SingleOrDefault();
 			}
@@ -65,7 +66,7 @@ namespace mjjames.AdminSystem.Authentication
 			}
 			UserAdministration ua = new UserAdministration();
 
-			var user = (from u in new AdminDataContext().aspnet_Users
+			var user = (from u in new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString).aspnet_Users
 			           where u.UserId.Equals(new Guid(Request["u"]))
 			           select u).First();
 			

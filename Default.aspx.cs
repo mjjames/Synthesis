@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections;
 using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
+using System.Reflection;
 using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
 
 public partial class _Default : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		if (ConfigurationManager.AppSettings["SiteName"] != null)
-		{
-			HtmlHead head = (HtmlHead)Page.Header;
-			head.Title = ConfigurationManager.AppSettings["SiteName"].ToString() + ": Admin - Welcome Page";
-		}
+	    if (ConfigurationManager.AppSettings["SiteName"] == null) return;
+	    HtmlHead head = Page.Header;
+	    head.Title = ConfigurationManager.AppSettings["SiteName"] + ": Admin - Welcome Page";
 	}
+
+    protected string GetVersionNumber()
+    {
+        return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+    }
 }

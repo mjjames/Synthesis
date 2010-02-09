@@ -22,11 +22,6 @@
 						runat="server" ID="vPassword" CssClass="validate" />
 				</div>
 				<div class="row">
-					<label runat="server" id="labelRememberMe" for="inputRememberMe" class="label">
-						Remember Me:</label>
-					<asp:CheckBox runat="server" ID="inputRememberMe" AutoPostBack="false" CssClass="field" />
-				</div>
-				<div class="row">
 					<input runat="server" id="btnLogon" type="submit" value="Logon" onserverclick="btnLogin_Click" class="submit" />
 				</div>
 			</div>

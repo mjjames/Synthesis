@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using mjjames.AdminSystem.dataEntities;
 using mjjames.AdminSystem.classes;
+using mjjames.AdminSystem.Repositories;
 
 namespace mjjames.AdminSystem
 {

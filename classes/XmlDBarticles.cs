@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
@@ -20,16 +19,6 @@ namespace mjjames.AdminSystem
 {
 	public class XmlDBarticles : XmlDBBase
 	{
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public XmlDBarticles()
-			: base()
-		{
-
-		}
-
-
 		#region datasources
 
 		/// <summary>
@@ -38,27 +27,25 @@ namespace mjjames.AdminSystem
 		/// <returns>a general object that needs casting to the correct type on use</returns>
 		protected override object GetData()
 		{
-			object ourData = new object();
-
+			
 			article ourArticle = new article();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourArticle = (from p in adminDC.articles
-							  where p.article_key == _iPKey
+				ourArticle = (from p in AdminDC.articles
+							  where p.article_key == PKey
 							  select p).SingleOrDefault();
 			}
-			ourData = ourArticle;
 
-			return ourData;
+			return ourArticle;
 		}
 
 		public override void ArchiveData(int iKey)
 		{
-			article a = (from art in adminDC.articles
+			article a = (from art in AdminDC.articles
 						 where art.article_key == iKey
 						 select art).SingleOrDefault();
 
-			DataEntities.Archive.article oldArticle = new mjjames.AdminSystem.DataEntities.Archive.article()
+			DataEntities.Archive.article oldArticle = new DataEntities.Archive.article
 			{
 				active = a.active,
 				article_key = a.article_key,
@@ -73,15 +60,15 @@ namespace mjjames.AdminSystem
 				title = a.title,
 				url = a.url,
 				virtualurl = a.virtualurl,
-				DBName = adminDC.Connection.Database
+				DBName = AdminDC.Connection.Database
 			};
 
-			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();
+			DataContexts.Archive.archiveDataContext archiveDC = new DataContexts.Archive.archiveDataContext();
 			archiveDC.articles.InsertOnSubmit(oldArticle);
 			archiveDC.SubmitChanges();
 
-			adminDC.articles.DeleteOnSubmit(a);
-			adminDC.SubmitChanges();
+			AdminDC.articles.DeleteOnSubmit(a);
+			AdminDC.SubmitChanges();
 		}
 
 
@@ -95,46 +82,44 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected override void saveEdit(object sender, EventArgs e)
+		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext = new AdminDataContext();
+			AdminDataContext ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			article ourData = new article();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourData = ourPageDataContext.articles.Single(p => p.article_key == _iPKey);
+				ourData = ourPageDataContext.articles.Single(p => p.article_key == PKey);
 			}
 
-			var ourfields = from fields in atTable.Tabs
-							select new
-							{
-								ID = fields.ID
-							};
-
-			foreach (AdminTab tab in atTable.Tabs)
+			foreach (AdminTab tab in Table.Tabs)
 			{
 				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
 				if (ourTab == null) continue;
 				foreach (AdminField field in tab.Fields)
 				{
-					Control ourControl = (Control)ourTab.FindControl("control" + field.ID);
+					Control ourControl = ourTab.FindControl("control" + field.ID);
 
 					if (ourControl == null) continue;
 					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
-						HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
-						ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+						Logger.LogInformation("Saving Content In: " + ourControl.ID);
+						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
 					}
 					else
 					{
-						HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
+						Logger.LogError("Error Saving Content: " + ourControl.ID, new Exception("Error Saving Content: " + ourControl.ID));
 					}
 				}
 			}
 
-			if (_iPKey == 0)
+			if (PKey == 0)
 			{
+				string prefix = ConfigurationManager.AppSettings["urlprefixArticle"] ?? String.Empty;
+				prefix = prefix.Replace("[*year]*", ourData.start_date.GetValueOrDefault(DateTime.Now).Year.ToString());
+				prefix = prefix.Replace("[*month]*", ourData.start_date.GetValueOrDefault(DateTime.Now).Month.ToString());
+				ourData.url = String.Format("{0}{1}", prefix, SQLHelpers.URLSafe(ourData.title));
 				ourPageDataContext.articles.InsertOnSubmit(ourData);
 			}
 
@@ -148,25 +133,27 @@ namespace mjjames.AdminSystem
 
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", atTable.ID);
-					string strPKeyField = String.Empty;
+					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
 
 
-					_iPKey = ((article)ourData).article_key;
+					PKey = ourData.article_key;
 
-					strPKeyField = TablePrimaryKeyField;
+					string strPKeyField = TablePrimaryKeyField;
 
 					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
 					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
 
 					try
 					{
-						ourControlPKey.Value = _iPKey.ToString();
-						ourPKey.Value = _iPKey.ToString();
+						ourControlPKey.Value = PKey.ToString();
+						ourPKey.Value = PKey.ToString();
 					}
 					catch
 					{
-						throw new Exception(String.Format("{0} doesn't contain a hidden control called {1}", atTable.ID, TablePrimaryKeyField));
+						Exception ex =
+							new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
+						Logger.LogError("Unknown Field",ex);
+						throw ex;
 					}
 
 					if (Convert.ToBoolean(ConfigurationManager.AppSettings["twitterPublishArticles"]) && ourData.active)
@@ -196,7 +183,7 @@ namespace mjjames.AdminSystem
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", atTable.ID);
+					labelStatus.Text = String.Format("{0} Updated", Table.ID);
 				}
 
 
@@ -204,7 +191,8 @@ namespace mjjames.AdminSystem
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = String.Format("{0} Update Failed: {1}", atTable.ID, ex);
+				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
+				Logger.LogError("Failed Update", ex);
 			}
 		}
 

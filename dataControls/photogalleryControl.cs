@@ -1,49 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
+using mjjames.AdminSystem.classes;
+using mjjames.AdminSystem.DataControls;
 using mjjames.ControlLibrary.AdminWebControls;
 using System.Web.UI.WebControls;
 using System.Configuration;
-using mjjames.Imaging;
 using mjjames.core;
 using mjjames.core.dataentities;
 using mjjames.AdminSystem.dataentities;
+using mjjames.Imaging;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class photogalleryControl
+	public class PhotogalleryControl : IDataControl
 	{
-		private int _iPKey;
+		private readonly ILogger _logger = new Logger("PhotogalleryControl");
+	
+		public int PKey { get; set; }
 
-		public int iPKey{
-			get
-			{
-				return _iPKey;
-			}
-			set
-			{
-				_iPKey = value;
-			}
+		public static object GetDataValue(Control ourControl, Type ourType)
+		{
+			throw new NotImplementedException();
 		}
 
-		public Control generateControl(AdminField field, object ourPage)
+		public Control GenerateControl(AdminField field, object ourPage)
 		{
-			UpdatePanel panelGallery = new UpdatePanel();
-			panelGallery.ID = "panelGallery";
-			panelGallery.UpdateMode = UpdatePanelUpdateMode.Conditional;
-			panelGallery.ChildrenAsTriggers = true;
+			UpdatePanel panelGallery = new UpdatePanel
+										{
+											ID = "panelGallery",
+											UpdateMode = UpdatePanelUpdateMode.Conditional,
+											ChildrenAsTriggers = true
+										};
 
-			AdminPhotoGallery gallery = new AdminPhotoGallery();
-			gallery.ID = "control" + field.ID;
+
+			_logger.LogInformation("Primary Key: " + PKey + " Total Galery Items:");
+			
+			//Hack: Basically if we try to load and use a photogallery before it's even saved we have no primary key
+			//rather than try and save and then save this I'm going to bodge in a "save message" and look at this at a later date
+			if(PKey <= 0)
+			{
+				panelGallery.ContentTemplateContainer.Controls.Add(
+					new LiteralControl
+						{
+							Text = "<h2 class=\"information\">Please save your changes before adding any images to your gallery</h2>",
+							ID = "control" + field.ID
+						});
+				return panelGallery;
+			}
+
+			AdminPhotoGallery gallery = new AdminPhotoGallery { ID = "control" + field.ID };
 			gallery.Attributes.Add("cssclass", "photogalleryContainer");
 
 			string sLookupID = field.Attributes.ContainsKey("lookupid") ? field.Attributes["lookupid"] : "galleryimage";
 
-			ObjectDataSource ods = new ObjectDataSource("mjjames.AdminSystem.PhotoInfoData", "GetImages");
-			ods.ID = "ods";
-			ods.SelectParameters.Add("linkkey", iPKey.ToString());
+			ObjectDataSource ods = new ObjectDataSource("mjjames.AdminSystem.PhotoInfoData", "GetImages") { ID = "ods" };
+			ods.SelectParameters.Add("linkkey", PKey.ToString());
 			ods.SelectParameters.Add("lookupid", sLookupID);
 
 			ods.InsertParameters.Add("lookupid", sLookupID);
@@ -52,11 +64,11 @@ namespace mjjames.AdminSystem.dataControls
 			ods.UpdateMethod = "UpdateImages";
 
 			ods.DeleteMethod = "DeleteImage";
-			ods.DeleteParameters.Add("linkkey", iPKey.ToString());
+			ods.DeleteParameters.Add("linkkey", PKey.ToString());
 			ods.DeleteParameters.Add("lookupid", sLookupID);
 
 
-			HttpContext.Current.Trace.Write("Primary Key: " + iPKey + " Total Galery Items:");
+		
 
 			string sAction = field.Attributes.ContainsKey("thumbaction") ? field.Attributes["thumbaction"] : "resize";
 			int iWidth = 90;
@@ -74,11 +86,11 @@ namespace mjjames.AdminSystem.dataControls
 
 			gallery.DataKeyNames = new[] { "key" };
 			gallery.InsertItemPosition = InsertItemPosition.LastItem;
-			gallery.ItemInserting += new EventHandler<ListViewInsertEventArgs>(gallery_ItemInserting);
-			gallery.ItemUpdating += new EventHandler<ListViewUpdateEventArgs>(gallery_ItemUpdating);
+			gallery.ItemInserting += GalleryItemInserting;
+			gallery.ItemUpdating += GalleryItemUpdating;
 
 			gallery.DataSourceID = "ods";
-			gallery.ThumbResizeProperties = new ResizerImage() { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
+			gallery.ThumbResizeProperties = new ResizerImage { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
 			gallery.FileUploadPath = ConfigurationManager.AppSettings["uploaddir"];
 
 
@@ -96,9 +108,9 @@ namespace mjjames.AdminSystem.dataControls
 				int.TryParse(field.Attributes["previewheight"], out iHeight);
 			}
 
-			gallery.PreviewResizeProperties = new ResizerImage() { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
+			gallery.PreviewResizeProperties = new ResizerImage { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
 
-			gallery.DataBound += new EventHandler(gallery_Load);
+			gallery.DataBound += GalleryLoad;
 
 			panelGallery.ContentTemplateContainer.Controls.Add(gallery);
 			panelGallery.ContentTemplateContainer.Controls.Add(ods);
@@ -106,34 +118,32 @@ namespace mjjames.AdminSystem.dataControls
 			return panelGallery;
 		}
 
-		void gallery_Load(object sender, EventArgs e)
+		static void GalleryLoad(object sender, EventArgs e)
 		{
 			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
 			ScriptManager ourSM = ScriptManager.GetCurrent((Page)HttpContext.Current.Handler);
 
-			ourSM.RegisterPostBackControl(gallery.InsertItem);
-
+			if (ourSM != null && gallery != null) ourSM.RegisterPostBackControl(gallery.InsertItem);
 		}
 
-		void gallery_ItemUpdating(object sender, ListViewUpdateEventArgs e)
+		static void GalleryItemUpdating(object sender, ListViewUpdateEventArgs e)
 		{
 			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
+			if (gallery == null) return;
 			FileUpload fu = helpers.FindControlRecursive(gallery.EditItem, "fileupload") as FileUpload;
 			TextBox title = helpers.FindControlRecursive(gallery.EditItem, "txtTitle") as TextBox;
 			TextBox desc = helpers.FindControlRecursive(gallery.EditItem, "txtDescription") as TextBox;
 			//TextBox alttag = helpers.FindControlRecursive(gallery.EditItem, "txtAltTag") as TextBox;
-			PhotoInfo pi = new PhotoInfo();
+			if (title == null || desc == null) return;
+			PhotoInfo pi = new PhotoInfo { Title = title.Text, Description = desc.Text };
 			//pi.AltTag = alttag.Text;
-			pi.Title = title.Text;
-			pi.Description = desc.Text;
 
-			if (fu.HasFile)
+			if (fu != null && fu.HasFile)
 			{
 				FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
 				if (fud.error)
 				{
-					LiteralControl labelStatus = new LiteralControl();
-					labelStatus.Text = "Invalid File: " + fud.errormessage;
+					LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };
 					gallery.Parent.Controls.Add(labelStatus);
 					throw new Exception("File Upload Error: " + fud.errormessage);
 				}
@@ -143,28 +153,30 @@ namespace mjjames.AdminSystem.dataControls
 			e.NewValues.Add("PhotoInfo", pi);
 		}
 
-		void gallery_ItemInserting(object sender, ListViewInsertEventArgs e)
+		void GalleryItemInserting(object sender, ListViewInsertEventArgs e)
 		{
 			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
-			FileUpload fu = helpers.FindControlRecursive(gallery.InsertItem, "fileupload") as FileUpload;
-			TextBox title = helpers.FindControlRecursive(gallery.InsertItem, "txtTitle") as TextBox;
-			TextBox desc = helpers.FindControlRecursive(gallery.InsertItem, "txtDescription") as TextBox;
-			TextBox alttag = helpers.FindControlRecursive(gallery.InsertItem, "txtAltTag") as TextBox;
-			FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
-			if (fud.error)
+			if (gallery != null)
 			{
-				LiteralControl labelStatus = new LiteralControl();
-				labelStatus.Text = "Invalid File: " + fud.errormessage;
-				gallery.Parent.Controls.Add(labelStatus);
-				throw new Exception("File Upload Error: " + fud.errormessage);
+				FileUpload fu = helpers.FindControlRecursive(gallery.InsertItem, "fileupload") as FileUpload;
+				TextBox title = helpers.FindControlRecursive(gallery.InsertItem, "txtTitle") as TextBox;
+				TextBox desc = helpers.FindControlRecursive(gallery.InsertItem, "txtDescription") as TextBox;
+				FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
+				if (fud.error)
+				{
+					LiteralControl labelStatus = new LiteralControl {Text = "Invalid File: " + fud.errormessage};
+					gallery.Parent.Controls.Add(labelStatus);
+					throw new Exception("File Upload Error: " + fud.errormessage);
+				}
+				if (title != null && desc != null)
+				{
+					PhotoInfo pi = new PhotoInfo { Title = title.Text, Description = desc.Text, FileName = fud.filepath };
+					//pi.AltTag = alttag.Text;
+					e.Values.Add("PhotoInfo", pi);
+				}
 			}
-			PhotoInfo pi = new PhotoInfo();
-			//pi.AltTag = alttag.Text;
-			pi.Title = title.Text;
-			pi.Description = desc.Text;
-			pi.FileName = fud.filepath;
-			e.Values.Add("PhotoInfo", pi);
-			e.Values.Add("LinkKey", _iPKey);
+
+			e.Values.Add("LinkKey", PKey);
 		}
 	}
 }

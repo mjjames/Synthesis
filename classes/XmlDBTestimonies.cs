@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
@@ -18,16 +18,6 @@ namespace mjjames.AdminSystem
 {
 	public class XmlDBtestimonies : XmlDBBase
 	{
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public XmlDBtestimonies()
-			: base()
-		{
-
-		}
-
-
 		#region datasources
 
 		/// <summary>
@@ -36,18 +26,15 @@ namespace mjjames.AdminSystem
 		/// <returns>a general object that needs casting to the correct type on use</returns>
 		protected override object GetData()
 		{
-			object ourData = new object();
-			
 			testimony ourTestimony = new testimony();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourTestimony = (from p in adminDC.testimonies
-							  where p.testimony_key == _iPKey
+				ourTestimony = (from p in AdminDC.testimonies
+							  where p.testimony_key == PKey
 							  select p).SingleOrDefault();
 			}
-			ourData = ourTestimony;
-
-			return ourData;
+			
+			return ourTestimony;
 		}
 
 
@@ -63,49 +50,39 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected override void saveEdit(object sender, EventArgs e)
+		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext = new AdminDataContext();
+			AdminDataContext ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			testimony ourData = new testimony();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourData = ourPageDataContext.testimonies.Single(p => p.testimony_key == _iPKey);
+				ourData = ourPageDataContext.testimonies.Single(p => p.testimony_key == PKey);
 			}
 
-			var ourfields = from fields in atTable.Tabs
-							select new
-							{
-								ID = fields.ID
-							};
-
-			foreach (AdminTab tab in atTable.Tabs)
+			foreach (AdminTab tab in Table.Tabs)
 			{
 				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
-				if (ourTab != null)
+				if (ourTab == null) continue;
+				foreach (AdminField field in tab.Fields)
 				{
-					foreach (AdminField field in tab.Fields)
-					{
-						Control ourControl = (Control)ourTab.FindControl("control" + field.ID);
+					Control ourControl = ourTab.FindControl("control" + field.ID);
 
-						if (ourControl != null)
-						{
-							PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
-							if (ourProperty != null)
-							{
-								HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
-								ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
-							}
-							else
-							{
-								HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
-							}
-						}
+					if (ourControl == null) continue;
+					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
+					if (ourProperty != null)
+					{
+						Logger.LogInformation("Saving Content In: " + ourControl.ID);
+						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+					}
+					else
+					{
+						Logger.LogError("Error Updating Content", new Exception("Error Saving Content: " + ourControl.ID));
 					}
 				}
 			}
 
-			if (_iPKey == 0)
+			if (PKey == 0)
 			{
 				ourPageDataContext.testimonies.InsertOnSubmit(ourData);
 			}
@@ -121,37 +98,39 @@ namespace mjjames.AdminSystem
 
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", atTable.ID);
-					string strPKeyField = String.Empty;
+					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
 
 
-					_iPKey = ((testimony)ourData).testimony_key;
+					PKey = ourData.testimony_key;
 				
-					strPKeyField = TablePrimaryKeyField;
+					string strPKeyField = TablePrimaryKeyField;
 
 					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
 					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
 
 					try
 					{
-						ourControlPKey.Value = _iPKey.ToString();
-						ourPKey.Value = _iPKey.ToString();
+						ourControlPKey.Value = PKey.ToString();
+						ourPKey.Value = PKey.ToString();
 					}
 					catch
 					{
-						throw new Exception(String.Format("{0} doesn't contain a hidden control called {1}", atTable.ID, TablePrimaryKeyField));
+						Exception ex = new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
+						Logger.LogError("Content has no Primary Key", ex);
+						throw ex;
 					}
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", atTable.ID);
+					labelStatus.Text = String.Format("{0} Updated", Table.ID);
 				}
 
 
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = String.Format("{0} Update Failed: {1}", atTable.ID, ex);
+				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
+				Logger.LogError("Update Failed", ex);
 			}
 		}
 
@@ -159,11 +138,12 @@ namespace mjjames.AdminSystem
 
 		public override void ArchiveData(int iKey)
 		{
-			testimony oldTestimony = (from t in adminDC.testimonies
+			testimony oldTestimony = (from t in AdminDC.testimonies
 										where t.testimony_key == iKey
 										select t).SingleOrDefault();
 										
-			DataEntities.Archive.testimony archiveTestimony = new mjjames.AdminSystem.DataEntities.Archive.testimony(){
+			DataEntities.Archive.testimony archiveTestimony = new DataEntities.Archive.testimony
+			                                                  	{
 				active = oldTestimony.active,
 				description = oldTestimony.description,
 				project_fkey = oldTestimony.project_fkey,
@@ -171,16 +151,16 @@ namespace mjjames.AdminSystem
 				title = oldTestimony.title,
 				url = oldTestimony.url,
 				video_id = oldTestimony.video_id,
-				DBName = adminDC.Connection.Database
+				DBName = AdminDC.Connection.Database
 			};
 			
-			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();
+			DataContexts.Archive.archiveDataContext archiveDC = new DataContexts.Archive.archiveDataContext();
 			
 			archiveDC.testimonies.InsertOnSubmit(archiveTestimony);
-			adminDC.testimonies.DeleteOnSubmit(oldTestimony);
+			AdminDC.testimonies.DeleteOnSubmit(oldTestimony);
 			
 			archiveDC.SubmitChanges();
-			adminDC.SubmitChanges();
+			AdminDC.SubmitChanges();
 		}
 
 	}

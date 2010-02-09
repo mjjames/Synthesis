@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
@@ -20,16 +19,6 @@ namespace mjjames.AdminSystem
 {
 	public class XmlDBoffers : XmlDBBase
 	{
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public XmlDBoffers()
-			: base()
-		{
-
-		}
-
-
 		#region datasources
 
 		/// <summary>
@@ -38,18 +27,14 @@ namespace mjjames.AdminSystem
 		/// <returns>a general object that needs casting to the correct type on use</returns>
 		protected override object GetData()
 		{
-			object ourData = new object();
-			
 			offer ourOffer = new offer();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourOffer = (from p in adminDC.offers
-							  where p.offer_key == _iPKey
+				ourOffer = (from p in AdminDC.offers
+							  where p.offer_key == PKey
 							  select p).SingleOrDefault();
 			}
-			ourData = ourOffer;
-
-			return ourData;
+			return ourOffer;
 		}
 
 
@@ -65,50 +50,42 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected override void saveEdit(object sender, EventArgs e)
+		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext = new AdminDataContext();
+			AdminDataContext ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			offer ourData = new offer();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourData = ourPageDataContext.offers.Single(p => p.offer_key == _iPKey);
+				ourData = ourPageDataContext.offers.Single(p => p.offer_key == PKey);
 			}
 
-			var ourfields = from fields in atTable.Tabs
-							select new
-							{
-								ID = fields.ID
-							};
-
-			foreach (AdminTab tab in atTable.Tabs)
+			foreach (AdminTab tab in Table.Tabs)
 			{
 				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
-				if (ourTab != null)
+				if (ourTab == null) continue;
+				foreach (AdminField field in tab.Fields)
 				{
-					foreach (AdminField field in tab.Fields)
-					{
-						Control ourControl = (Control)ourTab.FindControl("control" + field.ID);
+					Control ourControl = ourTab.FindControl("control" + field.ID);
 
-						if (ourControl != null)
-						{
-							PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
-							if (ourProperty != null)
-							{
-								HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
-								ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
-							}
-							else
-							{
-								HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
-							}
-						}
+					if (ourControl == null) continue;
+					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
+					if (ourProperty != null)
+					{
+						Logger.LogInformation("Saving Content In: " + ourControl.ID);
+						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+					}
+					else
+					{
+						Logger.LogError("Update Failed", new Exception("Error Saving Content: " + ourControl.ID));
 					}
 				}
 			}
 
-			if (_iPKey == 0)
+			if (PKey == 0)
 			{
+				string prefix = ConfigurationManager.AppSettings["urlprefixOffer"] ?? String.Empty;
+				ourData.url = String.Format("{0}{1}", prefix, SQLHelpers.URLSafe(ourData.title));
 				ourPageDataContext.offers.InsertOnSubmit(ourData);
 			}
 
@@ -123,25 +100,24 @@ namespace mjjames.AdminSystem
 
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", atTable.ID);
-					string strPKeyField = String.Empty;
-
-
-					_iPKey = ((offer)ourData).offer_key;
+					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
 				
-					strPKeyField = TablePrimaryKeyField;
+					PKey = ourData.offer_key;
+				
+					string strPKeyField = TablePrimaryKeyField;
 
 					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
 					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
 
 					try
 					{
-						ourControlPKey.Value = _iPKey.ToString();
-						ourPKey.Value = _iPKey.ToString();
+						ourControlPKey.Value = PKey.ToString();
+						ourPKey.Value = PKey.ToString();
 					}
 					catch
 					{
-						throw new Exception(String.Format("{0} doesn't contain a hidden control called {1}", atTable.ID, TablePrimaryKeyField));
+						Exception ex = new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
+						Logger.LogError("Update Failed", ex);
 					}
 
 					if (Convert.ToBoolean(ConfigurationManager.AppSettings["twitterPublishOffers"]) && ourData.active)
@@ -172,14 +148,15 @@ namespace mjjames.AdminSystem
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", atTable.ID);
+					labelStatus.Text = String.Format("{0} Updated", Table.ID);
 				}
 
 
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = String.Format("{0} Update Failed: {1}", atTable.ID, ex);
+				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
+				Logger.LogError("Update Failed", ex);
 			}
 		}
 
@@ -187,11 +164,12 @@ namespace mjjames.AdminSystem
 
 		public override void ArchiveData(int iKey)
 		{
-			offer oldOffer =(from o in adminDC.offers
+			offer oldOffer =(from o in AdminDC.offers
 								where o.offer_key == iKey
 								select o).SingleOrDefault();
 			
-			DataEntities.Archive.offer archiveOffer = new mjjames.AdminSystem.DataEntities.Archive.offer(){
+			DataEntities.Archive.offer archiveOffer = new DataEntities.Archive.offer
+			                                          	{
 				active = oldOffer.active,
 				description = oldOffer.description,
 				offer_end = oldOffer.offer_end,
@@ -203,16 +181,16 @@ namespace mjjames.AdminSystem
 				title = oldOffer.title,
 				url = oldOffer.url,
 				thumbnailimage = oldOffer.thumbnailimage,
-				DBName = adminDC.Connection.Database
+				DBName = AdminDC.Connection.Database
 			};
 			
-			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();
+			DataContexts.Archive.archiveDataContext archiveDC = new DataContexts.Archive.archiveDataContext();
 			
 			archiveDC.offers.InsertOnSubmit(archiveOffer);
-			adminDC.offers.DeleteOnSubmit(oldOffer);
+			AdminDC.offers.DeleteOnSubmit(oldOffer);
 			
 			archiveDC.SubmitChanges();
-			adminDC.SubmitChanges();
+			AdminDC.SubmitChanges();
 									
 		}
 

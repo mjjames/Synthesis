@@ -2,6 +2,7 @@
 using Dimebrain.TweetSharp.Extensions;
 using Dimebrain.TweetSharp.Fluent;
 using Dimebrain.TweetSharp.Model;
+using Dimebrain.TweetSharp.Model.Twitter;
 
 namespace mjjames.AdminSystem.classes
 {
@@ -39,11 +40,11 @@ namespace mjjames.AdminSystem.classes
 			OAuthToken accessToken = GetAccessToken(_consumerKey, _consumerSecret, token, pin);
 			return GetAuthenticatedUser(accessToken);
 		}
-		
-		private static TwitterAuth GetResponse(string response)
+
+		private static TwitterAuth GetResponse(TwitterResult response)
 		{
 			TwitterAuth auth = new TwitterAuth {User = response.AsUser()};
-
+			
 			if (auth.User == null)
 			{
 				auth.Error = response.AsError();

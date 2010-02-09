@@ -15,7 +15,7 @@ namespace mjjames.AdminSystem.classes
 {
 	public class UserAdministration
 	{
-		private readonly AdminDataContext _adc = new AdminDataContext();
+		private readonly AdminDataContext _adc =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 
 		public List<ApplicationUser> LoadUsers()
 		{
@@ -87,7 +87,7 @@ namespace mjjames.AdminSystem.classes
 						select u).SingleOrDefault();
 
 			var role = (from r in _adc.vw_aspnet_Roles
-						where r.RoleName == "editors"
+						where r.RoleName == "editor"
 						select r).SingleOrDefault();
 
 			if (role == null || user == null) return;
@@ -112,13 +112,13 @@ namespace mjjames.AdminSystem.classes
 
 		}
 
-		public void SendResetPasswordEmail(string resetAddress, Guid userID)
+		public bool SendResetPasswordEmail(string resetAddress, Guid userID)
 		{
 			var user = (from u in _adc.aspnet_Users
 						where u.UserId.Equals(userID)
 						select u).FirstOrDefault();
 
-			if (String.IsNullOrEmpty(user.aspnet_Membership.Email)) return;
+			if (String.IsNullOrEmpty(user.aspnet_Membership.Email)) return false;
 
 			string siteName = ConfigurationManager.AppSettings["SiteName"];
 
@@ -142,7 +142,8 @@ namespace mjjames.AdminSystem.classes
 									Email = resetEmail
 								};
 
-			emailer.SendMail();
+
+            return emailer.SendMail();
 		}
 
 		/// <summary>

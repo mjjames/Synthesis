@@ -14,7 +14,7 @@ namespace mjjames.AdminSystem
 	public partial class SystemSettings : Page
 	{
 
-		protected Configuration.SystemSettings _settings = new Configuration.SystemSettings();
+		protected Configuration.SystemSettings Settings = new Configuration.SystemSettings();
 		private TwitterAuth _twitterAuth;
 		private readonly TwitterAuthentication _twitterAuthentication = new TwitterAuthentication(ConfigurationManager.AppSettings["twitterConsumerKey"], ConfigurationManager.AppSettings["twitterConsumerSecret"]);
 		private readonly NavigationSettings _navsettings = new NavigationSettings();
@@ -25,13 +25,13 @@ namespace mjjames.AdminSystem
 
 		public string GetSetting(string key)
 		{
-			return _settings[key] ?? String.Empty;
+			return Settings[key] ?? String.Empty;
 		}
 
 		protected bool GetSettingAsBool(string key)
 		{
 			bool value;
-			bool.TryParse(_settings[key], out value);
+			bool.TryParse(Settings[key], out value);
 			return value;
 		}
 
@@ -39,7 +39,7 @@ namespace mjjames.AdminSystem
 		{
 			DropDownList ddl = (DropDownList) sender;
 			
-			string value =_settings[ddl.ID.Substring(1).Replace("__", ":")];
+			string value =Settings[ddl.ID.Substring(1).Replace("__", ":")];
 
 			foreach (ListItem item in ddl.Items)
 			{
@@ -65,7 +65,7 @@ namespace mjjames.AdminSystem
 		{
 			DropDownList ddl = (DropDownList) sender;
 			AdminToolboxState state = ((AdminToolboxState) ((ListViewDataItem) ddl.Parent).DataItem);
-			string value = state.name + "-|-" + state.accesslevel.ToString();
+			string value = state.name + "-|-" + state.accesslevel;
 			foreach (ListItem item in ddl.Items)
 			{
 				item.Value = state.name + "-|-" + item.Value; //stashing the field name in the value, bit dirty but hey
@@ -109,20 +109,20 @@ namespace mjjames.AdminSystem
 				switch (control.GetType().Name)
 				{
 					case "TextBox":
-						_settings[key] = ((TextBox) control).Text;
+						Settings[key] = ((TextBox) control).Text;
 						break;
 					case "CheckBox":
-						_settings[key] = ((CheckBox) control).Checked.ToString();
+						Settings[key] = ((CheckBox) control).Checked.ToString();
 						break;
 					case "DropDownList":
-						_settings[key] = ((DropDownList) control).SelectedValue;
+						Settings[key] = ((DropDownList) control).SelectedValue;
 						break;
 				}
 			}
 
 			try
 			{
-				_settings.Save();
+				Settings.Save();
 				configStatus.Text = "Config Settings Saved";
 			}
 			catch (Exception)
@@ -155,9 +155,9 @@ namespace mjjames.AdminSystem
 			Session.Remove("twittertoken");
 
 			//persist OAuth token
-			_settings["twitterAuthenticationToken"] = _twitterAuth.AccessToken.Token;
-			_settings["twitterAuthenticationTokenSecret"] = _twitterAuth.AccessToken.TokenSecret;
-			_settings.Save();
+			Settings["twitterAuthenticationToken"] = _twitterAuth.AccessToken.Token;
+			Settings["twitterAuthenticationTokenSecret"] = _twitterAuth.AccessToken.TokenSecret;
+			Settings.Save();
 		}
 
 		protected void CheckTwitterSettings(object sender, EventArgs e)
@@ -210,7 +210,7 @@ namespace mjjames.AdminSystem
 			{
 				return;
 			}
-			OAuthToken token = new OAuthToken()
+			OAuthToken token = new OAuthToken
 			                   	{
 			                   		Token =ConfigurationManager.AppSettings["twitterAuthenticationToken"],
 			                   		TokenSecret = ConfigurationManager.AppSettings["twitterAuthenticationTokenSecret"]
@@ -228,9 +228,9 @@ namespace mjjames.AdminSystem
 
 		protected void RemoveTwitterAuthentication(object sender, EventArgs e)
 		{
-			_settings.Remove("twitterAuthenticationToken");
-			_settings.Remove("twitterAuthenticationTokenSecret");
-			_settings.Save();
+			Settings.Remove("twitterAuthenticationToken");
+			Settings.Remove("twitterAuthenticationTokenSecret");
+			Settings.Save();
 
 			litStatus.Text = "Twitter Authentication Removed";
 						
@@ -267,7 +267,7 @@ namespace mjjames.AdminSystem
 					key = ddl.SelectedValue.Substring(0, ddl.SelectedValue.IndexOf("-|-"));
 				}
 				var url = _navsettings.GetSettings().Cast<AdminToolboxState>().FirstOrDefault(ats => ats.name.Equals(key)).url;
-				AdminToolboxState toolboxitem = new AdminToolboxState()
+				AdminToolboxState toolboxitem = new AdminToolboxState
 				                                	{
 				                                		name = key,
 				                                		accesslevel = newValue,

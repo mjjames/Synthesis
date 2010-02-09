@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" Inherits="mjjames.AdminSystem.newsletters_subscriptionmanagement" Codebehind="subscriptionmanagement.aspx.cs" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" Inherits="mjjames.AdminSystem.NewslettersSubscriptionmanagement" Codebehind="subscriptionmanagement.aspx.cs" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -81,7 +81,7 @@
 										Enabled="false" />
 								</td>
 								<td>
-									<asp:LinkButton ID="sendConfirmation" runat="server" OnClick="resendConfirmation"
+									<asp:LinkButton ID="sendConfirmation" runat="server" OnClick="ResendConfirmation"
 										Text="Resend" ToolTip="Resend Confirmation Email" />
 									<asp:ImageButton ID="removeReciprient" runat="server" AlternateText="Remove" CommandName="Delete"
 										CssClass="buttonDelete" ImageUrl="~/adminimages/icons/remove.png" ToolTip="Remove Reciprient" />
@@ -109,7 +109,7 @@
 										Enabled="false" />
 								</td>
 								<td>
-									<asp:LinkButton ID="sendConfirmation" runat="server" OnClick="resendConfirmation"
+									<asp:LinkButton ID="sendConfirmation" runat="server" OnClick="ResendConfirmation"
 										Text="Resend" ToolTip="Resend Confirmation Email" />
 									<asp:ImageButton ID="removeReciprient" runat="server" AlternateText="Remove" CommandName="Delete"
 										CssClass="buttonDelete" ImageUrl="~/adminimages/icons/remove.png" ToolTip="Remove Reciprient" />

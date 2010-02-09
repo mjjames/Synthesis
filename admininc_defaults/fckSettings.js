@@ -2,11 +2,10 @@
 
 FCKConfig.ToolbarSets["mjjames"] = [
     ['Cut','Copy','PasteText','-','SpellCheck',
-    '-','Image','Flash','Table','Rule','Smiley','SpecialChar','-',
+    '-','Image','OnlineVideo','Table','Rule','Smiley','SpecialChar','-',
 	'Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat','-','Link','Unlink','Anchor','-','Source'],
 	['Style','FontFormat','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull',
-	'-','Bold','Italic','Superscript','OrderedList','UnorderedList','-','Outdent','Indent']
-	
+	'-','Bold','Italic','Superscript','OrderedList','UnorderedList','-','Outdent','Indent']	
 ];
 
 FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
@@ -20,3 +19,8 @@ _QuickUploadLanguage	= 'aspx' ;
 FCKConfig.ImageUpload = true ;
 FCKConfig.FirefoxSpellChecker = true;
 FCKConfig.FormatSource = true;
+
+FCKConfig.PluginsPath = '/admin/fckplugins/';
+
+
+FCKConfig.Plugins.Add('OnlineVideo', 'en');

@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
 using System.Xml.Linq;
 using AjaxControlToolkit;
+using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataContexts;
 
@@ -19,94 +23,99 @@ namespace mjjames.AdminSystem
 {
 	public class XmlDBBase
 	{
-		protected string sTableName;
-		protected string sXMLFile;
-		protected XDocument xdXML;
-		protected AdminDataContext adminDC;
-		protected int _iPKey;
-		protected int _iFKey;
-		protected AdminTable atTable;
-		protected string _connectionstring = String.Empty;
+		protected string InternalTableName;
+		protected string XMLFilePath;
+		protected XDocument XML;
+		protected AdminDataContext AdminDC;
+		protected int PKey;
+		protected int FKey;
+		protected AdminTable Table;
+		protected string Connectionstring = String.Empty;
+		protected readonly Logger Logger = new Logger("XMLDB");
 		
+
 
 		/// <summary>
 		/// Provide a ConnectionString for the DataSources
 		/// </summary>
-		public string ConnectionString { set { _connectionstring = value; } get { return _connectionstring; } }
+		public string ConnectionString { set { Connectionstring = value; } get { return Connectionstring; } }
 
 		/// <summary>
 		/// sets the table to use within the xml
 		/// </summary>
-		public string TableName { set { sTableName = value; buildAdminTable();} get { return sTableName; } }
+		public string TableName { set { InternalTableName = value; BuildAdminTable(); } get { return InternalTableName; } }
 
 		/// <summary>
 		/// for overridding the xml file 
 		/// </summary>
-		public string CustomXMLFile { set { sXMLFile = value; } get { return sXMLFile; } }
+		public string CustomXMLFile { set { XMLFilePath = value; } get { return XMLFilePath; } }
 
 		/// <summary>
 		/// provide the tables primary key for databinding
 		/// </summary>
-		public int PrimaryKey { set { _iPKey = value; } get { return _iPKey; } }
+		public int PrimaryKey { set { PKey = value; } get { return PKey; } }
 
 		/// <summary>
 		/// provides the tables foreign key for linking
 		/// </summary>
-		public int ForeignKey { set { _iFKey = value; } get { return _iFKey; } }
+		public int ForeignKey { set { FKey = value; } get { return FKey; } }
 
-		public string TableLabel { get { return atTable != null ? atTable.Label : String.Empty; } }
+		public string TableLabel { get { return Table != null ? Table.Label : String.Empty; } }
 
-		public string TablePrimaryKeyField { get { return atTable != null ? atTable.Defaults.FirstOrDefault(t => t.Attributes.ContainsKey("primarykey")).ID : String.Empty; } }
+		public string TablePrimaryKeyField { get { return Table != null ? Table.Defaults.FirstOrDefault(t => t.Attributes.ContainsKey("primarykey")).ID : String.Empty; } }
 
 
 		public List<AdminField> TableDefaults
 		{
 			get
 			{
-				return atTable != null ? atTable.Defaults : null ;
+				return Table != null ? Table.Defaults : null;
 			}
 		}
 
-		public bool TableQuickEdit { get { return atTable.bQuickEdit; } }
-		
+		public bool TableQuickEdit { get { return Table.bQuickEdit; } }
+
 		/// <summary>
 		/// constructor
 		/// </summary>
 		public XmlDBBase()
 		{
-			sXMLFile = (string)ConfigurationManager.AppSettings["adminConfigXML"];
+			XMLFilePath = ConfigurationManager.AppSettings["adminConfigXML"];
 			try
 			{
-				if (sXMLFile == null)
+				if (XMLFilePath == null)
 				{
-					throw new Exception("Error: No Admin Config XML Specified");
+					Exception exception = new Exception("Error: No Admin Config XML Specified");
+					Logger.LogError("XMLDB Error", exception);
+					throw exception;
 				}
-				string sFilePath = HttpContext.Current.Server.MapPath(sXMLFile);
+				string sFilePath = HttpContext.Current.Server.MapPath(XMLFilePath);
 
-				xdXML = XDocument.Load(sFilePath);
-				HttpContext.Current.Trace.Write("adminConfigxml: " + sFilePath);
-				adminDC = new AdminDataContext();
+				XML = XDocument.Load(sFilePath);
+				Logger.LogInformation("adminConfigxml: " + sFilePath);
+				AdminDC = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			}
 			catch (Exception e)
 			{
+				Logger.LogError("XMLDB Error", e);
 				HttpContext.Current.Response.Write(string.Format("<h1>{0}</h1><p>{1}</p><p>{2}</p>", "XML DB Error", e.Message, e.InnerException));
 				HttpContext.Current.Response.End();
 			}
-			
+
 		}
 
 		/// <summary>
 		/// builds the admin table object from the xml file 
 		/// </summary>
-		private void buildAdminTable()
-		{ 
-			var xmlQuery = from table in xdXML.Descendants("table")
-						   where table.Attribute("id").Value == sTableName
+		private void BuildAdminTable()
+		{
+			var xmlQuery = from table in XML.Descendants("table")
+						   where table.Attribute("id").Value == InternalTableName
 						   select new AdminTable
 						   {
 							   bEmailButton = XmlConvert.ToBoolean(table.Attribute("emailbutton") != null ? table.Attribute("emailbutton").Value : "false"),
 							   bQuickEdit = XmlConvert.ToBoolean(table.Attribute("quickedit") != null ? table.Attribute("quickedit").Value : "false"),
-							   ID = table.Attribute("id").Value ,
+							   ID = table.Attribute("id").Value,
 							   Label = table.Attribute("label").Value,
 							   Defaults = (from fields in table.Element("defaults").Elements("field")
 										   select new AdminField
@@ -148,11 +157,11 @@ namespace mjjames.AdminSystem
 									   }).ToList()
 
 						   };
-			atTable = xmlQuery.FirstOrDefault();
+			Table = xmlQuery.FirstOrDefault();
 		}
 
 
-		#region dbeditor methods
+		#region DBEditor methods
 		/// <summary>
 		/// Renders a WebControl for the field specified
 		/// </summary>
@@ -162,16 +171,13 @@ namespace mjjames.AdminSystem
 		/// TODO need to cast from object to a type
 		private PlaceHolder RenderControl(AdminField field, object ourPage)
 		{
-			HttpContext.Current.Trace.Write("Rendering Control: " + field.Type);
+
+			Logger.LogDebug("Rendering Control: " + field.Type);
 			PlaceHolder renderedControl = new PlaceHolder();
 			bool bRenderControl = true;
-			
-			ScriptManager ourSM = ScriptManager.GetCurrent((Page)HttpContext.Current.Handler);
-					
-			Label ourLabel = new Label();
-			WebControl ourContainer = new WebControl(HtmlTextWriterTag.Div);
 
-			ourContainer.CssClass = "row";
+			Label ourLabel = new Label();
+			WebControl ourContainer = new WebControl(HtmlTextWriterTag.Div) { CssClass = "row" };
 
 			ourLabel.Text = field.Label;
 			ourLabel.CssClass = "label " + field.Type.ToLower();
@@ -180,17 +186,31 @@ namespace mjjames.AdminSystem
 
 			ourContainer.Controls.Add(ourLabel);
 
-			object[] controlParams = new object[] { field, ourPage };
+			object[] controlParams = new[] { field, ourPage };
 			try
 			{
-				object ourType = Activator.CreateInstance(null, "mjjames.AdminSystem.dataControls." + field.Type.ToLower() + "Control").Unwrap();
-				ourType.GetType().GetProperty("iPKey").SetValue(ourType, _iPKey, null);
-				Control ourControl = (Control)ourType.GetType().GetMethod("generateControl").Invoke(ourType, controlParams);
-				ourContainer.Controls.Add(ourControl);
+				//Create CultureInfo and TextInfo classes to use ToTitleCase method
+				CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+				TextInfo textInfo = cultureInfo.TextInfo;
+				string controlName = String.Format("mjjames.AdminSystem.dataControls.{0}Control", textInfo.ToTitleCase(field.Type));
+				ObjectHandle ourType = Activator.CreateInstance("mjjames.AdminSystem", controlName);
+				
+				if (ourType != null)
+				{
+					object controlHandle = ourType.Unwrap();
+					controlHandle.GetType().GetProperty("PKey").SetValue(controlHandle, PKey, null);
+					Control ourControl = (Control)controlHandle.GetType().GetMethod("GenerateControl").Invoke(controlHandle, controlParams);
+					ourContainer.Controls.Add(ourControl);
+				}
+				else
+				{
+					Logger.LogError("RenderControl Failed ", new TypeLoadException("Unknown ControlType: " + field.Type));
+				
+				}
 			}
-			catch (TypeLoadException)
+			catch (TypeLoadException ex)
 			{
-				HttpContext.Current.Trace.Warn("Unknown ControlType: " + field.Type);
+				Logger.LogError("RenderControl Failed ", new Exception("Unknown ControlType: " + field.Type, ex));
 				bRenderControl = false;
 			}
 
@@ -201,7 +221,7 @@ namespace mjjames.AdminSystem
 
 			return renderedControl;
 		}
-				
+
 		/// <summary>
 		/// generate the controls for the tab / snippet
 		/// </summary>
@@ -228,16 +248,14 @@ namespace mjjames.AdminSystem
 		public PlaceHolder GenerateTabs()
 		{
 
-			PlaceHolder phTabs = new PlaceHolder();
+			PlaceHolder phTabs = new PlaceHolder {ID = "tabsPlaceholder"};
 			TabContainer tabContainer = new TabContainer();
-			if (atTable != null)
+			if (Table != null)
 			{
-				foreach (AdminTab tab in atTable.Tabs)
+				foreach (AdminTab tab in Table.Tabs)
 				{
-					TabPanel tpTab = new TabPanel();
-					tpTab.ID = tab.ID;
-					tpTab.HeaderText = tab.Label;
-					HttpContext.Current.Trace.Write("Rendering Tab:" + tab.ID );
+					TabPanel tpTab = new TabPanel { ID = tab.ID, HeaderText = tab.Label };
+					Logger.LogDebug("Rendering Tab:" + tab.ID);
 					tpTab.Controls.Add(GenerateControls(tab.Fields));
 					tabContainer.Tabs.Add(tpTab);
 				}
@@ -248,34 +266,34 @@ namespace mjjames.AdminSystem
 		}
 
 		/// <summary>
-		/// generates the table dbeditor page includes buttons
+		/// generates the table DBEditor page includes buttons
 		/// </summary>
 		/// <returns>PlaceHolder containing page</returns>
 		public PlaceHolder GeneratePage()
 		{
-			PlaceHolder ourPage = new PlaceHolder();
-			if (atTable != null)
+			PlaceHolder ourPage = new PlaceHolder {ID = "pagePlaceHolder"};
+			if (Table != null)
 			{
 
 				ourPage.Controls.Add(GenerateTabs());
 
-				Button saveButton = new Button();
-				saveButton.Text = "Save";
-				saveButton.CommandName = "saveEdit";
-				saveButton.Click += saveEdit;
-
-				Button cancelButton = new Button();
-				cancelButton.Text = "Cancel";
-				cancelButton.CommandName = "cancelEdit";
-				cancelButton.Click += cancelEdit;
-
-				if (atTable.bEmailButton)
+				Button saveButton = new Button { Text = "Save", CommandName = "SaveEdit" };
+				
+			
+				saveButton.Click += SaveEdit;
+	
+				if(PrimaryKey == 0)
 				{
-					Button emailButton = new Button();
-					emailButton.Text = "Email";
-					emailButton.CommandName = "emailButton";
-					emailButton.Click += saveEdit;
-					emailButton.Click += emailNewsletter;
+					saveButton.Click += RedirectToEdit; //this should only work for an insert
+				}
+				Button cancelButton = new Button { Text = "Cancel", CommandName = "CancelEdit" };
+				cancelButton.Click += CancelEdit;
+
+				if (Table.bEmailButton)
+				{
+					Button emailButton = new Button { Text = "Email", CommandName = "emailButton" };
+					emailButton.Click += SaveEdit;
+					emailButton.Click += EmailNewsletter;
 					ourPage.Controls.Add(emailButton);
 				}
 
@@ -283,15 +301,15 @@ namespace mjjames.AdminSystem
 				ourPage.Controls.Add(cancelButton);
 
 
-				if (_iPKey > 0) //this is optional
+				if (PKey > 0) //this is optional
 				{
-					Button deleteButton = new Button();
-					deleteButton.Text = "Delete";
-					deleteButton.CommandName = "deleteEdit";
-					deleteButton.CssClass = "buttonDelete";
-					deleteButton.Click += deleteEdit;
-					LiteralControl deleteScript = new LiteralControl();
-					deleteScript.Text = "<script type=\"text/javascript\"> $(\".buttonDelete\").click(function(){ var bDelete = confirm(\"Are You Sure You Want To Delete This Item?\");	return bDelete;	}); </script>";
+					Button deleteButton = new Button { Text = "Delete", CommandName = "DeleteEdit", CssClass = "buttonDelete" };
+					deleteButton.Click += DeleteEdit;
+					LiteralControl deleteScript = new LiteralControl
+													{
+														Text =
+															"<script type=\"text/javascript\"> $(\".buttonDelete\").click(function(){ var bDelete = confirm(\"Are You Sure You Want To Delete This Item?\");	return bDelete;	}); </script>"
+													};
 
 					ourPage.Controls.Add(deleteButton);
 					ourPage.Controls.Add(deleteScript);
@@ -300,7 +318,7 @@ namespace mjjames.AdminSystem
 			else
 			{
 				LiteralControl errorMessage = new LiteralControl("<h1>DBEditor Could Not Be Loaded</h1><p> Please Try Again</p>");
-				HttpContext.Current.Trace.Warn("DBEditor Couldn't Be Loaded - Missing Table");
+				Logger.LogError("XMLDB ERROR:", new Exception("DBEditor Couldn't Be Loaded - Missing Table"));
 				ourPage.Controls.Add(errorMessage);
 			}
 			return ourPage;
@@ -310,21 +328,23 @@ namespace mjjames.AdminSystem
 		/// <summary>
 		/// Finds a Control recursively. Note finds the first match and exists
 		/// </summary>
-		/// <param name="Root"></param>
-		/// <param name="Id"></param>
+		/// <param name="root"></param>
+		/// <param name="id"></param>
 		/// <returns></returns>
 
-		public static Control FindControlRecursive(Control Root, string Id)
+		public static Control FindControlRecursive(Control root, string id)
 		{
 
-			if (Root.ID == Id)
-				return Root;
+			if (root.ID == id)
+				return root;
 
-			foreach (Control Ctl in Root.Controls)
+			foreach (Control ctl in root.Controls)
 			{
-				Control FoundCtl = FindControlRecursive(Ctl, Id);
-				if (FoundCtl != null)
-					return FoundCtl;
+				using (Control foundCtl = FindControlRecursive(ctl, id))
+				{
+					if (foundCtl != null)
+						return foundCtl;
+				}
 			}
 			return null;
 		}
@@ -335,15 +355,30 @@ namespace mjjames.AdminSystem
 		/// <param name="sFieldType">The Type of Control</param>
 		/// <param name="ourType">The datatype we need</param>
 		/// <returns>An object with our Value in</returns>
-		protected static object getDataValue(Control ourControl, string sFieldType, Type ourType)
+		protected static object GetDataValue(Control ourControl, string sFieldType, Type ourType)
 		{
-			object[] dataParams = new object[] {ourControl, ourType};
-			object ourDType = Activator.CreateInstance(null, "mjjames.AdminSystem.dataControls." + sFieldType.ToLower() + "Control").Unwrap();
-			object dataValue = ourDType.GetType().GetMethod("getDataValue").Invoke(null, dataParams) ;
+			object[] dataParams = new object[] { ourControl, ourType };
+			//Create CultureInfo and TextInfo classes to use ToTitleCase method
+			CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+			TextInfo textInfo = cultureInfo.TextInfo;
+			string controlName = String.Format("mjjames.AdminSystem.dataControls.{0}Control", textInfo.ToTitleCase(sFieldType));
+			ObjectHandle ourDType = Activator.CreateInstance("mjjames.AdminSystem", controlName);
+
+			object dataValue = null;
+			if (ourDType != null)
+			{
+				object controlHandle = ourDType.Unwrap();
+				dataValue = controlHandle.GetType().GetMethod("GetDataValue").Invoke(null, dataParams);
+			}
+			else
+			{
+				Logger logger = new Logger("XMLDB");
+				logger.LogError("Base GetDataValue Failed To Load Control", new Exception(String.Format("Unknown Control - mjjames.AdminSystem.dataControls.{0}Control", sFieldType.ToLower())));
+			}
 			return dataValue;
 		}
 
-		#endregion dbeditor methods
+		#endregion DBEditor methods
 
 		#region datasources
 
@@ -351,10 +386,11 @@ namespace mjjames.AdminSystem
 		/// Gets the data for this editor
 		/// </summary>
 		/// <returns>a general object that needs casting to the correct type on use</returns>
-		protected virtual object GetData(){
-			throw new NotImplementedException();	
+		protected virtual object GetData()
+		{
+			throw new NotImplementedException();
 		}
-		
+
 
 		/// <summary>
 		/// Makes A LinqDataSource
@@ -373,9 +409,8 @@ namespace mjjames.AdminSystem
 		/// <returns></returns>
 		public SqlDataSource DataSource(bool listingmode, bool select, bool update, bool insert, bool delete)
 		{
-			SqlDataSource sds = new SqlDataSource();
-			
-			sds.ConnectionString = _connectionstring;
+			SqlDataSource sds = new SqlDataSource { ConnectionString = Connectionstring };
+
 			if (select)
 			{
 				sds.SelectCommand = BuildSelectCommand(listingmode);
@@ -409,13 +444,13 @@ namespace mjjames.AdminSystem
 			string selectCommand = String.Empty;
 			List<string> selectparams = new List<string>();
 
-			if (atTable != null)
+			if (Table != null)
 			{
-				var listfields = atTable.Defaults;
+				var listfields = Table.Defaults;
 
 				if (bListingMode)
 				{
-					listfields = atTable.Defaults.FindAll(t => t.Attributes.ContainsKey("list"));
+					listfields = Table.Defaults.FindAll(t => t.Attributes.ContainsKey("list"));
 				}
 
 				foreach (AdminField field in listfields)
@@ -423,7 +458,7 @@ namespace mjjames.AdminSystem
 					selectparams.Add("[" + field.ID + "]");
 				}
 
-				selectCommand = String.Format("SELECT {0} FROM [{1}]", String.Join(" , ", selectparams.ToArray()), atTable.ID);
+				selectCommand = String.Format("SELECT {0} FROM [{1}]", String.Join(" , ", selectparams.ToArray()), Table.ID);
 
 				if (listfields.Find(f => f.Attributes.ContainsKey("listfilter")) != null)
 				{
@@ -449,9 +484,9 @@ namespace mjjames.AdminSystem
 		private string BuildDeleteCommand()
 		{
 			string deleteCommand = String.Empty;
-			if (atTable != null)
+			if (Table != null)
 			{
-				deleteCommand = String.Format("DELETE FROM [{0}] WHERE [{1}] = @{2}", atTable.ID, TablePrimaryKeyField, TablePrimaryKeyField);
+				deleteCommand = String.Format("DELETE FROM [{0}] WHERE [{1}] = @{2}", Table.ID, TablePrimaryKeyField, TablePrimaryKeyField);
 			}
 			return deleteCommand;
 		}
@@ -459,7 +494,7 @@ namespace mjjames.AdminSystem
 		private string BuildInsertCommand()
 		{
 			string insertCommand = String.Empty;
-			if (atTable != null)
+			if (Table != null)
 			{
 
 			}
@@ -469,7 +504,7 @@ namespace mjjames.AdminSystem
 		private string BuildUpdateCommand()
 		{
 			string updateCommand = String.Empty;
-			if (atTable != null)
+			if (Table != null)
 			{
 				///TODO need to write an update command still
 			}
@@ -485,7 +520,7 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected void cancelEdit(object sender, EventArgs e)
+		protected void CancelEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
 			Page prevPage = ourSender.Page.PreviousPage;
@@ -499,14 +534,28 @@ namespace mjjames.AdminSystem
 			}
 		}
 
-		
+
 		/// <summary>
 		/// save away our data / insert - abstract
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected virtual void saveEdit(object sender, EventArgs e){
-			throw new NotImplementedException();	
+		protected virtual void SaveEdit(object sender, EventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+		
+		/// <summary>
+		/// After a successful save we need to redirect to the edit page, this is due to the photogallery control
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		protected void RedirectToEdit(object sender, EventArgs e)
+		{
+			//having a primary key at this point means the insert was a success
+			if (PKey <= 0) return;
+			string url = String.Format("{0}&{1}={2}", HttpContext.Current.Request.Url, TablePrimaryKeyField, PrimaryKey);
+			HttpContext.Current.Response.Redirect(url, true);
 		}
 
 		/// <summary>
@@ -514,15 +563,16 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected virtual void emailNewsletter(object sender, EventArgs e)
+		protected virtual void EmailNewsletter(object sender, EventArgs e)
 		{
 			throw new NotImplementedException();
 		}
-		
+
 		/// <summary>
 		/// Archive the Data - abstract
 		/// </summary>
-		public virtual void ArchiveData(int iKey){
+		public virtual void ArchiveData(int iKey)
+		{
 			throw new NotImplementedException();
 		}
 
@@ -531,21 +581,24 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected void deleteEdit(object sender, EventArgs e)
+		protected void DeleteEdit(object sender, EventArgs e)
 		{
 
 			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext = new AdminDataContext();
-			
+			AdminDataContext ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+
 			Label labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
 			try
 			{
-				ArchiveData(_iPKey);
-			
-				string strDelete = String.Format("DELETE FROM [{0}] WHERE [{1}] = {2}", atTable.ID, TablePrimaryKeyField, _iPKey);
+				ArchiveData(PKey);
+
+				string strDelete = String.Format("DELETE FROM [{0}] WHERE [{1}] = {2}", Table.ID, TablePrimaryKeyField, PKey);
+
+				Logger.LogDebug("Deleting Item: " + strDelete);
+
 				ourPageDataContext.ExecuteQuery<object>(strDelete);
-				
-				labelStatus.Text = String.Format("{0} Removed", atTable.ID);
+
+				labelStatus.Text = String.Format("{0} Removed", Table.ID);
 
 				Page prevPage = ourSender.Page.PreviousPage;
 				if (prevPage == null)
@@ -560,14 +613,15 @@ namespace mjjames.AdminSystem
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = String.Format("{0} Removal Failed: {1}", atTable.ID, ex);
-					
+				labelStatus.Text = String.Format("{0} Removal Failed", Table.ID);
+				Logger.LogError("Delete Failed", ex);
+
 			}
 		}
-		
+
 		#endregion
 
-	
+
 	}
 
 }

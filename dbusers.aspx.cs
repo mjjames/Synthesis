@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web.UI.WebControls;
 using mjjames.AdminSystem.classes;
@@ -10,7 +11,7 @@ namespace mjjames.AdminSystem
 {
 	public partial class DBUsers : System.Web.UI.Page
 	{
-		private readonly AdminDataContext _adc = new AdminDataContext();
+		private readonly AdminDataContext _adc =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 		private List<vw_aspnet_Role> _roles;
 
 		protected void Page_Load(object sender, EventArgs e)
@@ -32,6 +33,7 @@ namespace mjjames.AdminSystem
 			ChangePassword.Visible = false;
 			CreateUserWizard.Visible = false;
 			_UserLising.Visible = false;
+		    errorMessage.Text = "";
 			switch (dbuserList.SelectedValue)
 			{
 				case "createUser":
@@ -53,6 +55,7 @@ namespace mjjames.AdminSystem
 
 		protected void LoadUsers()
 		{
+			errorMessage.Text = "";
 			UserAdministration ua = new UserAdministration();
 
 			_UserLising.DataSource = ua.LoadUsers();
@@ -151,9 +154,14 @@ namespace mjjames.AdminSystem
 			string hostName = Request.Url.Host;
 			string timeOut = ua.GenerateTimeOut();
 			string resetURL = String.Format("http://{0}/admin/authentication/resetPassword.aspx?u={1}&v={2}", hostName, userID, timeOut);
-			ua.SendResetPasswordEmail(resetURL, userID);
-
+			errorMessage.Text = ua.SendResetPasswordEmail(resetURL, userID) ? "Password Reset Email Sent" : "Error: Unable to send password reset email <br /> Please ensure the user has a valid email address";
 		}
+
+        protected void CancelEdit(object sender, ListViewCancelEventArgs e)
+        {
+            _UserLising.EditIndex = -1;
+			LoadUsers();
+        }
 
 		/// <summary>
 		/// Handles event for custom commands

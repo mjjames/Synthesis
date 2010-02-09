@@ -1,70 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Reflection;
+using mjjames.AdminSystem.DataControls;
 using mjjames.AdminSystem.dataentities;
-using mjjames.AdminSystem;
 using System.Configuration;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class lookupControl
+	public class LookupControl : IDataControl
 	{
+		public int PKey { get; set; }
 
-		private int _iPKey;
-
-		public int iPKey
-		{
-			get
-			{
-				return _iPKey;
-			}
-			set
-			{
-				_iPKey = value;
-			}
-		}
-
-		public static object getDataValue(Control ourControl, Type ourType)
+		public static object GetDataValue(Control ourControl, Type ourType)
 		{
 			Control ourFileControl = ourControl.Parent.FindControl(ourControl.ID.Replace("control", "hidden"));
 			HiddenField ourHiddenFile = (HiddenField)ourFileControl;
-			if (ourHiddenFile.Value == String.Empty)//If a lookup value isnt provided then return null
-			{
-				return null;
-			}
-			return Convert.ChangeType(ourHiddenFile.Value, ourType);
+			return ourHiddenFile.Value == String.Empty ? null : Convert.ChangeType(ourHiddenFile.Value, ourType);
 		}
 
-		public Control generateControl(AdminField field, object ourPage)
+		public Control GenerateControl(AdminField field, object ourPage)
 		{
-			PropertyInfo ourProperty;
-
 			ScriptManager ourSM = ScriptManager.GetCurrent((Page)HttpContext.Current.Handler);
 			
-			UpdatePanel lookupPanel = new UpdatePanel();
-			lookupPanel.ChildrenAsTriggers = true;
+			UpdatePanel lookupPanel = new UpdatePanel {ChildrenAsTriggers = true};
 
-			GridView pageListing = new GridView();
-			pageListing.ID = "control" + field.ID;
+			GridView pageListing = new GridView {ID = "control" + field.ID};
 
-			XmlDBBase lookupDB = new XmlDBBase();
-			lookupDB.ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString;
-			lookupDB.TableName = field.Attributes["lookuptable"];
+			XmlDBBase lookupDB = new XmlDBBase
+			                     	{
+			                     		ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString,
+			                     		TableName = field.Attributes["lookuptable"]
+			                     	};
 
 			SqlDataSource datasource = lookupDB.DataSource(true, true, false, false, false);
 
 			pageListing.DataSource = datasource;
 			pageListing.DataKeyNames = new[] { lookupDB.TablePrimaryKeyField };
 
-			ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
-			
-			CommandField cfSelect = new CommandField();
-			cfSelect.ShowSelectButton = true;
-			cfSelect.SelectText = "Choose";
+			ourPage.GetType().GetProperty(field.ID, typeof(string));
+
+			CommandField cfSelect = new CommandField {ShowSelectButton = true, SelectText = "Choose"};
 
 			pageListing.AutoGenerateColumns = false;
 			pageListing.EnableViewState = false;
@@ -75,7 +53,7 @@ namespace mjjames.AdminSystem.dataControls
 			pageListing.HeaderStyle.CssClass = "pageListHeader";
 			pageListing.AlternatingRowStyle.CssClass = "pageListRowAlternate";
 			pageListing.SelectedRowStyle.CssClass = "selectedRow";
-			pageListing.SelectedIndexChanged += new EventHandler(pageListing_SelectedIndexChanged);
+			pageListing.SelectedIndexChanged += PageListingSelectedIndexChanged;
 
 			if (lookupDB.TableDefaults != null)
 			{
@@ -83,39 +61,36 @@ namespace mjjames.AdminSystem.dataControls
 				foreach (AdminField listingField in lookupDB.TableDefaults.FindAll(t => t.Attributes.ContainsKey("list")))
 				{
 					BoundField dcf = new BoundField();
-					string Type = String.Empty;
-					bool bType = listingField.Attributes.TryGetValue("type", out Type);
+					string type;
+					bool bType = listingField.Attributes.TryGetValue("type", out type);
 					bool bRenderField = true;
 
 					dcf.HeaderText = listingField.Label;
 					dcf.SortExpression = listingField.ID;
 					dcf.DataField = listingField.ID;
 
-					if (bType)
+					if (!bType) continue;
+					// Specific Functionality Depends on Type
+					switch (type)
 					{
-						// Specific Functionality Depends on Type
-						switch (Type)
-						{
-							case "hidden":
-								bRenderField = false;
-								break;
-							case "datetime":
-								dcf.DataFormatString = "{0:dd/MM/yyyy}";
-								break;
-							default:
-								break;
-						}
-						if (bRenderField)
-						{
-							pageListing.Columns.Add(dcf);
-						}
+						case "hidden":
+							bRenderField = false;
+							break;
+						case "datetime":
+							dcf.DataFormatString = "{0:dd/MM/yyyy}";
+							break;
+						default:
+							break;
+					}
+					if (bRenderField)
+					{
+						pageListing.Columns.Add(dcf);
 					}
 				}
 			}
 
-			HiddenField selectedItem = new HiddenField();
-			selectedItem.ID = "hidden" + field.ID;
-			ourProperty = ourPage.GetType().GetProperty(field.ID);
+			HiddenField selectedItem = new HiddenField {ID = "hidden" + field.ID};
+			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID);
 
 			///TODO Fix ourLabel.CssClass = "hidden";
 
@@ -124,7 +99,7 @@ namespace mjjames.AdminSystem.dataControls
 			lookupPanel.DataBind();
 			lookupPanel.ContentTemplateContainer.Controls.Add(selectedItem);
 
-			if (_iPKey > 0 && ourProperty != null)
+			if (PKey > 0 && ourProperty != null)
 			{
 				string ourValue = (ourProperty.GetValue(ourPage, null) + "");
 				selectedItem.Value = "" + ourValue;
@@ -142,15 +117,16 @@ namespace mjjames.AdminSystem.dataControls
 				HttpContext.Current.Trace.Warn("Rendering Control Value: " + selectedItem.Value);
 			}
 
-			ourSM.RegisterAsyncPostBackControl(pageListing);
+			if (ourSM != null) ourSM.RegisterAsyncPostBackControl(pageListing);
 
 			return lookupPanel;
 		}
 
 
-		void pageListing_SelectedIndexChanged(object sender, EventArgs e)
+		static void PageListingSelectedIndexChanged(object sender, EventArgs e)
 		{
 			GridView ourRow = sender as GridView;
+			if (ourRow == null) return;
 			HiddenField ourValue = ourRow.Parent.Controls.OfType<HiddenField>().FirstOrDefault();
 			ourValue.Value = ourRow.SelectedValue.ToString();
 		}

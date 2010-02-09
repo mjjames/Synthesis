@@ -289,14 +289,6 @@
 								</HeaderTemplate>
 								<ContentTemplate>
 									<span class="row">
-										<asp:Label runat="server" ID="lbldefault_rewritepath" Text="Path to Default Rewrite File"
-											CssClass="labelwide" AssociatedControlID="_default_rewritepath" />
-										<asp:TextBox runat="server" CssClass="textbox" ID="_default_rewritepath" Text='<%# GetSetting("default_rewritepath") %>' />
-									</span><span class="row">
-										<asp:Label runat="server" ID="lbldefault_rewritepath_param" Text="Default Rewrite Parameter Name:"
-											CssClass="labelwide" AssociatedControlID="_default_rewritepath_param" />
-										<asp:TextBox runat="server" CssClass="textbox" ID="_default_rewritepath_param" Text='<%# GetSetting("default_rewritepath_param") %>' />
-									</span><span class="row">
 										<asp:Label runat="server" ID="lblTestimonialPaging" Text="Testimonial Paging Size:"
 											CssClass="labelwide" AssociatedControlID="_TestimonialPaging" />
 										<asp:TextBox runat="server" CssClass="textbox" ID="_TestimonialPaging" Text='<%# GetSetting("TestimonialPaging") %>' />
@@ -362,6 +354,43 @@
 											<asp:ListItem Text="Wycliffe New Testament" Value="53" />
 											<asp:ListItem Text="Young's Literal Translation" Value="15"  />
 										</asp:DropDownList>
+									</span>
+								</ContentTemplate>
+							</AjaxControlToolkit:TabPanel>
+							<AjaxControlToolkit:TabPanel runat="server" ID="tabURLs">
+								<HeaderTemplate>
+									URL Settings
+								</HeaderTemplate>
+								<ContentTemplate>
+									<span class="row">
+										<asp:Label runat="server" ID="lbldefault_rewritepath" Text="Path to Default Rewrite File"
+											CssClass="labelwide" AssociatedControlID="_default_rewritepath" />
+										<asp:TextBox runat="server" CssClass="textbox" ID="_default_rewritepath" Text='<%# GetSetting("default_rewritepath") %>' />
+									</span>
+									<span class="row">
+										<asp:Label runat="server" ID="lbldefault_rewritepath_param" Text="Default Rewrite Parameter Name:"
+											CssClass="labelwide" AssociatedControlID="_default_rewritepath_param" />
+										<asp:TextBox runat="server" CssClass="textbox" ID="_default_rewritepath_param" Text='<%# GetSetting("default_rewritepath_param") %>' />
+									</span>
+									<span class="row">
+										<asp:Label runat="server" ID="lblurlprefixPage" Text="Page Url Prefix:"
+											CssClass="labelwide" AssociatedControlID="_urlprefixPage" />
+										<asp:TextBox runat="server" CssClass="textbox" ID="_urlprefixPage" Text='<%# GetSetting("urlprefixPage") %>' />
+									</span>
+									<span class="row">
+										<asp:Label runat="server" ID="lblurlprefixProject" Text="Project Url Prefix:"
+											CssClass="labelwide" AssociatedControlID="_urlprefixProject" />
+										<asp:TextBox runat="server" CssClass="textbox" ID="_urlprefixProject" Text='<%# GetSetting("urlprefixProject") %>' />
+									</span>
+									<span class="row">
+										<asp:Label runat="server" ID="lblurlprefixArticle" Text="Articles Url Prefix:"
+											CssClass="labelwide" AssociatedControlID="_urlprefixArticle" />
+										<asp:TextBox runat="server" CssClass="textbox" ID="_urlprefixArticle" Text='<%# GetSetting("urlprefixArticle") %>' />
+									</span>
+									<span class="row">
+										<asp:Label runat="server" ID="lblurlprefixOffer" Text="Offers Url Prefix:"
+											CssClass="labelwide" AssociatedControlID="_urlprefixOffer" />
+										<asp:TextBox runat="server" CssClass="textbox" ID="_urlprefixOffer" Text='<%# GetSetting("urlprefixOffer") %>' />
 									</span>
 								</ContentTemplate>
 							</AjaxControlToolkit:TabPanel>

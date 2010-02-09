@@ -6,15 +6,16 @@ using System.Web.UI.WebControls;
 using System.Globalization;
 using System.Reflection;
 using AjaxControlToolkit;
+using mjjames.AdminSystem.DataControls;
 using mjjames.AdminSystem.dataentities;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class DatetimeControl
+	public class DatetimeControl :IDataControl
 	{
-		public int iPKey { get; set; }
+		public int PKey { get; set; }
 
-		public static object getDataValue(Control ourControl, Type ourType)
+		public static object GetDataValue(Control ourControl, Type ourType)
 		{
 			TextBox ourDateTime = (TextBox)ourControl;
 			DateTime? dtValue = null;
@@ -25,7 +26,7 @@ namespace mjjames.AdminSystem.dataControls
 			return dtValue ;
 		}
 
-		public Control generateControl(AdminField field, object ourPage)
+		public Control GenerateControl(AdminField field, object ourPage)
 		{
 			WebControl container = new WebControl(HtmlTextWriterTag.Div);
 
@@ -33,7 +34,7 @@ namespace mjjames.AdminSystem.dataControls
 
 			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID);
 			DateTime ourValue = new DateTime();
-			if (iPKey > 0 && ourProperty != null && (ourProperty.GetValue(ourPage, null) != null))
+			if (PKey > 0 && ourProperty != null && (ourProperty.GetValue(ourPage, null) != null))
 			{
 				ourValue = DateTime.Parse(ourProperty.GetValue(ourPage, null).ToString());
 				ourDateText.Text = String.Format("{0:dd/MM/yyyy}", ourValue);

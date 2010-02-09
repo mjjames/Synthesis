@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Database Name="Abellandscapes.co.uk" EntityNamespace="mjjames.AdminSystem.DataEntities" ContextNamespace="mjjames.AdminSystem.DataContexts" Class="AdminDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=Abellandscapes.co.uk;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="Abellandscapes_co_ukConnectionString" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="adry" EntityNamespace="mjjames.AdminSystem.DataEntities" ContextNamespace="mjjames.AdminSystem.DataContexts" Class="AdminDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=MJDESKTOP01\sqlexpress;Initial Catalog=adry;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="adryConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.testimonies" Member="testimonies">
     <Type Name="testimony">
       <Column Name="testimony_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -22,6 +21,7 @@
       <Column Name="url" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="category" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
       <Column Name="randomness" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+	  <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false"/>
     </Type>
   </Table>
   <Table Name="dbo.lookup" Member="lookups">
@@ -31,9 +31,12 @@
       <Column Name="title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="value" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="active" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="active" Type="System.Boolean" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Association Name="lookup_media" Member="medias" ThisKey="lookup_key" OtherKey="mediatype_lookup" Type="media" />
       <Association Name="lookup_media_link" Member="media_links" ThisKey="lookup_key" OtherKey="linktype_lookup" Type="media_link" />
+      <Association Name="lookup_project" Member="projects" ThisKey="lookup_key" OtherKey="category_lookup" Type="project" />
+      <Association Name="lookup_keyvalue" Member="keyvalues" ThisKey="lookup_key" OtherKey="link_lookup" Type="keyvalue" />
+      <Association Name="lookup_keyvalue1" Member="keyvalues1" ThisKey="lookup_key" OtherKey="key_lookup" Type="keyvalue" />
     </Type>
   </Table>
   <Table Name="dbo.media" Member="medias">
@@ -76,21 +79,6 @@
       <Column Name="date_created" AutoSync="Never" Type="System.DateTime" DbType="DateTime" IsDbGenerated="true" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.projects" Member="projects">
-    <Type Name="project">
-      <Column Name="project_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="title" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="description" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="start_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Column Name="end_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="include_in_rss" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="photogallery_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="video_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Association Name="project_testimony" Member="testimonies" ThisKey="project_key" OtherKey="project_fkey" Type="testimony" />
-    </Type>
-  </Table>
   <Table Name="dbo.pages" Member="pages">
     <Type Name="page">
       <Column Name="page_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -114,6 +102,8 @@
       <Column Name="page_url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="password" Type="System.String" DbType="nvarchar(12)" CanBeNull="true" />
       <Column Name="passwordprotect" Type="System.Boolean" DbType="bit" CanBeNull="true" />
+      <Association Name="page_page" Member="pages" ThisKey="page_key" OtherKey="page_fkey" Type="page" />
+      <Association Name="page_page" Member="page1" ThisKey="page_fkey" OtherKey="page_key" Type="page" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.articles" Member="articles">
@@ -131,6 +121,7 @@
       <Column Name="include_in_feed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="virtualurl" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="article_Comment" Member="Comments" Storage="_comments" ThisKey="article_key" OtherKey="ArticleKey" Type="Comment" />
     </Type>
   </Table>
   <Table Name="dbo.offers" Member="offers">
@@ -261,6 +252,73 @@
       <Column Name="LoweredRoleName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Association Name="aspnet_Role_aspnet_UsersInRole" Member="aspnet_UsersInRoles" ThisKey="RoleId" OtherKey="RoleId" Type="aspnet_UsersInRole" />
+    </Type>
+  </Table>
+  <Table Name="dbo.donatees" Member="Donatees">
+    <Type Name="Donatee">
+      <Column Name="donatees_key" Member="DonateesKey" Storage="_donatees_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="first_name" Member="FirstName" Storage="_first_name" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="last_name" Member="LastName" Storage="_last_name" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="address1" Member="Address1" Storage="_address1" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="address2" Member="Address2" Storage="_address2" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="address3" Member="Address3" Storage="_address3" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="address4" Member="Address4" Storage="_address4" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="postcode" Member="PostCode" Storage="_postcode" Type="System.String" DbType="NVarChar(8)" CanBeNull="true" />
+      <Column Name="email" Member="Email" Storage="_email" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="receve_email" Member="ReceiveEmail" Storage="_receve_email" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Donatee_Donation" Member="Donations" Storage="_donations" ThisKey="DonateesKey" OtherKey="DonateeFKey" Type="Donation" />
+    </Type>
+  </Table>
+  <Table Name="dbo.donations" Member="Donations">
+    <Type Name="Donation">
+      <Column Name="donation_key" Member="DonationKey" Storage="_donation_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="donatee_fkey" Member="DonateeFKey" Storage="_donatee_fkey" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="amount" Member="Amount" Storage="_amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="gift_aid" Member="GiftAid" Storage="_gift_aid" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="donation_date" Member="DonationDate" Storage="_donation_date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Donatee_Donation" Member="Donatee" Storage="_donatee" ThisKey="DonateeFKey" OtherKey="DonateesKey" Type="Donatee" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.comments" Member="Comments">
+    <Type Name="Comment">
+      <Column Name="comment_key" Member="CommentKey" Storage="_comment_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="comment_fkey" Member="CommentFKey" Storage="_comment_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="article_key" Member="ArticleKey" Storage="_article_key" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="email" Member="Email" Storage="_email" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="website" Member="Website" Storage="_website" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="text" Member="Text" Storage="_text" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="username" Member="UserName" Storage="_username" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Comment_Comment" Member="Comments" Storage="_comments" ThisKey="CommentKey" OtherKey="CommentFKey" Type="Comment" />
+      <Association Name="article_Comment" Member="article" ThisKey="ArticleKey" OtherKey="article_key" Type="article" IsForeignKey="true" />
+      <Association Name="Comment_Comment" Member="comment1" ThisKey="CommentFKey" OtherKey="CommentKey" Type="Comment" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.projects" Member="projects">
+    <Type Name="project">
+      <Column Name="project_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="start_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="end_date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="include_in_rss" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="photogallery_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="video_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="category_lookup" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="project_testimony" Member="testimonies" ThisKey="project_key" OtherKey="project_fkey" Type="testimony" />
+      <Association Name="lookup_project" Member="lookup" ThisKey="category_lookup" OtherKey="lookup_key" Type="lookup" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.keyvalues" Member="keyvalues">
+    <Type Name="keyvalue">
+      <Column Name="keyvalue_key" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="link_fkey" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="key_lookup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="value" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="link_lookup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="lookup_keyvalue" Member="lookup" ThisKey="link_lookup" OtherKey="lookup_key" Type="lookup" IsForeignKey="true" />
+      <Association Name="lookup_keyvalue1" Member="lookup1" ThisKey="key_lookup" OtherKey="lookup_key" Type="lookup" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.getFeatured" Method="getFeatured">

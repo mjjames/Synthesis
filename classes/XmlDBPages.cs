@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
+using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
@@ -18,16 +19,6 @@ namespace mjjames.AdminSystem
 {
 	public class XmlDBpages : XmlDBBase
 	{
-		/// <summary>
-		/// constructor
-		/// </summary>
-		public XmlDBpages()
-			: base()
-		{
-
-		}
-
-
 		#region datasources
 
 		/// <summary>
@@ -38,62 +29,59 @@ namespace mjjames.AdminSystem
 		{
 			///TODO replace this out as its rubbish but dynamic linq isnt easy
 			
-			object ourData = new object();
-
-
 			page ourPage = new page();
 
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourPage = (from p in adminDC.pages
-						   where p.page_key == _iPKey
+				ourPage = (from p in AdminDC.pages
+						   where p.page_key == PKey
 						   select p).SingleOrDefault();
 			}
 
-			if (_iFKey > 0)
+			if (FKey > 0)
 			{
-				ourPage.page_fkey = _iFKey;
+				ourPage.page_fkey = FKey;
 			}
 			else
 			{
-				_iFKey = ourPage.page_fkey == null ? 0 : ourPage.page_fkey.Value;
+				FKey = ourPage.page_fkey == null ? 0 : ourPage.page_fkey.Value;
 			}
 
-			ourData = ourPage;
-			return ourData;
+			return ourPage;
 		}
 
 		public override void ArchiveData(int iKey)
 		{
-			page ourPage = (from p in adminDC.pages
+			page ourPage = (from p in AdminDC.pages
 							where p.page_key == iKey
 							select p).SingleOrDefault();
 							
-			DataContexts.Archive.archiveDataContext archiveDC = new mjjames.AdminSystem.DataContexts.Archive.archiveDataContext();
-			DataEntities.Archive.page archivePage = new mjjames.AdminSystem.DataEntities.Archive.page();
-			
-			archivePage.page_key = ourPage.page_key;
-			archivePage.page_fkey = ourPage.page_fkey;
-			archivePage.accesskey = ourPage.accesskey;
-			archivePage.active = ourPage.active;
-			archivePage.body = ourPage.body;
-			archivePage.linkurl = ourPage.linkurl;
-			archivePage.metadescription = ourPage.metadescription;
-			archivePage.metakeywords = ourPage.metakeywords;
-			archivePage.navtitle = ourPage.navtitle;
-			archivePage.page_url = ourPage.page_url;
-			archivePage.pageid = ourPage.pageid;
-			archivePage.password = ourPage.password;
-			archivePage.passwordprotect = ourPage.passwordprotect;
-			archivePage.showinfeaturednav = ourPage.showinfeaturednav;
-			archivePage.showinfooter = ourPage.showinfooter;
-			archivePage.showinnav = ourPage.showinnav;
-			archivePage.showonhome = ourPage.showonhome;
-			archivePage.sortorder = ourPage.sortorder;
-			archivePage.thumbnailimage = ourPage.thumbnailimage;
-			archivePage.title = ourPage.title;
-			archivePage.DBName = adminDC.Connection.Database;
-			
+			DataContexts.Archive.archiveDataContext archiveDC = new DataContexts.Archive.archiveDataContext();
+			DataEntities.Archive.page archivePage = new DataEntities.Archive.page
+			                                        	{
+			                                        		page_key = ourPage.page_key,
+			                                        		page_fkey = ourPage.page_fkey,
+			                                        		accesskey = ourPage.accesskey,
+			                                        		active = ourPage.active,
+			                                        		body = ourPage.body,
+			                                        		linkurl = ourPage.linkurl,
+			                                        		metadescription = ourPage.metadescription,
+			                                        		metakeywords = ourPage.metakeywords,
+			                                        		navtitle = ourPage.navtitle,
+			                                        		page_url = ourPage.page_url,
+			                                        		pageid = ourPage.pageid,
+			                                        		password = ourPage.password,
+			                                        		passwordprotect = ourPage.passwordprotect,
+			                                        		showinfeaturednav = ourPage.showinfeaturednav,
+			                                        		showinfooter = ourPage.showinfooter,
+			                                        		showinnav = ourPage.showinnav,
+			                                        		showonhome = ourPage.showonhome,
+			                                        		sortorder = ourPage.sortorder,
+			                                        		thumbnailimage = ourPage.thumbnailimage,
+			                                        		title = ourPage.title,
+			                                        		DBName = AdminDC.Connection.Database
+			                                        	};
+			Logger.LogInformation("Archiving Page - " + iKey);
 			archiveDC.pages.InsertOnSubmit(archivePage);
 			archiveDC.SubmitChanges();
 		}
@@ -107,53 +95,44 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected override void saveEdit(object sender, EventArgs e)
+		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext = new AdminDataContext();
+			AdminDataContext ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			page ourData = new page();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourData = ourPageDataContext.pages.Single(p => p.page_key == _iPKey);
+				ourData = ourPageDataContext.pages.Single(p => p.page_key == PKey);
 			}
 
-			var ourfields = from fields in atTable.Tabs
-							select new
-							{
-								ID = fields.ID
-							};
-
-			foreach (AdminTab tab in atTable.Tabs)
+			foreach (AdminTab tab in Table.Tabs)
 			{
 				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
-				if (ourTab != null)
+				if (ourTab == null) continue;
+				foreach (AdminField field in tab.Fields)
 				{
-					foreach (AdminField field in tab.Fields)
-					{
-						Control ourControl = (Control)ourTab.FindControl("control" + field.ID);
+					Control ourControl = ourTab.FindControl("control" + field.ID);
 
-						if (ourControl != null)
-						{
-							PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
-							if (ourProperty != null)
-							{
-								HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
-								ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
-							}
-							else
-							{
-								HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
-							}
-						}
+					if (ourControl == null) continue;
+					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
+					if (ourProperty != null)
+					{
+						Logger.LogInformation("Saving Content In: " + ourControl.ID);
+						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+					}
+					else
+					{
+						Logger.LogError("Update Error", new Exception("Error Saving Content: " + ourControl.ID));
 					}
 				}
 			}
 
-			if (_iPKey == 0)
+			if (PKey == 0)
 			{
-
+				string prefix = ConfigurationManager.AppSettings["urlprefixPage"] ?? String.Empty;
+				ourData.page_url= String.Format("{0}{1}", prefix, SQLHelpers.URLSafe(ourData.title));
 				ourPageDataContext.pages.InsertOnSubmit(ourData);
-				ourData.page_fkey = _iFKey;
+				ourData.page_fkey = FKey;
 
 
 			}
@@ -169,16 +148,15 @@ namespace mjjames.AdminSystem
 
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", atTable.ID);
-					string strPKeyField = String.Empty;
+					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
 
 
-					_iPKey = ((page)ourData).page_key;
-					_iFKey = (int)((page)ourData).page_fkey;
+					PKey = ourData.page_key;
+					FKey = (int)ourData.page_fkey;
 					HiddenField ourControlFKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "controlpage_fkey");
-					ourControlFKey.Value = _iFKey.ToString();
+					ourControlFKey.Value = FKey.ToString();
 
-					strPKeyField = TablePrimaryKeyField;
+					string strPKeyField = TablePrimaryKeyField;
 
 					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
 					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
@@ -186,25 +164,27 @@ namespace mjjames.AdminSystem
 
 					try
 					{
-						ourControlPKey.Value = _iPKey.ToString();
-						ourPKey.Value = _iPKey.ToString();
+						ourControlPKey.Value = PKey.ToString();
+						ourPKey.Value = PKey.ToString();
 						
 					}
 					catch
 					{
-						throw new Exception(String.Format("{0} doesn't contain a hidden control called {1}", atTable.ID, TablePrimaryKeyField));
+						Exception ex = new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
+						Logger.LogError("Page Update Failed", ex);
 					}
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", atTable.ID);
+					labelStatus.Text = String.Format("{0} Updated", Table.ID);
 				}
 
 
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = String.Format("{0} Update Failed: {1}", atTable.ID, ex);
+				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
+				Logger.LogError("Page Update Failed", ex);
 			}
 		}
 

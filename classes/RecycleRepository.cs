@@ -175,14 +175,12 @@ namespace mjjames.AdminSystem.classes
 				sqlTable, sqlTable, sqlFields, sqlValues, sqlTable
 			);
 
-			if (!String.IsNullOrEmpty(sqlTable))
-			{
-				_admin.ExecuteCommand(String.Format(sql, values));
-				_adc.SubmitChanges();
-			}
+			if (String.IsNullOrEmpty(sqlTable)) return;
+			_admin.ExecuteCommand(String.Format(sql, values));
+			_adc.SubmitChanges();
 		}
 
-		private object[] CleanValues(object[] values)
+		private static object[] CleanValues(object[] values)
 		{
 			for (int i = 0; i < values.Length; i++)
 			{
@@ -215,12 +213,9 @@ namespace mjjames.AdminSystem.classes
 
 
 				//Ensure Strings are SQL Safe and has quotes
-				if (values[i].GetType() == typeof(string))
-				{
-					values[i] = String.Format("'{0}'", SQLHelpers.SQLSafe((string)values[i]));
-					continue;
-				}
-
+				if (values[i].GetType() != typeof (string)) continue;
+				values[i] = String.Format("'{0}'", SQLHelpers.SQLSafe((string)values[i]));
+				continue;
 			}
 			return values;
 		}

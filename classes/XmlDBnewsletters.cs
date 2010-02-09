@@ -2,7 +2,6 @@
 using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
@@ -32,11 +31,11 @@ namespace mjjames.AdminSystem
 		protected override object GetData()
 		{
 			Newsletter ourOffer = new Newsletter();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourOffer = (from p in adminDC.Newsletters
-							  where p.newsletter_key == _iPKey
-							  select p).SingleOrDefault();
+				ourOffer = (from p in AdminDC.Newsletters
+							where p.newsletter_key == PKey
+							select p).SingleOrDefault();
 			}
 			object ourData = ourOffer;
 
@@ -56,41 +55,44 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected override void saveEdit(object sender, EventArgs e)
+		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext = new AdminDataContext();
+			AdminDataContext ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			Newsletter ourData = new Newsletter();
-			if (_iPKey > 0)
+			if (PKey > 0)
 			{
-				ourData = ourPageDataContext.Newsletters.Single(p => p.newsletter_key == _iPKey);
+				ourData = ourPageDataContext.Newsletters.Single(p => p.newsletter_key == PKey);
 			}
 
-			foreach (AdminTab tab in atTable.Tabs)
+			foreach (AdminTab tab in Table.Tabs)
 			{
 				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
-				if (ourTab != null)
+				if (ourTab == null)
 				{
-					foreach (AdminField field in tab.Fields)
-					{
-						Control ourControl = ourTab.FindControl("control" + field.ID);
+					continue;
+				}
+				foreach (AdminField field in tab.Fields)
+				{
+					Control ourControl = ourTab.FindControl("control" + field.ID);
 
-						if (ourControl == null) continue;
-						PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
-						if (ourProperty != null)
-						{
-							HttpContext.Current.Trace.Warn("Saving Content In: " + ourControl.ID);
-							ourProperty.SetValue(ourData, getDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
-						}
-						else
-						{
-							HttpContext.Current.Trace.Warn("Error Saving Content: " + ourControl.ID);
-						}
+					if (ourControl == null) continue;
+					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
+					if (ourProperty != null)
+					{
+						Logger.LogInformation("Saving Content In: " + ourControl.ID);
+						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+					}
+					else
+					{
+						Exception ex = new Exception("Error Saving Content: " + ourControl.ID);
+						Logger.LogError("Update Content Failed", ex);
 					}
 				}
+
 			}
 
-			if (_iPKey == 0)
+			if (PKey == 0)
 			{
 				ourPageDataContext.Newsletters.InsertOnSubmit(ourData);
 			}
@@ -102,15 +104,15 @@ namespace mjjames.AdminSystem
 
 				labelStatus.Text = "Nothing to Save";
 
-				
+
 				ourPageDataContext.SubmitChanges();
 
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", atTable.ID);
+					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
 
 
-					_iPKey = ourData.newsletter_key;
+					PKey = ourData.newsletter_key;
 
 					string strPKeyField = TablePrimaryKeyField;
 
@@ -119,24 +121,27 @@ namespace mjjames.AdminSystem
 
 					try
 					{
-						ourControlPKey.Value = _iPKey.ToString();
-						ourPKey.Value = _iPKey.ToString();
+						ourControlPKey.Value = PKey.ToString();
+						ourPKey.Value = PKey.ToString();
 					}
 					catch
 					{
-						throw new Exception(String.Format("{0} doesn't contain a hidden control called {1}", atTable.ID, TablePrimaryKeyField));
+						Exception ex = new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
+						Logger.LogError("Missing Primary Key Field", ex);
+						throw ex;
 					}
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", atTable.ID);
+					labelStatus.Text = String.Format("{0} Updated", Table.ID);
 				}
 
 
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = String.Format("{0} Update Failed: {1}", atTable.ID, ex);
+				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
+				Logger.LogError("Update Failed", ex);
 			}
 		}
 
@@ -147,9 +152,9 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected override void emailNewsletter(object sender, EventArgs e)
+		protected override void EmailNewsletter(object sender, EventArgs e)
 		{
-			saveEdit(sender, e); //save first then build the email
+			SaveEdit(sender, e); //save first then build the email
 
 			Button ourSender = (Button)sender;
 			Label labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
@@ -158,18 +163,18 @@ namespace mjjames.AdminSystem
 			string fromemail = ConfigurationManager.AppSettings["NewsletterFromAddress"] ?? String.Empty;
 			string fromname = ConfigurationManager.AppSettings["SiteName"] ?? String.Empty;
 
-			Newsletter ourNewsletter = (Newsletter) GetData();
+			Newsletter ourNewsletter = (Newsletter)GetData();
 			email newsletter = new email
-			                   	{
-			                   		fromemail = fromemail,
-			                   		fromname = fromname,
-			                   		subject = ourNewsletter.subject ?? String.Empty,
-			                   		body = ourNewsletter.body ?? String.Empty,
-			                   		reciprients = GetReciprients(),
-			                   		unsubscribelink = ConfigurationManager.AppSettings["NewsletterUnSubscribe"]
-			                   	};
+								{
+									fromemail = fromemail,
+									fromname = fromname,
+									subject = ourNewsletter.subject ?? String.Empty,
+									body = ourNewsletter.body ?? String.Empty,
+									reciprients = GetReciprients(),
+									unsubscribelink = ConfigurationManager.AppSettings["NewsletterUnSubscribe"]
+								};
 
-			Emailer mailer = new Emailer {Email = newsletter};
+			Emailer mailer = new Emailer { Email = newsletter };
 
 			if (mailer.SendMail())
 			{
@@ -186,8 +191,9 @@ namespace mjjames.AdminSystem
 		}
 		#endregion
 
-		private List<MailAddress> GetReciprients(){
-			List<MailAddress> reciprients = (from r in adminDC.NewsletterReciprients
+		private List<MailAddress> GetReciprients()
+		{
+			List<MailAddress> reciprients = (from r in AdminDC.NewsletterReciprients
 											 where r.active && r.confirmed
 											 select new MailAddress(r.email, r.name)).ToList();
 			return reciprients;
@@ -195,29 +201,29 @@ namespace mjjames.AdminSystem
 
 		public override void ArchiveData(int iKey)
 		{
-			Newsletter oldNews = (from n in adminDC.Newsletters
-									where n.newsletter_key == iKey
-									select n).SingleOrDefault();
-			
+			Newsletter oldNews = (from n in AdminDC.Newsletters
+								  where n.newsletter_key == iKey
+								  select n).SingleOrDefault();
+
 			DataEntities.Archive.Newsletter archiveNews = new DataEntities.Archive.Newsletter
-			                                              	{
-				body = oldNews.body,
-				date_created = oldNews.date_created,
-				date_sent = oldNews.date_sent,
-				newsletter_key = oldNews.newsletter_key,
-				subject = oldNews.subject,
-				DBName = adminDC.Connection.Database
-			};
-			
+															{
+																body = oldNews.body,
+																date_created = oldNews.date_created,
+																date_sent = oldNews.date_sent,
+																newsletter_key = oldNews.newsletter_key,
+																subject = oldNews.subject,
+																DBName = AdminDC.Connection.Database
+															};
+
 			DataContexts.Archive.archiveDataContext archiveDC = new DataContexts.Archive.archiveDataContext();
-			
+
 			archiveDC.Newsletters.InsertOnSubmit(archiveNews);
-			adminDC.Newsletters.DeleteOnSubmit(oldNews);
-			
+			AdminDC.Newsletters.DeleteOnSubmit(oldNews);
+
 			archiveDC.SubmitChanges();
-			adminDC.SubmitChanges();
-			
-			
+			AdminDC.SubmitChanges();
+
+
 		}
 
 

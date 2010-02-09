@@ -1,39 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using mjjames.ControlLibrary;
 
 namespace mjjames.AdminSystem
 {
-	public partial class newsletters_subscriptionmanagement : System.Web.UI.Page
+	public partial class NewslettersSubscriptionmanagement : System.Web.UI.Page
 	{
-		private NewsletterFunctions nf = new NewsletterFunctions();
+		private readonly NewsletterFunctions _nf = new NewsletterFunctions();
 		protected void Page_Load(object sender, EventArgs e)
 		{
-
+			
 		}
 
-		protected void resendConfirmation(object sender, EventArgs e)
+
+		protected void ResendConfirmation(object sender, EventArgs e)
 		{
 			ListViewDataItem lv = ((LinkButton)sender).Parent as ListViewDataItem;
 
+			if (lv == null) return;
 			Label name = lv.FindControl("nameLabel") as Label;
 			Label email = lv.FindControl("emailLabel") as Label;
 
 			labelStatus.Text = "Sorry An Error Has Occurred";
 
-			if (name != null && email != null)
+			if (name == null || email == null) return;
+			if (String.IsNullOrEmpty(name.Text) || String.IsNullOrEmpty(email.Text)) return;
+			if (_nf.SendSignUpConfirmation(name.Text, email.Text))
 			{
-				if (!String.IsNullOrEmpty(name.Text) && !String.IsNullOrEmpty(email.Text))
-				{
-					if (nf.SendSignUpConfirmation(name.Text, email.Text))
-					{
-						labelStatus.Text = "Confirmation Sent";
-					}
-				}
+				labelStatus.Text = "Confirmation Sent";
 			}
 		}
 

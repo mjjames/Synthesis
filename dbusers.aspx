@@ -149,7 +149,7 @@
 						</SuccessTemplate>
 					</asp:ChangePassword>
 					<asp:ListView runat="server" ID="_UserLising" Visible="false" OnItemEditing="EditDataBind"
-						OnItemUpdating="UpdateUsers" OnItemDeleting="DeleteUser" OnItemCommand="CustomCommands">
+						OnItemUpdating="UpdateUsers" OnItemDeleting="DeleteUser" OnItemCanceling="CancelEdit" OnItemCommand="CustomCommands">
 						<LayoutTemplate>
 							<table class="listingTable">
 								<thead>
@@ -256,6 +256,9 @@
 							</tr>
 						</EditItemTemplate>
 					</asp:ListView>
+					<p class="error">
+					    <asp:Literal runat="server" ID="errorMessage" Text="" />
+					</p>
 				</div>
 			</ContentTemplate>
 		</asp:UpdatePanel>

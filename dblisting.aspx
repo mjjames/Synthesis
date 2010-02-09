@@ -1,5 +1,5 @@
 <%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true"
-	ValidateRequest="false" Inherits="listPage" CodeBehind="dblisting.aspx.cs" %>
+	ValidateRequest="false" Inherits="mjjames.AdminSystem.ListPage" CodeBehind="dblisting.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 	<asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
@@ -28,14 +28,14 @@
 			<h2 runat="server" id="levelLabel">
 				at this Level</h2>
 			<div class="listingTable">
-				<asp:LinkButton ID="linkbuttonBack" runat="server" CssClass="backUp" ToolTip="Up a Level"
-					PostBackUrl="~/dbeditor.aspx?type=" Visible="true" EnableViewState="False">
+				<asp:Hyperlink ID="linkbuttonBack" runat="server" CssClass="backUp" ToolTip="Up a Level"
+					NavigateUrl="~/DBEditor.aspx?type=" Visible="true" >
 					&lt; &lt; Up a Level
-				</asp:LinkButton>
-				<asp:LinkButton ID="buttonAddPage" runat="server" CssClass="addPage" ToolTip="Add a New "
-					PostBackUrl="~/dbeditor.aspx?type=" Enabled="false" Visible="false">
+				</asp:Hyperlink>
+				<asp:HyperLink ID="buttonAddPage" runat="server" CssClass="addPage" ToolTip="Add a New "
+					NavigateUrl="~/DBEditor.aspx?type=" Visible="false">
 					Add Page
-				</asp:LinkButton>
+				</asp:HyperLink>
 			</div>
 			<asp:UpdatePanel ID="upListing" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional"  >
 				<ContentTemplate>

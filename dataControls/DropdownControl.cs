@@ -1,63 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Reflection;
+using mjjames.AdminSystem.DataControls;
 using mjjames.AdminSystem.dataentities;
-using mjjames.AdminSystem;
 using System.Configuration;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class dropdownControl
+	public class DropdownControl : IDataControl
 	{
+		public int PKey { get; set; }
 
-		private int _iPKey;
-
-		public int iPKey
+		public static object GetDataValue(Control ourControl, Type ourType)
 		{
-			get
-			{
-				return _iPKey;
-			}
-			set
-			{
-				_iPKey = value;
-			}
+			DropDownList ourDropDown = (DropDownList)ourControl.Parent.FindControl(ourControl.ID);
+			int output;
+			return int.TryParse(ourDropDown.SelectedValue, out output) ? output : Convert.ChangeType(ourDropDown.SelectedValue, ourType);
+
 		}
 
-		public static object getDataValue(Control ourControl, Type ourType)
+		public Control GenerateControl(AdminField field, object ourPage)
 		{
-			DropDownList ourDropDown = (DropDownList) ourControl.Parent.FindControl(ourControl.ID); ;
-			return Convert.ChangeType(ourDropDown.SelectedValue, ourType);
-		}
+			DropDownList ourDropDown = new DropDownList { ID = "control" + field.ID };
 
-		public Control generateControl(AdminField field, object ourPage)
-		{
-			PropertyInfo ourProperty;
-
-			DropDownList ourDropDown = new DropDownList();
-			ourDropDown.ID = "control" + field.ID;
-
-			XmlDBBase lookupDB = new XmlDBBase();
-			lookupDB.ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString;
-			lookupDB.TableName = field.Attributes["lookuptable"];
+			XmlDBBase lookupDB = new XmlDBBase
+									{
+										ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString,
+										TableName = field.Attributes["lookuptable"]
+									};
 
 			SqlDataSource datasource = lookupDB.DataSource(true, true, false, false, false);
 
-			datasource.FilterExpression =String.Format("{0} = '{1}'", field.Attributes["lookupfilter"], field.Attributes["lookupfiltervalue"]);
+			datasource.FilterExpression = String.Format("{0} = '{1}'", field.Attributes["lookupfilter"], field.Attributes["lookupfiltervalue"]);
 
 			ourDropDown.DataSource = datasource;
 			ourDropDown.DataValueField = lookupDB.TablePrimaryKeyField;
 			ourDropDown.DataTextField = field.Attributes["lookuptextfield"];
 			ourDropDown.DataBind();
-			ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(int));
-		
-			if (_iPKey > 0 && ourProperty != null)
+			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID);
+
+			if (PKey > 0 && ourProperty != null)
 			{
-				int ourValue = (int) ourProperty.GetValue(ourPage, null);
+				int ourValue = (int)ourProperty.GetValue(ourPage, null);
 
 				int iPosition = 0;
 				foreach (ListItem item in ourDropDown.Items)

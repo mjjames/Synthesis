@@ -34,15 +34,10 @@ namespace mjjames.AdminSystem.authentication
 		{
 			if (ValidateUser(inputUserName.Value, inputPassword.Value))
 			{
-				FormsAuthenticationTicket tkt = new FormsAuthenticationTicket(1, inputUserName.Value, DateTime.Now, DateTime.Now.AddMinutes(30), inputRememberMe.Checked, "MJJames Admin Tool");
+				FormsAuthenticationTicket tkt = new FormsAuthenticationTicket(1, inputUserName.Value, DateTime.Now, DateTime.Now.AddMinutes(30), false, "MJJames Admin Tool");
 			
 				string cookiestr = FormsAuthentication.Encrypt(tkt);
 				HttpCookie ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr);
-			
-				if (inputRememberMe.Checked)
-				{
-					ck.Expires = tkt.Expiration;
-				}
 			
 				ck.Path = FormsAuthentication.FormsCookiePath;
 				Response.Cookies.Add(ck);

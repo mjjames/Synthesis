@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" Inherits="dbeditor" Title="DBEditor" ValidateRequest="false" Codebehind="dbeditor.aspx.cs" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" Inherits="mjjames.AdminSystem.DBEditor" Title="DBEditor" ValidateRequest="false" Codebehind="dbeditor.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 	<asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
@@ -29,16 +29,15 @@
 				<asp:Label ID="labelStatus" Text="Editing" runat="server" CssClass="status"></asp:Label>
 			</h2>
 			<div class="listingTable">
-				<asp:LinkButton ID="linkbuttonBack" runat="server" Style="position: relative" ToolTip="Back to Listing"
-					PostBackUrl="#" Visible="true" EnableViewState="False" CausesValidation="false"
-					CssClass="backListing">
+				<asp:HyperLink ID="linkbuttonBack" runat="server" Style="position: relative" ToolTip="Back to Listing"
+					Visible="true" CssClass="backListing">
 					 &lt; &lt; Back to Listing
-				</asp:LinkButton>
-				<asp:LinkButton ID="linkbuttonSubPages" runat="server" Style="position: relative"
-					CausesValidation="false" ToolTip="Show SubItems" PostBackUrl="#" Visible="false"
-					EnableViewState="False" CssClass="subPages">
+				</asp:HyperLink>
+				<asp:HyperLink ID="linkbuttonSubPages" runat="server" Style="position: relative"
+					ToolTip="Show SubItems" Visible="false"
+					CssClass="subPages">
 					Sub Items &gt; &gt;
-				</asp:LinkButton>
+				</asp:HyperLink>
 			</div>
 			<div id="pageEditor" class="listingTable">
 				<asp:PlaceHolder ID="placeholderTabs" runat="server" />

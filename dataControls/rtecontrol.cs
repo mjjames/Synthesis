@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using FredCK.FCKeditorV2;
+using mjjames.AdminSystem.DataControls;
 using mjjames.AdminSystem.dataentities;
 using System.Web.UI.WebControls;
 using System.Reflection;
@@ -10,41 +9,30 @@ using System.Web.UI;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class rteControl
+	public class RteControl : IDataControl
 	{
-		private int _iPKey;
+		public int PKey { get; set; }
 
-		public int iPKey
-		{
-			get
-			{
-				return _iPKey;
-			}
-			set
-			{
-				_iPKey = value;
-			}
-		}
-		public static object getDataValue(Control ourControl, Type ourType)
+		public static object GetDataValue(Control ourControl, Type ourType)
 		{
 			FCKeditor ourFCK = (FCKeditor)ourControl;
 			return ourFCK.Value;
 		}
 
-		public Control generateControl(AdminField field, object ourPage)
+		public Control GenerateControl(AdminField field, object ourPage)
 		{
-			PropertyInfo ourProperty;
-
-			FCKeditor fckEditor = new FCKeditor();
-			fckEditor.ID = "control" + field.ID;
-			fckEditor.CustomConfigurationsPath = "/admininc/fckSettings.js?v=1";
-			fckEditor.BasePath = "~/fckeditor/";
-			fckEditor.ToolbarCanCollapse = false;
-			fckEditor.ToolbarSet = "mjjames";
-			fckEditor.EnableSourceXHTML = true;
-			fckEditor.EnableXHTML = true;
-			fckEditor.FormatOutput = true;
-			fckEditor.FormatSource = true;
+			FCKeditor fckEditor = new FCKeditor
+			                      	{
+			                      		ID = "control" + field.ID,
+			                      		CustomConfigurationsPath = "/admininc/fckSettings.js?v=1",
+			                      		BasePath = "~/fckeditor/",
+			                      		ToolbarCanCollapse = false,
+			                      		ToolbarSet = "mjjames",
+			                      		EnableSourceXHTML = true,
+			                      		EnableXHTML = true,
+			                      		FormatOutput = true,
+			                      		FormatSource = true
+			                      	};
 			fckEditor.EnableSourceXHTML = true;
 			fckEditor.HtmlEncodeOutput = true;
 			//	fckEditor.Config["HtmlEncodeOutput"] = "true";
@@ -111,13 +99,13 @@ namespace mjjames.AdminSystem.dataControls
 				fckEditor.Height = Unit.Pixel(450);
 			}
 
-			ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
-			if (iPKey > 0 && ourProperty != null)
+			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
+			if (PKey > 0 && ourProperty != null)
 			{
 				string ourValue = (string)ourProperty.GetValue(ourPage, null);
 				fckEditor.Value = HttpContext.Current.Server.HtmlDecode("" + ourValue);
 			}
-			return (Control) fckEditor;
+			return fckEditor;
 		}
 	}
 }

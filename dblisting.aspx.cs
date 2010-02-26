@@ -40,6 +40,11 @@ namespace mjjames.AdminSystem
 			_xmldb.TableName = _sType;
 			_xmldb.ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString;
 
+			if (Session["userSiteKey"] != null)
+			{
+				_xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());
+			}
+
 
 		}
 
@@ -213,7 +218,7 @@ namespace mjjames.AdminSystem
 				}
 				else
 				{
-					string strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] FROM [{4}] ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName);
+					string strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] FROM [{4}] WHERE [site_fkey] = {5} ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName, Session["userSiteKey"]);
 					string strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
 
 					config.Add("query", strQuery);

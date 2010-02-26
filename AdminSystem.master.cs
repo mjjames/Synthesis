@@ -10,17 +10,31 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using System.Xml.Linq;
+using System.Reflection;
 
 public partial class AdminSystem : System.Web.UI.MasterPage
 {
-	protected void Page_Load(object sender, EventArgs e)
+	protected override void OnInit(EventArgs e)
 	{
 		if (Page.User.Identity.IsAuthenticated)
 		{
 			signout.Visible = true;
 			adminToolbar.Visible = true;
+			siteSelector.Visible = true;
 		}
+		base.OnInit(e);
+		
+	}
 
+	protected void Page_Load(object sender, EventArgs e)
+	{
+		
+
+	}
+
+	protected string GetVersionNumber()
+	{
+		return Assembly.GetExecutingAssembly().GetName().Version.ToString();
 	}
 
 	protected void btnSignOut_ServerClick(object sender, System.EventArgs e)

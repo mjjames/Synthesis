@@ -61,6 +61,10 @@ namespace mjjames.AdminSystem
 				int.TryParse(pkey.Value, out pKey);
 				_xmldb.PrimaryKey = pKey;
 			}
+			if(Session["userSiteKey"] != null){
+				_xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());
+			}
+
 			placeholderTabs.Controls.Add(_xmldb.GeneratePage());
 
 

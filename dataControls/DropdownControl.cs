@@ -15,7 +15,7 @@ namespace mjjames.AdminSystem.dataControls
 
 		public static object GetDataValue(Control ourControl, Type ourType)
 		{
-			DropDownList ourDropDown = (DropDownList)ourControl.Parent.FindControl(ourControl.ID);
+			var ourDropDown = (DropDownList)ourControl.Parent.FindControl(ourControl.ID);
 			int output;
 			return int.TryParse(ourDropDown.SelectedValue, out output) ? output : Convert.ChangeType(ourDropDown.SelectedValue, ourType);
 
@@ -23,15 +23,15 @@ namespace mjjames.AdminSystem.dataControls
 
 		public Control GenerateControl(AdminField field, object ourPage)
 		{
-			DropDownList ourDropDown = new DropDownList { ID = "control" + field.ID };
+			var ourDropDown = new DropDownList { ID = "control" + field.ID };
 
-			XmlDBBase lookupDB = new XmlDBBase
+			var lookupDB = new XmlDBBase(false)
 									{
 										ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString,
 										TableName = field.Attributes["lookuptable"]
 									};
 
-			SqlDataSource datasource = lookupDB.DataSource(true, true, false, false, false);
+			var datasource = lookupDB.DataSource(true, true, false, false, false);
 
 			datasource.FilterExpression = String.Format("{0} = '{1}'", field.Attributes["lookupfilter"], field.Attributes["lookupfiltervalue"]);
 
@@ -39,13 +39,13 @@ namespace mjjames.AdminSystem.dataControls
 			ourDropDown.DataValueField = lookupDB.TablePrimaryKeyField;
 			ourDropDown.DataTextField = field.Attributes["lookuptextfield"];
 			ourDropDown.DataBind();
-			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID);
+			var ourProperty = ourPage.GetType().GetProperty(field.ID);
 
 			if (PKey > 0 && ourProperty != null)
 			{
-				int ourValue = (int)ourProperty.GetValue(ourPage, null);
+				var ourValue = (int)ourProperty.GetValue(ourPage, null);
 
-				int iPosition = 0;
+				var iPosition = 0;
 				foreach (ListItem item in ourDropDown.Items)
 				{
 					if (item.Value == ourValue.ToString())

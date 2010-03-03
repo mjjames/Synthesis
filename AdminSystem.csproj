@@ -68,6 +68,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Resources\log4net-1.2.10\bin\net\2.0\release\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="mjjames.Imaging, Version=1.0.3706.37217, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\classes\Imaging\bin\Release\mjjames.Imaging.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Resources\TweetSharp\Newtonsoft.Json.dll</HintPath>
@@ -112,11 +116,16 @@
     <Content Include="adminimages\icons\Move_Prev.png" />
     <Content Include="adminimages\icons\Remove.png" />
     <Content Include="adminimages\icons\Verify.png" />
-    <Content Include="admininc\adminDB.xml" />
+    <Content Include="admininc_defaults\adminDB.xml" />
     <Content Include="admininc_defaults\adminstyle.css" />
     <Content Include="admininc_defaults\fckSettings.js" />
+    <Content Include="admininc_defaults\newsletterbuilder.xml" />
     <Content Include="admininc_defaults\styles.xml" />
     <Content Include="authentication\default.aspx" />
+    <Content Include="dbchanges\GenerateDBJune2009.sql" />
+    <Content Include="dbchanges\Upgrade 1.2 to 1.6 Admin Tool.sql" />
+    <Content Include="dbchanges\Upgrade 1.5 to 1.6 Admin Tool.sql" />
+    <Content Include="dbchanges\UPgrade 1.6 to 1.7 Admin Tool.sql" />
     <Content Include="images\anchor.gif" />
     <Content Include="images\arrow_ltr.gif" />
     <Content Include="images\arrow_rtl.gif" />
@@ -143,6 +152,7 @@
     <Content Include="images\smiley\msn\whatchutalkingabout_smile.gif" />
     <Content Include="images\smiley\msn\wink_smile.gif" />
     <Content Include="images\spacer.gif" />
+    <Content Include="usercontrols\SiteSelector.ascx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -164,27 +174,17 @@
     <Compile Include="classes\ILogger.cs" />
     <Compile Include="classes\Logger.cs" />
     <Compile Include="classes\NavigationSettings.cs" />
-    <Compile Include="classes\XmlDBBanners.cs" />
-    <Compile Include="classes\XmlDBlookup.cs" />
-    <Compile Include="dao\KeyValueRepository.cs" />
-    <Compile Include="dao\RecycleRepository.cs" />
+    <Compile Include="classes\PhotoInfoData.cs" />
+    <Compile Include="Repositories\KeyValueRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />
     <Compile Include="classes\SystemSettings.cs" />
     <Compile Include="classes\TwitterAuth.cs" />
     <Compile Include="classes\TwitterAuthentication.cs" />
     <Compile Include="classes\TwitterPublisher.cs" />
     <Compile Include="classes\UserAdministration.cs" />
-    <Compile Include="classes\XmlDBmedia.cs" />
-    <Compile Include="classes\XmlDBarticles.cs" />
-    <Compile Include="classes\XmlDBnewsletters.cs" />
-    <Compile Include="classes\XmlDBoffers.cs" />
-    <Compile Include="classes\XmlDBTestimonies.cs" />
-    <Compile Include="classes\XmlDBProjects.cs" />
-    <Compile Include="classes\XmlDBPages.cs" />
     <Compile Include="classes\generic.cs" />
-    <Compile Include="dao\PhotoInfoData.cs" />
-    <Compile Include="classes\XmlDBBase.cs" />
     <Compile Include="dao\daoDonations.cs" />
+    <Compile Include="Repositories\SiteUsersRepoistory.cs" />
     <Compile Include="dataContexts\adminDataContexts.cs">
       <DependentUpon>adminDataContexts.dbml</DependentUpon>
     </Compile>
@@ -215,6 +215,7 @@
     </Compile>
     <Compile Include="DataControls\IDataControl.cs" />
     <Compile Include="DataControls\ImageControl.cs" />
+    <Compile Include="DataControls\KeyValuePairControl.cs" />
     <Compile Include="DataControls\LookupControl.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -297,6 +298,7 @@
     <Compile Include="Repositories\IComments.cs" />
     <Compile Include="Repositories\IDonation.cs" />
     <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\RecycleRepository.cs" />
     <Compile Include="subscriptionmanagement.aspx.cs">
       <DependentUpon>subscriptionmanagement.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -318,6 +320,25 @@
     <Compile Include="authentication\ResetPassword.aspx.designer.cs">
       <DependentUpon>ResetPassword.aspx</DependentUpon>
     </Compile>
+    <Compile Include="usercontrols\SiteSelector.ascx.cs">
+      <DependentUpon>SiteSelector.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrols\SiteSelector.ascx.designer.cs">
+      <DependentUpon>SiteSelector.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="XMLDB\XmlDBarticles.cs" />
+    <Compile Include="XMLDB\XmlDBBanners.cs" />
+    <Compile Include="XMLDB\XmlDBBase.cs" />
+    <Compile Include="XMLDB\XmlDBlookup.cs" />
+    <Compile Include="XMLDB\XmlDBmarketingsites.cs" />
+    <Compile Include="XMLDB\XmlDBmedia.cs" />
+    <Compile Include="XMLDB\XmlDBnewsletters.cs" />
+    <Compile Include="XMLDB\XmlDBoffers.cs" />
+    <Compile Include="XMLDB\XmlDBPages.cs" />
+    <Compile Include="XMLDB\XmlDBProjects.cs" />
+    <Compile Include="XMLDB\XmlDBsites.cs" />
+    <Compile Include="XMLDB\XmlDBTestimonies.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dbeditor.aspx" />
@@ -360,24 +381,20 @@
     <Content Include="subscriptionmanagement.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\classes\ControlLibrary\ControlLibrary.csproj">
+    <ProjectReference Include="..\..\..\classes\ControlLibrary\mjjames.ControlLibrary.csproj">
       <Project>{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}</Project>
-      <Name>ControlLibrary</Name>
+      <Name>mjjames.ControlLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\classes\Imaging\Imaging.csproj">
-      <Project>{0DC543BE-B98F-4D32-BCFB-C65BACAAF347}</Project>
-      <Name>Imaging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
+    <ProjectReference Include="..\..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
       <Project>{B8488B6E-F1E4-4C64-A39D-5C853169DCE5}</Project>
       <Name>mjjames.core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="admininc_defaults\admin.config" />
     <Content Include="admininc_defaults\adminsettings.config" />
     <Content Include="admininc_defaults\connectionsettings.config" />
     <Content Include="admininc_defaults\mjjames.config" />
+    <Content Include="admininc_defaults\adminDB.config" />
     <None Include="dataContexts\adminDataContexts.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>adminDataContexts.designer.cs</LastGenOutput>

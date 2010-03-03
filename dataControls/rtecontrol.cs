@@ -4,24 +4,22 @@ using FredCK.FCKeditorV2;
 using mjjames.AdminSystem.DataControls;
 using mjjames.AdminSystem.dataentities;
 using System.Web.UI.WebControls;
-using System.Reflection;
 using System.Web.UI;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class RteControl : IDataControl
+	public class RteControl : KeyValuePairControl, IDataControl
 	{
-		public int PKey { get; set; }
 
 		public static object GetDataValue(Control ourControl, Type ourType)
 		{
-			FCKeditor ourFCK = (FCKeditor)ourControl;
+			var ourFCK = (FCKeditor)ourControl;
 			return ourFCK.Value;
 		}
 
 		public Control GenerateControl(AdminField field, object ourPage)
 		{
-			FCKeditor fckEditor = new FCKeditor
+			var fckEditor = new FCKeditor
 			                      	{
 			                      		ID = "control" + field.ID,
 			                      		CustomConfigurationsPath = "/admininc/fckSettings.js?v=1",
@@ -37,7 +35,7 @@ namespace mjjames.AdminSystem.dataControls
 			fckEditor.HtmlEncodeOutput = true;
 			//	fckEditor.Config["HtmlEncodeOutput"] = "true";
 
-			UnitType unit = UnitType.Percentage;
+			var unit = UnitType.Percentage;
 
 			if (field.Attributes.ContainsKey("unit"))
 			{
@@ -99,12 +97,8 @@ namespace mjjames.AdminSystem.dataControls
 				fckEditor.Height = Unit.Pixel(450);
 			}
 
-			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
-			if (PKey > 0 && ourProperty != null)
-			{
-				string ourValue = (string)ourProperty.GetValue(ourPage, null);
-				fckEditor.Value = HttpContext.Current.Server.HtmlDecode("" + ourValue);
-			}
+			var ourValue = GetStringValue(field, ourPage);
+			fckEditor.Value = HttpContext.Current.Server.HtmlDecode("" + ourValue);
 			return fckEditor;
 		}
 	}

@@ -257,3 +257,8 @@ div.ajax__calendar div.ajax__calendar_header
 .passwordHint{
 	float: right;
 }
+
+div.siteSelector{
+	text-align:right;
+	color: #8799FF;
+}

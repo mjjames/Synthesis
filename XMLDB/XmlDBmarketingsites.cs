@@ -12,10 +12,6 @@ using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using System.Web;
 
-/// <summary>
-/// Summary description for xmlDB
-/// </summary>
-/// 
 namespace mjjames.AdminSystem
 {
 	public class XmlDBmarketingsites : XmlDBBase
@@ -29,7 +25,7 @@ namespace mjjames.AdminSystem
 		protected override object GetData()
 		{
 			
-			marketingsite ourSite = new marketingsite();
+			var ourSite = new marketingsite();
 			if (PKey > 0)
 			{
 				ourSite = (from p in AdminDC.marketingsites
@@ -53,24 +49,24 @@ namespace mjjames.AdminSystem
 		/// <param name="e"></param>
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
-			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
-			marketingsite ourData = new marketingsite();
+			var ourSender = (Button)sender;
+			var ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+			var ourData = new marketingsite();
 			if (PKey > 0)
 			{
 				ourData = ourPageDataContext.marketingsites.Single(p => p.marketingsite_key== PKey);
 			}
 
-			foreach (AdminTab tab in Table.Tabs)
+			foreach (var tab in Table.Tabs)
 			{
-				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
+				var ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
 				if (ourTab == null) continue;
-				foreach (AdminField field in tab.Fields)
+				foreach (var field in tab.Fields)
 				{
-					Control ourControl = ourTab.FindControl("control" + field.ID);
+					var ourControl = ourTab.FindControl("control" + field.ID);
 
 					if (ourControl == null) continue;
-					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
+					var ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
 						Logger.LogInformation("Saving Content In: " + ourControl.ID);
@@ -92,13 +88,17 @@ namespace mjjames.AdminSystem
 				ourPageDataContext.marketingsites.InsertOnSubmit(ourData);
 			}
 
-			Label labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
+			var labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
 			try
 			{
-				ChangeSet ourChanges = ourPageDataContext.GetChangeSet();
+				var ourChanges = ourPageDataContext.GetChangeSet();
 
 				labelStatus.Text = "Nothing to Save";
 				ourPageDataContext.SubmitChanges();
+				
+				//TODO: after we have saved our changes we need to insert / update any keyvaluepair data we may have
+				//		to do this we need to look at stashing this data and passing it to a base method. 
+				//		we can only do it after the insert / update as we need the primary key
 
 				if (ourChanges.Inserts.Count > 0)
 				{
@@ -107,10 +107,10 @@ namespace mjjames.AdminSystem
 
 					PKey = ourData.marketingsite_key;
 
-					string strPKeyField = TablePrimaryKeyField;
+					var strPKeyField = TablePrimaryKeyField;
 
-					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
-					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
+					var ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
+					var ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
 
 					try
 					{
@@ -119,7 +119,7 @@ namespace mjjames.AdminSystem
 					}
 					catch
 					{
-						Exception ex =
+						var ex =
 							new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
 						Logger.LogError("Unknown Field",ex);
 						throw ex;

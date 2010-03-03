@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
-using mjjames.AdminSystem.dao;
+using mjjames.AdminSystem.Repositories;
 
 namespace mjjames.AdminSystem.usercontrols
 {
@@ -13,7 +10,11 @@ namespace mjjames.AdminSystem.usercontrols
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			
+			//if we have onlye 1 or less options hide the drop down
+			if(ddlSites.Items.Count <= 1)
+			{
+				Visible = false;
+			}
 		}
 
 		protected void LoadSites(object sender, EventArgs e){
@@ -29,7 +30,6 @@ namespace mjjames.AdminSystem.usercontrols
 				{
 					Session["userSiteKey"] = userSites.First().site_key.ToString();
 				}
-				this.Visible = false; //hide this control
 				return;
 			}
 
@@ -63,7 +63,7 @@ namespace mjjames.AdminSystem.usercontrols
 		protected void UpdateSiteSession(object sender, EventArgs e)
 		{
 			var ddl = sender as DropDownList;
-			Session["userSiteKey"] = ddl.SelectedValue;
+			if (ddl != null) Session["userSiteKey"] = ddl.SelectedValue;
 			Response.Redirect("~/");
 		}
 	}

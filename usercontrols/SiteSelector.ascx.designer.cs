@@ -13,6 +13,15 @@ namespace mjjames.AdminSystem.usercontrols {
     public partial class SiteSelector {
         
         /// <summary>
+        /// SiteSelectorWrapper control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl SiteSelectorWrapper;
+        
+        /// <summary>
         /// lblSites control.
         /// </summary>
         /// <remarks>

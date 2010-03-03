@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.Remoting;
 using System.Threading;
 using System.Web;
 using System.Web.UI;
@@ -15,10 +13,6 @@ using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataContexts;
 
-/// <summary>
-/// Summary description for xmlDB
-/// </summary>
-/// 
 namespace mjjames.AdminSystem
 {
 	public class XmlDBBase
@@ -34,7 +28,7 @@ namespace mjjames.AdminSystem
 		protected readonly Logger Logger = new Logger("XMLDB");
 		protected int SiteFKey;
 		protected bool MultiTenancyTableEnabled = true;
-		protected readonly bool MultiTenancyEnabled = false;
+		protected readonly bool MultiTenancyEnabled;
 
        /// <summary>
 		/// Provide a ConnectionString for the DataSources
@@ -94,11 +88,11 @@ namespace mjjames.AdminSystem
 			{
 				if (XMLFilePath == null)
 				{
-					Exception exception = new Exception("Error: No Admin Config XML Specified");
+					var exception = new Exception("Error: No Admin Config XML Specified");
 					Logger.LogError("XMLDB Error", exception);
 					throw exception;
 				}
-				string sFilePath = HttpContext.Current.Server.MapPath(XMLFilePath);
+				var sFilePath = HttpContext.Current.Server.MapPath(XMLFilePath);
 
 				XML = XDocument.Load(sFilePath);
 				Logger.LogInformation("adminConfigxml: " + sFilePath);
@@ -185,11 +179,11 @@ namespace mjjames.AdminSystem
 		{
 
 			Logger.LogDebug("Rendering Control: " + field.Type);
-			PlaceHolder renderedControl = new PlaceHolder();
-			bool bRenderControl = true;
+			var renderedControl = new PlaceHolder();
+			var bRenderControl = true;
 
-			Label ourLabel = new Label();
-			WebControl ourContainer = new WebControl(HtmlTextWriterTag.Div) { CssClass = "row" };
+			var ourLabel = new Label();
+			var ourContainer = new WebControl(HtmlTextWriterTag.Div) { CssClass = "row" };
 
 			ourLabel.Text = field.Label;
 			ourLabel.CssClass = "label " + field.Type.ToLower();
@@ -198,20 +192,20 @@ namespace mjjames.AdminSystem
 
 			ourContainer.Controls.Add(ourLabel);
 
-			object[] controlParams = new[] { field, ourPage };
+			var controlParams = new[] { field, ourPage };
 			try
 			{
 				//Create CultureInfo and TextInfo classes to use ToTitleCase method
-				CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-				TextInfo textInfo = cultureInfo.TextInfo;
-				string controlName = String.Format("mjjames.AdminSystem.dataControls.{0}Control", textInfo.ToTitleCase(field.Type));
-				ObjectHandle ourType = Activator.CreateInstance("mjjames.AdminSystem", controlName);
+				var cultureInfo = Thread.CurrentThread.CurrentCulture;
+				var textInfo = cultureInfo.TextInfo;
+				var controlName = String.Format("mjjames.AdminSystem.dataControls.{0}Control", textInfo.ToTitleCase(field.Type));
+				var ourType = Activator.CreateInstance("mjjames.AdminSystem", controlName);
 				
 				if (ourType != null)
 				{
-					object controlHandle = ourType.Unwrap();
+					var controlHandle = ourType.Unwrap();
 					controlHandle.GetType().GetProperty("PKey").SetValue(controlHandle, PKey, null);
-					Control ourControl = (Control)controlHandle.GetType().GetMethod("GenerateControl").Invoke(controlHandle, controlParams);
+					var ourControl = (Control)controlHandle.GetType().GetMethod("GenerateControl").Invoke(controlHandle, controlParams);
 					ourContainer.Controls.Add(ourControl);
 				}
 				else
@@ -240,11 +234,11 @@ namespace mjjames.AdminSystem
 		/// <returns>placeholder containing controls</returns>
 		public PlaceHolder GenerateControls(List<AdminField> fields)
 		{
-			PlaceHolder phControls = new PlaceHolder();
+			var phControls = new PlaceHolder();
 
-			object ourData = GetData();
+			var ourData = GetData();
 
-			foreach (AdminField field in fields)
+			foreach (var field in fields)
 			{
 				phControls.Controls.Add(RenderControl(field, ourData));
 			}
@@ -260,13 +254,13 @@ namespace mjjames.AdminSystem
 		public PlaceHolder GenerateTabs()
 		{
 
-			PlaceHolder phTabs = new PlaceHolder {ID = "tabsPlaceholder"};
-			TabContainer tabContainer = new TabContainer();
+			var phTabs = new PlaceHolder {ID = "tabsPlaceholder"};
+			var tabContainer = new TabContainer();
 			if (Table != null)
 			{
 				foreach (AdminTab tab in Table.Tabs)
 				{
-					TabPanel tpTab = new TabPanel { ID = tab.ID, HeaderText = tab.Label };
+					var tpTab = new TabPanel { ID = tab.ID, HeaderText = tab.Label };
 					Logger.LogDebug("Rendering Tab:" + tab.ID);
 					tpTab.Controls.Add(GenerateControls(tab.Fields));
 					tabContainer.Tabs.Add(tpTab);
@@ -283,13 +277,13 @@ namespace mjjames.AdminSystem
 		/// <returns>PlaceHolder containing page</returns>
 		public PlaceHolder GeneratePage()
 		{
-			PlaceHolder ourPage = new PlaceHolder {ID = "pagePlaceHolder"};
+			var ourPage = new PlaceHolder {ID = "pagePlaceHolder"};
 			if (Table != null)
 			{
 
 				ourPage.Controls.Add(GenerateTabs());
 
-				Button saveButton = new Button { Text = "Save", CommandName = "SaveEdit" };
+				var saveButton = new Button { Text = "Save", CommandName = "SaveEdit" };
 				
 			
 				saveButton.Click += SaveEdit;
@@ -298,12 +292,12 @@ namespace mjjames.AdminSystem
 				{
 					saveButton.Click += RedirectToEdit; //this should only work for an insert
 				}
-				Button cancelButton = new Button { Text = "Cancel", CommandName = "CancelEdit" };
+				var cancelButton = new Button { Text = "Cancel", CommandName = "CancelEdit" };
 				cancelButton.Click += CancelEdit;
 
 				if (Table.bEmailButton)
 				{
-					Button emailButton = new Button { Text = "Email", CommandName = "emailButton" };
+					var emailButton = new Button { Text = "Email", CommandName = "emailButton" };
 					emailButton.Click += SaveEdit;
 					emailButton.Click += EmailNewsletter;
 					ourPage.Controls.Add(emailButton);
@@ -315,9 +309,9 @@ namespace mjjames.AdminSystem
 
 				if (PKey > 0) //this is optional
 				{
-					Button deleteButton = new Button { Text = "Delete", CommandName = "DeleteEdit", CssClass = "buttonDelete" };
+					var deleteButton = new Button { Text = "Delete", CommandName = "DeleteEdit", CssClass = "buttonDelete" };
 					deleteButton.Click += DeleteEdit;
-					LiteralControl deleteScript = new LiteralControl
+					var deleteScript = new LiteralControl
 													{
 														Text =
 															"<script type=\"text/javascript\"> $(\".buttonDelete\").click(function(){ var bDelete = confirm(\"Are You Sure You Want To Delete This Item?\");	return bDelete;	}); </script>"
@@ -329,7 +323,7 @@ namespace mjjames.AdminSystem
 			}
 			else
 			{
-				LiteralControl errorMessage = new LiteralControl("<h1>DBEditor Could Not Be Loaded</h1><p> Please Try Again</p>");
+				var errorMessage = new LiteralControl("<h1>DBEditor Could Not Be Loaded</h1><p> Please Try Again</p>");
 				Logger.LogError("XMLDB ERROR:", new Exception("DBEditor Couldn't Be Loaded - Missing Table"));
 				ourPage.Controls.Add(errorMessage);
 			}
@@ -338,7 +332,7 @@ namespace mjjames.AdminSystem
 
 
 		/// <summary>
-		/// Finds a Control recursively. Note finds the first match and exists
+		/// Finds a Control recursively. Note finds the first match and exits
 		/// </summary>
 		/// <param name="root"></param>
 		/// <param name="id"></param>
@@ -369,22 +363,22 @@ namespace mjjames.AdminSystem
 		/// <returns>An object with our Value in</returns>
 		protected static object GetDataValue(Control ourControl, string sFieldType, Type ourType)
 		{
-			object[] dataParams = new object[] { ourControl, ourType };
+			var dataParams = new object[] { ourControl, ourType };
 			//Create CultureInfo and TextInfo classes to use ToTitleCase method
-			CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-			TextInfo textInfo = cultureInfo.TextInfo;
-			string controlName = String.Format("mjjames.AdminSystem.dataControls.{0}Control", textInfo.ToTitleCase(sFieldType));
-			ObjectHandle ourDType = Activator.CreateInstance("mjjames.AdminSystem", controlName);
+			var cultureInfo = Thread.CurrentThread.CurrentCulture;
+			var textInfo = cultureInfo.TextInfo;
+			var controlName = String.Format("mjjames.AdminSystem.dataControls.{0}Control", textInfo.ToTitleCase(sFieldType));
+			var ourDType = Activator.CreateInstance("mjjames.AdminSystem", controlName);
 
 			object dataValue = null;
 			if (ourDType != null)
 			{
-				object controlHandle = ourDType.Unwrap();
+				var controlHandle = ourDType.Unwrap();
 				dataValue = controlHandle.GetType().GetMethod("GetDataValue").Invoke(null, dataParams);
 			}
 			else
 			{
-				Logger logger = new Logger("XMLDB");
+				var logger = new Logger("XMLDB");
 				logger.LogError("Base GetDataValue Failed To Load Control", new Exception(String.Format("Unknown Control - mjjames.AdminSystem.dataControls.{0}Control", sFieldType.ToLower())));
 			}
 			return dataValue;
@@ -421,7 +415,7 @@ namespace mjjames.AdminSystem
 		/// <returns></returns>
 		public SqlDataSource DataSource(bool listingmode, bool select, bool update, bool insert, bool delete)
 		{
-			SqlDataSource sds = new SqlDataSource { ConnectionString = Connectionstring };
+			var sds = new SqlDataSource { ConnectionString = Connectionstring };
 
 			if (select)
 			{
@@ -453,8 +447,8 @@ namespace mjjames.AdminSystem
 		/// <returns>String for Select Command</returns>
 		protected string BuildSelectCommand(bool bListingMode)
 		{
-			string selectCommand = String.Empty;
-			List<string> selectparams = new List<string>();
+			var selectCommand = String.Empty;
+			var selectparams = new List<string>();
 
 			if (Table != null)
 			{
@@ -465,15 +459,12 @@ namespace mjjames.AdminSystem
 					listfields = Table.Defaults.FindAll(t => t.Attributes.ContainsKey("list"));
 				}
 
-				foreach (AdminField field in listfields)
-				{
-					selectparams.Add("[" + field.ID + "]");
-				}
+				selectparams.AddRange(listfields.Select(field => "[" + field.ID + "]"));
 
 				selectCommand = String.Format("SELECT {0} FROM [{1}]", String.Join(" , ", selectparams.ToArray()), Table.ID);
 
 				var filter = "";
-				bool bMultiWhere = false;
+				var bMultiWhere = false;
 
 				if (MultiTenancyEnabled && MultiTenancyTableEnabled)
 				{
@@ -485,7 +476,7 @@ namespace mjjames.AdminSystem
 				{
 
 					
-					foreach (AdminField af in listfields.FindAll(lf => lf.Attributes.ContainsKey("listfilter")))
+					foreach (var af in listfields.FindAll(lf => lf.Attributes.ContainsKey("listfilter")))
 					{
 						if (bMultiWhere)
 						{
@@ -507,7 +498,7 @@ namespace mjjames.AdminSystem
 
 		private string BuildDeleteCommand()
 		{
-			string deleteCommand = String.Empty;
+			var deleteCommand = String.Empty;
 			if (Table != null)
 			{
 				deleteCommand = String.Format("DELETE FROM [{0}] WHERE [{1}] = @{2}", Table.ID, TablePrimaryKeyField, TablePrimaryKeyField);
@@ -517,7 +508,7 @@ namespace mjjames.AdminSystem
 
 		private string BuildInsertCommand()
 		{
-			string insertCommand = String.Empty;
+			var insertCommand = String.Empty;
 			if (Table != null)
 			{
 
@@ -527,7 +518,7 @@ namespace mjjames.AdminSystem
 
 		private string BuildUpdateCommand()
 		{
-			string updateCommand = String.Empty;
+			var updateCommand = String.Empty;
 			if (Table != null)
 			{
 				///TODO need to write an update command still
@@ -546,16 +537,9 @@ namespace mjjames.AdminSystem
 		/// <param name="e"></param>
 		protected void CancelEdit(object sender, EventArgs e)
 		{
-			Button ourSender = (Button)sender;
-			Page prevPage = ourSender.Page.PreviousPage;
-			if (prevPage == null)
-			{
-				ourSender.Page.Response.Redirect("~/");
-			}
-			else
-			{
-				ourSender.Page.Response.Redirect(prevPage.Request.RawUrl);
-			}
+			var ourSender = (Button)sender;
+			var prevPage = ourSender.Page.PreviousPage;
+			ourSender.Page.Response.Redirect(prevPage == null ? "~/" : prevPage.Request.RawUrl);
 		}
 
 
@@ -578,7 +562,7 @@ namespace mjjames.AdminSystem
 		{
 			//having a primary key at this point means the insert was a success
 			if (PKey <= 0) return;
-			string url = String.Format("{0}&{1}={2}", HttpContext.Current.Request.Url, TablePrimaryKeyField, PrimaryKey);
+			var url = String.Format("{0}&{1}={2}", HttpContext.Current.Request.Url, TablePrimaryKeyField, PrimaryKey);
 			HttpContext.Current.Response.Redirect(url, true);
 		}
 
@@ -608,10 +592,10 @@ namespace mjjames.AdminSystem
 		protected void DeleteEdit(object sender, EventArgs e)
 		{
 
-			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+			var ourSender = (Button)sender;
+			var ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 
-			Label labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
+			var labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
 			try
 			{
 				ArchiveData(PKey);
@@ -624,16 +608,8 @@ namespace mjjames.AdminSystem
 
 				labelStatus.Text = String.Format("{0} Removed", Table.ID);
 
-				Page prevPage = ourSender.Page.PreviousPage;
-				if (prevPage == null)
-				{
-					ourSender.Page.Response.Redirect("~/");
-				}
-				else
-				{
-					ourSender.Page.Response.Redirect(prevPage.Request.RawUrl);
-				}
-
+				var prevPage = ourSender.Page.PreviousPage;
+				ourSender.Page.Response.Redirect(prevPage == null ? "~/" : prevPage.Request.RawUrl);
 			}
 			catch (Exception ex)
 			{

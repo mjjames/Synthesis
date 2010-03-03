@@ -326,3 +326,52 @@ GO
 ALTER TABLE [dbo].[marketingsites] CHECK CONSTRAINT [FK_marketingsites_lookup]
 GO
 
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_keyvalues_lookup]') AND parent_object_id = OBJECT_ID(N'[dbo].[keyvalues]'))
+ALTER TABLE [dbo].[keyvalues] DROP CONSTRAINT [FK_keyvalues_lookup]
+GO
+
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_keyvalues_lookup1]') AND parent_object_id = OBJECT_ID(N'[dbo].[keyvalues]'))
+ALTER TABLE [dbo].[keyvalues] DROP CONSTRAINT [FK_keyvalues_lookup1]
+GO
+
+/****** Object:  Table [dbo].[keyvalues]    Script Date: 03/02/2010 21:40:36 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[keyvalues]') AND type in (N'U'))
+DROP TABLE [dbo].[keyvalues]
+GO
+
+/****** Object:  Table [dbo].[keyvalues]    Script Date: 03/02/2010 21:40:36 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[keyvalues](
+	[keyvalue_key] [int] IDENTITY(1,1) NOT NULL,
+	[link_fkey] [int] NOT NULL,
+	[key_lookup] [int] NOT NULL,
+	[value] [nvarchar](max) NOT NULL,
+	[link_lookup] [int] NOT NULL,
+ CONSTRAINT [PK_keyvalues] PRIMARY KEY CLUSTERED 
+(
+	[keyvalue_key] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[keyvalues]  WITH CHECK ADD  CONSTRAINT [FK_keyvalues_lookup] FOREIGN KEY([link_lookup])
+REFERENCES [dbo].[lookup] ([lookup_key])
+GO
+
+ALTER TABLE [dbo].[keyvalues] CHECK CONSTRAINT [FK_keyvalues_lookup]
+GO
+
+ALTER TABLE [dbo].[keyvalues]  WITH CHECK ADD  CONSTRAINT [FK_keyvalues_lookup1] FOREIGN KEY([key_lookup])
+REFERENCES [dbo].[lookup] ([lookup_key])
+GO
+
+ALTER TABLE [dbo].[keyvalues] CHECK CONSTRAINT [FK_keyvalues_lookup1]
+GO
+
+

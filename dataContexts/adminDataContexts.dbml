@@ -360,7 +360,7 @@
   </Table>
   <Table Name="dbo.keyvalues" Member="keyvalues">
     <Type Name="keyvalue">
-      <Column Name="keyvalue_key" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="keyvalue_key" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="link_fkey" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="key_lookup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="value" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />

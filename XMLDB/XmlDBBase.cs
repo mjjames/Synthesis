@@ -621,7 +621,12 @@ namespace mjjames.AdminSystem
 
 		#endregion
 
-
+		internal enum UpdateType
+		{
+			None,
+			Inserted,
+			Updated
+		}
 	}
 
 }

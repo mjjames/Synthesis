@@ -1,16 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Linq;
 using System.Linq;
-using System.Reflection;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
-using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.DataContexts;
-using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
-using System.Web;
+using mjjames.AdminSystem.Repositories;
 
 namespace mjjames.AdminSystem
 {
@@ -24,19 +20,19 @@ namespace mjjames.AdminSystem
 		/// <returns>a general object that needs casting to the correct type on use</returns>
 		protected override object GetData()
 		{
-			
+
 			var ourSite = new marketingsite();
 			if (PKey > 0)
 			{
 				ourSite = (from p in AdminDC.marketingsites
-							  where p.marketingsite_key == PKey
-							  select p).SingleOrDefault();
+						   where p.marketingsite_key == PKey
+						   select p).SingleOrDefault();
 			}
 
 			return ourSite;
 		}
 
-		
+
 		#endregion
 
 		#region button events
@@ -50,13 +46,14 @@ namespace mjjames.AdminSystem
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			var ourSender = (Button)sender;
-			var ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+			var ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			var ourData = new marketingsite();
 			if (PKey > 0)
 			{
-				ourData = ourPageDataContext.marketingsites.Single(p => p.marketingsite_key== PKey);
+				ourData = ourPageDataContext.marketingsites.Single(p => p.marketingsite_key == PKey);
 			}
 
+			var keyvalues = new List<KeyValueData>();
 			foreach (var tab in Table.Tabs)
 			{
 				var ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
@@ -66,6 +63,20 @@ namespace mjjames.AdminSystem
 					var ourControl = ourTab.FindControl("control" + field.ID);
 
 					if (ourControl == null) continue;
+
+					//if we are a key value get our data out and stash it for later
+					if (field.Attributes.ContainsKey("keyvalue"))
+					{
+						keyvalues.Add(new KeyValueData
+										{
+											LinkKey = PKey,
+											Value = GetDataValue(ourControl, field.Type, typeof(String)) as String,
+											LinkTypeID = "marketingsitelookup",
+											LookupID = field.Attributes["lookupid"]
+										});
+						continue;
+					}
+
 					var ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
@@ -93,19 +104,24 @@ namespace mjjames.AdminSystem
 			{
 				var ourChanges = ourPageDataContext.GetChangeSet();
 
-				labelStatus.Text = "Nothing to Save";
-				ourPageDataContext.SubmitChanges();
-				
-				//TODO: after we have saved our changes we need to insert / update any keyvaluepair data we may have
-				//		to do this we need to look at stashing this data and passing it to a base method. 
-				//		we can only do it after the insert / update as we need the primary key
 
+				ourPageDataContext.SubmitChanges();
+
+				var updateType = UpdateType.None;
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+					updateType = UpdateType.Inserted;
 
 
 					PKey = ourData.marketingsite_key;
+					//when we do an insert update any keyvalues we have to have the correct primary key
+					keyvalues = keyvalues.Select(kv => new KeyValueData()
+					                                   	{
+															LinkKey = PKey,
+															LinkTypeID = kv.LinkTypeID,
+															LookupID = kv.LookupID,
+															Value =  kv.Value
+					                                   	}).ToList();
 
 					var strPKeyField = TablePrimaryKeyField;
 
@@ -121,17 +137,39 @@ namespace mjjames.AdminSystem
 					{
 						var ex =
 							new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
-						Logger.LogError("Unknown Field",ex);
+						Logger.LogError("Unknown Field", ex);
 						throw ex;
 					}
 
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", Table.ID);
+					updateType = UpdateType.Updated;
 				}
 
+				if (keyvalues.Count > 0)
+				{
+					var keyValueRepository = new KeyValueRepository();
+					Logger.LogInformation("Updating Key Values");
+					keyValueRepository.UpdateKeyValues(keyvalues);
+					if (updateType.Equals(UpdateType.None))
+					{
+						updateType = UpdateType.Updated;
+					}
+				}
 
+				switch (updateType)
+				{
+					case UpdateType.None:
+						labelStatus.Text = "Nothing to Save";
+						break;
+					case UpdateType.Inserted:
+						labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+						break;
+					case UpdateType.Updated:
+						labelStatus.Text = String.Format("{0} Updated", Table.ID);
+						break;
+				}
 
 			}
 			catch (Exception ex)
@@ -139,6 +177,12 @@ namespace mjjames.AdminSystem
 				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
 				Logger.LogError("Failed Update", ex);
 			}
+		}
+
+		private object UpdatePrimaryKey(KeyValueData kv)
+		{
+			kv.LinkKey = PKey;
+			return kv;
 		}
 
 		#endregion

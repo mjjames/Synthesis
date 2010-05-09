@@ -1,8 +1,8 @@
 using System;
 using System.Configuration;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
 using mjjames.AdminSystem.classes;
 using mjjames.core;
 using System.Collections.Specialized;
@@ -28,11 +28,11 @@ namespace mjjames.AdminSystem
 			{
 				_sType = Request.QueryString["type"];
 			}
-
-			_xmldb = Activator.CreateInstance(null, "mjjames.AdminSystem.XmlDB" + _sType).Unwrap() as XmlDBBase;
+			var activator = Activator.CreateInstance(null, "mjjames.AdminSystem.XmlDB" + _sType);
+			_xmldb = activator !=null ? activator.Unwrap() as XmlDBBase : null;
 			if (_xmldb == null)
 			{
-				InvalidCastException exception = new InvalidCastException(String.Format("Can not cast: {0} to {1}", "XmlDB" + _sType, "XmlDBBase"));
+				var exception = new InvalidCastException(String.Format("Can not cast: {0} to {1}", "XmlDB" + _sType, "XmlDBBase"));
 				_logger.LogError("DBListing Unable To Cast", exception);
 				throw exception;
 			}
@@ -40,24 +40,28 @@ namespace mjjames.AdminSystem
 			_xmldb.TableName = _sType;
 			_xmldb.ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString;
 
-			if (Session["userSiteKey"] != null)
+			//if we have no site key we have an error - assume this is because of an expired session so log the user out
+			if (Session["userSiteKey"] == null)
 			{
-				_xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());
+				FormsAuthentication.SignOut();
+				Response.Redirect("/admin/authentication/default.aspx?ReturnUrl=" + Server.UrlEncode(Page.Request.Url.PathAndQuery), true);
 			}
-
+			
+			_xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());
+			
 
 		}
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			HtmlHead head = Page.Header;
+			var head = Page.Header;
 			head.Title = ConfigurationManager.AppSettings["SiteName"] + ": Admin - Page Listing";
 		}
 
 		protected void SetupTable(object sender, EventArgs e)
 		{
 
-			SqlDataSource datasource = _xmldb.DataSource(true, true, false, false, true);
+			var datasource = _xmldb.DataSource(true, true, false, false, true);
 			sdsData.SelectCommand = datasource.SelectCommand;
 			sdsData.UpdateCommand = datasource.UpdateCommand;
 			sdsData.InsertCommand = datasource.InsertCommand;
@@ -65,7 +69,7 @@ namespace mjjames.AdminSystem
 			pageListing.DataKeyNames = new[] { _xmldb.TablePrimaryKeyField };
 			sdsData.Deleting += SdsDataDeleting;
 
-			CommandField cfSelect = new CommandField {ShowSelectButton = true, SelectText = "Edit"};
+			var cfSelect = new CommandField {ShowSelectButton = true, SelectText = "Edit"};
 
 			pageListing.Columns.Add(cfSelect);
 
@@ -74,14 +78,14 @@ namespace mjjames.AdminSystem
 
 				foreach (AdminField field in _xmldb.TableDefaults.FindAll(t => t.Attributes.ContainsKey("list")))
 				{
-					BoundField dcf = new BoundField();
+					var dcf = new BoundField();
 					string type;
-					bool bType = field.Attributes.TryGetValue("type", out type);
-					bool bRenderField = true;
+					var bType = field.Attributes.TryGetValue("type", out type);
+					var bRenderField = true;
 
 					if (!Page.IsPostBack && field.Attributes.ContainsKey("listfilter"))
 					{
-						QueryStringParameter p = new QueryStringParameter(field.ID, field.ID);
+						var p = new QueryStringParameter(field.ID, field.ID);
 						if (!sdsData.SelectParameters.Contains(p))
 						{ //if post back this should already be in the params so dont add another one
 							sdsData.SelectParameters.Add(p);
@@ -103,9 +107,9 @@ namespace mjjames.AdminSystem
 							dcf.DataFormatString = "{0:dd/MM/yyyy}";
 							break;
 						case "dropdown":
-							DropdownControl ddc = new DropdownControl();
-							DropDownList ddl = (DropDownList)ddc.GenerateControl(field, new object());
-							TemplateField tcf = new TemplateField
+							var ddc = new DropdownControl();
+							var ddl = (DropDownList)ddc.GenerateControl(field, new object());
+							var tcf = new TemplateField
 							                    	{
 							                    		ItemTemplate =
 							                    			new GridViewDropDownListTemplate(DataControlRowType.DataRow, field.Label, field.ID, ddl,
@@ -126,7 +130,7 @@ namespace mjjames.AdminSystem
 					}
 				}
 			}
-			CommandField cfDelete = new CommandField {ShowDeleteButton = true};
+			var cfDelete = new CommandField {ShowDeleteButton = true};
 
 			cfDelete.ControlStyle.CssClass = "buttonDelete";
 			pageListing.Columns.Add(cfDelete);
@@ -186,19 +190,19 @@ namespace mjjames.AdminSystem
 		//on select load up DBEditor
 		protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			string strURL = String.Format("~/DBEditor.aspx?{0}={1}&{2}", _xmldb.TablePrimaryKeyField, pageListing.SelectedValue, Request.QueryString);
+			var strURL = String.Format("~/DBEditor.aspx?{0}={1}&{2}", _xmldb.TablePrimaryKeyField, pageListing.SelectedValue, Request.QueryString);
 
 			Response.Redirect(strURL);
 		}
 
 		//loads the quickedit listing
-		protected void loadListing(object sender, EventArgs e)
+		protected void LoadListing(object sender, EventArgs e)
 		{
-			string strParent = String.Empty;
-			string strTitle = String.Empty;
-			bool bQuickEdit = false;
+			var strParent = String.Empty;
+			var strTitle = String.Empty;
+			var bQuickEdit = false;
 
-			NameValueCollection config = new NameValueCollection();
+			var config = new NameValueCollection();
 
 			if (_xmldb.TableDefaults != null)
 			{
@@ -218,21 +222,25 @@ namespace mjjames.AdminSystem
 				}
 				else
 				{
-					string strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] FROM [{4}] WHERE [site_fkey] = {5} ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName, Session["userSiteKey"]);
-					string strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
+					Page.Trace.Write("Site Key:" + Session["userSiteKey"]);
+					var strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] FROM [{4}] WHERE [site_fkey] = @siteKey ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName);
+					var strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
 
 					config.Add("query", strQuery);
 					config.Add("urlprefix", strURLPrefix);
 					config.Add("connectionStringName", "ourDatabase");
-
-
-					CustomSqlSiteMapProvider cssmp = new CustomSqlSiteMapProvider();
+				
+					var cssmp = new CustomSqlSiteMapProvider
+					            	{
+					            		SiteKey = int.Parse(Session["userSiteKey"].ToString())
+					            	};
 					cssmp.Initialize("Admin Navigation SiteMap", config);
+					
 					navigationSiteMap.Provider = cssmp;
 
 					Page.Trace.Write("CUSTOM SITEMAP QUERY: " + strQuery);
 				}
-				TreeView treeview = new TreeView
+				var treeview = new TreeView
 				                    	{
 				                    		ID = "treeListing",
 				                    		PopulateNodesFromClient = true,
@@ -253,7 +261,7 @@ namespace mjjames.AdminSystem
 			}
 			else
 			{
-				LiteralControl notavail = new LiteralControl("<p class=\"notavail\">Not Available</p>");
+				var notavail = new LiteralControl("<p class=\"notavail\">Not Available</p>");
 				treePanel.ContentTemplateContainer.Controls.Add(notavail);
 
 				leftCol.Visible = false; //just not render quick edit

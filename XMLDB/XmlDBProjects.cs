@@ -127,6 +127,32 @@ namespace mjjames.AdminSystem
 						Logger.LogError("Update Failed", ex);
 						throw ex;
 					}
+
+					if (Convert.ToBoolean(ConfigurationManager.AppSettings["twitterPublishProjects"]) && ourData.active)
+					{
+						TwitterPublisher tp = new TwitterPublisher(ConfigurationManager.AppSettings["twitterConsumerKey"],
+																	ConfigurationManager.AppSettings["twitterConsumerSecret"],
+																	ConfigurationManager.AppSettings["twitterAuthenticationToken"],
+																	ConfigurationManager.AppSettings["twitterAuthenticationTokenSecret"]);
+
+						ourPageDataContext.Refresh(RefreshMode.OverwriteCurrentValues, ourData);
+
+						string url = String.Format("http://{0}/{1}", ConfigurationManager.AppSettings["DomainName"], ourData.url);
+
+						int length = ourData.title.Length;
+						if (length > 100)
+						{
+							length = 100;
+						}
+						string message = String.Format("{0} - {1}", ourData.title.Substring(0, length), url);
+
+						if (!tp.PublishMessage(message))
+						{
+							labelStatus.Text += " - Twitter Update Failed";
+						}
+						labelStatus.Text += " - Twitter Update Succeeded";
+
+					}
 				}
 				if (ourChanges.Updates.Count > 0)
 				{

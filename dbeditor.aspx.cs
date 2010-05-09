@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Configuration;
-using System.Runtime.Remoting;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using mjjames.AdminSystem.classes;
@@ -11,7 +11,7 @@ using mjjames.AdminSystem.dataentities;
 
 namespace mjjames.AdminSystem
 {
-	public partial class DBEditor : System.Web.UI.Page
+	public partial class DBEditor : Page
 	{
 		private string _sType = String.Empty;
 		private XmlDBBase _xmldb;
@@ -19,8 +19,8 @@ namespace mjjames.AdminSystem
 
 		protected override void OnInit(EventArgs e)
 		{
-			string sID = String.Empty;
-			int pKey = 0;
+			var sID = String.Empty;
+			var pKey = 0;
 
 			base.OnInit(e);
 
@@ -29,11 +29,11 @@ namespace mjjames.AdminSystem
 				_sType = Request.QueryString["type"];
 			}
 
-			ObjectHandle oh = Activator.CreateInstance(null, "mjjames.AdminSystem.XmlDB" + _sType);
+			var oh = Activator.CreateInstance(null, "mjjames.AdminSystem.XmlDB" + _sType);
 		
 			if(oh == null)
 			{
-				Exception exception = new Exception(String.Format("Can not load XmlDB{0}", _sType));
+				var exception = new Exception(String.Format("Can not load XmlDB{0}", _sType));
 				_logger.LogError("Invalid XMLDB", exception);
 				throw exception;
 			}
@@ -42,7 +42,7 @@ namespace mjjames.AdminSystem
 
 			if (_xmldb == null)
 			{
-				InvalidCastException exception = new InvalidCastException(String.Format("Can not cast: {0} to {1}", "XmlDB" + _sType, "XmlDBBase"));
+				var exception = new InvalidCastException(String.Format("Can not cast: {0} to {1}", "XmlDB" + _sType, "XmlDBBase"));
 				_logger.LogError("DBEditor Cast Error", exception);
 				throw exception;
 			}
@@ -61,9 +61,13 @@ namespace mjjames.AdminSystem
 				int.TryParse(pkey.Value, out pKey);
 				_xmldb.PrimaryKey = pKey;
 			}
-			if(Session["userSiteKey"] != null){
-				_xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());
+			//if we have no site key we have an error - assume this is because of an expired session so log the user out
+			if(Session["userSiteKey"] == null){
+				FormsAuthentication.SignOut();
+				Response.Redirect("/admin/authentication/default.aspx?ReturnUrl=" + Server.UrlEncode(Page.Request.Url.PathAndQuery), true);
 			}
+			
+			_xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());
 
 			placeholderTabs.Controls.Add(_xmldb.GeneratePage());
 
@@ -109,7 +113,7 @@ namespace mjjames.AdminSystem
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			HiddenField hiddenField = helpers.FindControlRecursive(placeholderTabs, "control" + _xmldb.TablePrimaryKeyField) as HiddenField;
+			var hiddenField = helpers.FindControlRecursive(placeholderTabs, "control" + _xmldb.TablePrimaryKeyField) as HiddenField;
 			if (hiddenField != null)
 			{
 				if (!String.IsNullOrEmpty(hiddenField.Value))
@@ -139,12 +143,12 @@ namespace mjjames.AdminSystem
 
 		}
 
-		protected void loadListing(object sender, EventArgs e)
+		protected void LoadListing(object sender, EventArgs e)
 		{
-			string strParent = String.Empty;
-			string strTitle = String.Empty;
-			bool bQuickEdit = false;
-			NameValueCollection config = new NameValueCollection();
+			var strParent = String.Empty;
+			var strTitle = String.Empty;
+			var bQuickEdit = false;
+			var config = new NameValueCollection();
 
 			if (_xmldb.TableDefaults != null)
 			{
@@ -163,21 +167,24 @@ namespace mjjames.AdminSystem
 				}
 				else
 				{
-					string strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] FROM [{4}] ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName);
-					string strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
+					var strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] FROM [{4}] WHERE [site_fkey] = @siteKey ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName);
+					var strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
 
 					config.Add("query", strQuery);
 					config.Add("urlprefix", strURLPrefix);
 					config.Add("connectionStringName", "ourDatabase");
 
+					var cssmp = new CustomSqlSiteMapProvider
+					            	{
+					            		SiteKey = int.Parse(Session["userSiteKey"].ToString())
+					            	};
 
-					CustomSqlSiteMapProvider cssmp = new CustomSqlSiteMapProvider();
 					cssmp.Initialize("Admin Navigation SiteMap", config);
 					navigationSiteMap.Provider = cssmp;
 
 					Page.Trace.Write("CUSTOM SITEMAP QUERY: " + strQuery);
 				}
-				TreeView treeview = new TreeView
+				var treeview = new TreeView
 				                    	{
 				                    		ID = "treeListing",
 				                    		PopulateNodesFromClient = true,
@@ -198,7 +205,7 @@ namespace mjjames.AdminSystem
 			}
 			else
 			{
-				LiteralControl notavail = new LiteralControl("<p class=\"notavail\">Not Available</p>");
+				var notavail = new LiteralControl("<p class=\"notavail\">Not Available</p>");
 				treePanel.ContentTemplateContainer.Controls.Add(notavail);
 
 				leftCol.Visible = false; //just not render quick edit

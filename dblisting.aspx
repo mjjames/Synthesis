@@ -8,7 +8,7 @@
 	<asp:SqlDataSource ID="sdsData" runat="server" OnLoad="SetupTable" ConnectionString="<%$ ConnectionStrings:ourDatabase %>">
 	</asp:SqlDataSource>
 	<asp:SiteMapDataSource ID="navigationSiteMap" runat="server" ShowStartingNode="True"
-		OnLoad="loadListing" />
+		OnLoad="LoadListing" />
 	<h1 class="listingTitle">
 		<asp:Literal runat="server" ID="dbEditorLabel" />
 		Editor: Listing View

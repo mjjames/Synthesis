@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.Linq;
 using System.Linq;
-using System.Reflection;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using mjjames.AdminSystem.classes;
@@ -11,10 +8,6 @@ using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
 
-/// <summary>
-/// Summary description for xmlDB
-/// </summary>
-/// 
 namespace mjjames.AdminSystem
 {
 	public class XmlDBpages : XmlDBBase
@@ -27,9 +20,7 @@ namespace mjjames.AdminSystem
 		/// <returns>a general object that needs casting to the correct type on use</returns>
 		protected override object GetData()
 		{
-			///TODO replace this out as its rubbish but dynamic linq isnt easy
-			
-			page ourPage = new page();
+			var ourPage = new page();
 
 			if (PKey > 0)
 			{
@@ -56,8 +47,8 @@ namespace mjjames.AdminSystem
 							where p.page_key == iKey
 							select p).SingleOrDefault();
 							
-			DataContexts.Archive.archiveDataContext archiveDC = new DataContexts.Archive.archiveDataContext();
-			DataEntities.Archive.page archivePage = new DataEntities.Archive.page
+			var archiveDC = new DataContexts.Archive.archiveDataContext();
+			var archivePage = new DataEntities.Archive.page
 			                                        	{
 			                                        		page_key = ourPage.page_key,
 			                                        		page_fkey = ourPage.page_fkey,
@@ -97,9 +88,9 @@ namespace mjjames.AdminSystem
 		/// <param name="e"></param>
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
-			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
-			page ourData = new page();
+			var ourSender = (Button)sender;
+			var ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+			var ourData = new page();
 			if (PKey > 0)
 			{
 				ourData = ourPageDataContext.pages.Single(p => p.page_key == PKey);
@@ -107,14 +98,14 @@ namespace mjjames.AdminSystem
 
 			foreach (AdminTab tab in Table.Tabs)
 			{
-				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
+				var ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
 				if (ourTab == null) continue;
-				foreach (AdminField field in tab.Fields)
+				foreach (var field in tab.Fields)
 				{
-					Control ourControl = ourTab.FindControl("control" + field.ID);
+					var ourControl = ourTab.FindControl("control" + field.ID);
 
 					if (ourControl == null) continue;
-					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
+					var ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
 						Logger.LogInformation("Saving Content In: " + ourControl.ID);
@@ -129,21 +120,22 @@ namespace mjjames.AdminSystem
 
 			if (PKey == 0)
 			{
-				string prefix = ConfigurationManager.AppSettings["urlprefixPage"] ?? String.Empty;
+				var prefix = ConfigurationManager.AppSettings["urlprefixPage"] ?? String.Empty;
 				ourData.page_url= String.Format("{0}{1}", prefix, SQLHelpers.URLSafe(ourData.title));
-				if(MultiTenancyEnabled){
+				//we always set the sitefkey as we must always have a site
+				//if(MultiTenancyEnabled){
 					ourData.site_fkey = SiteFKey;
-				}
+				//}
 				ourPageDataContext.pages.InsertOnSubmit(ourData);
 				ourData.page_fkey = FKey;
 
 
 			}
 
-			Label labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
+			var labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
 			try
 			{
-				ChangeSet ourChanges = ourPageDataContext.GetChangeSet();
+				var ourChanges = ourPageDataContext.GetChangeSet();
 
 				labelStatus.Text = "Nothing to Save";
 
@@ -155,14 +147,14 @@ namespace mjjames.AdminSystem
 
 
 					PKey = ourData.page_key;
-					FKey = (int)ourData.page_fkey;
-					HiddenField ourControlFKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "controlpage_fkey");
+					if (ourData.page_fkey != null) FKey = (int)ourData.page_fkey;
+					var ourControlFKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "controlpage_fkey");
 					ourControlFKey.Value = FKey.ToString();
 
-					string strPKeyField = TablePrimaryKeyField;
+					var strPKeyField = TablePrimaryKeyField;
 
-					HiddenField ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
-					HiddenField ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
+					var ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
+					var ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
 
 
 					try
@@ -173,7 +165,7 @@ namespace mjjames.AdminSystem
 					}
 					catch
 					{
-						Exception ex = new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
+						var ex = new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
 						Logger.LogError("Page Update Failed", ex);
 					}
 				}

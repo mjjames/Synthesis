@@ -287,7 +287,7 @@
       <Column Name="active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="sortorder" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="linkurl" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="lastmodified" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="lastmodified" AutoSync="Never" Type="System.DateTime" DbType="DateTime NOT NULL" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="page_url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="passwordprotect" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="password" Type="System.String" DbType="NVarChar(12)" CanBeNull="true" />

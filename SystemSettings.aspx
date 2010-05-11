@@ -3,7 +3,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 	<asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
-		AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
+		AsyncPostBackTimeout="60"  CompositeScript-ScriptMode="Release" ScriptMode="Release">
 	</asp:ScriptManager>
 	<h1 class="listingTitle">
 		<asp:Literal runat="server" ID="dbEditorLabel" />

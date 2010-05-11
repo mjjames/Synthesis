@@ -33,7 +33,7 @@ namespace mjjames.AdminSystem.dataControls
 		/// <param name="field">Field Data</param>
 		/// <param name="ourPage">Page Data</param>
 		/// <returns>WebControl</returns>
-		public Control GenerateControl(AdminField field, object ourPage)
+		virtual public Control GenerateControl(AdminField field, object ourPage)
 		{
 			var ourControl = new TextBox {ID = "control" + field.ID, CssClass = "field textbox"};
 			if (field.Attributes.ContainsKey("maxlength"))

@@ -36,7 +36,7 @@ namespace mjjames.AdminSystem.dataControls
 			{
 				string ourValue = (ourProperty.GetValue(ourPage, null) + "");
 				ourHidden.Value = "" + ourValue;
-				HttpContext.Current.Trace.Warn("Rendering Control Value: " + ourHidden.Value);
+				HttpContext.Current.Trace.Write("Rendering Control Value: " + ourHidden.Value);
 			}
 			///TODO work out how to hide the label ourLabel.CssClass = "hidden";
 			return ourHidden;

@@ -211,12 +211,14 @@ namespace mjjames.AdminSystem
 				else
 				{
 					Logger.LogError("RenderControl Failed ", new TypeLoadException("Unknown ControlType: " + field.Type));
+                    HttpContext.Current.Trace.Warn("Unknown ControlType: " + field.Type);
 				
 				}
 			}
 			catch (TypeLoadException ex)
 			{
 				Logger.LogError("RenderControl Failed ", new Exception("Unknown ControlType: " + field.Type, ex));
+                HttpContext.Current.Trace.Warn("Unknown ControlType: " + field.Type);
 				bRenderControl = false;
 			}
 

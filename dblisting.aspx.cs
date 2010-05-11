@@ -218,13 +218,13 @@ namespace mjjames.AdminSystem
 				}
 				else
 				{
-					string strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] FROM [{4}] WHERE [site_fkey] = {5} ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName, Session["userSiteKey"]);
+                    string strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] FROM [{4}] WHERE [site_fkey] = {5} ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName, Session["userSiteKey"]);
 					string strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
 
 					config.Add("query", strQuery);
 					config.Add("urlprefix", strURLPrefix);
 					config.Add("connectionStringName", "ourDatabase");
-
+                    config.Add("DisableRootURLFix", "true");
 
 					CustomSqlSiteMapProvider cssmp = new CustomSqlSiteMapProvider();
 					cssmp.Initialize("Admin Navigation SiteMap", config);

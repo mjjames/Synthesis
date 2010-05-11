@@ -5,7 +5,7 @@
 	<h1 class="listingTitle">
 		User Administration
 	</h1>
-	<asp:ScriptManager ID="ScriptManager1" runat="server">
+	<asp:ScriptManager ID="ScriptManager1" runat="server"  CompositeScript-ScriptMode="Release" ScriptMode="Release">
 	</asp:ScriptManager>
 	<div id="colContainer">
 		<asp:UpdatePanel ID="UpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">

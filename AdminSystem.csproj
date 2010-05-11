@@ -42,7 +42,7 @@
     </Reference>
     <Reference Include="Dimebrain.TweetSharp, Version=1.0.14.37163, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Resources\TweetSharp\Dimebrain.TweetSharp.dll</HintPath>
+      <HintPath>..\..\..\..\Resources\TweetSharp\Dimebrain.TweetSharp.dll</HintPath>
     </Reference>
     <Reference Include="FlickrNet, Version=2.1.5.19851, Culture=neutral, PublicKeyToken=2491df59efa5d132">
       <SpecificVersion>False</SpecificVersion>
@@ -74,7 +74,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Resources\TweetSharp\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\Resources\TweetSharp\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -153,7 +153,9 @@
     <Content Include="images\smiley\msn\wink_smile.gif" />
     <Content Include="images\spacer.gif" />
     <Content Include="usercontrols\SiteSelector.ascx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminSystem.master.cs">
@@ -175,6 +177,7 @@
     <Compile Include="classes\Logger.cs" />
     <Compile Include="classes\NavigationSettings.cs" />
     <Compile Include="classes\PhotoInfoData.cs" />
+    <Compile Include="DataControls\UrlTextBox.cs" />
     <Compile Include="Repositories\KeyValueRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />
     <Compile Include="classes\SystemSettings.cs" />
@@ -381,9 +384,9 @@
     <Content Include="subscriptionmanagement.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\classes\ControlLibrary\mjjames.ControlLibrary.csproj">
+    <ProjectReference Include="..\..\..\classes\ControlLibrary\ControlLibrary.csproj">
       <Project>{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}</Project>
-      <Name>mjjames.ControlLibrary</Name>
+      <Name>ControlLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
       <Project>{B8488B6E-F1E4-4C64-A39D-5C853169DCE5}</Project>

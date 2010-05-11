@@ -38,7 +38,7 @@ namespace mjjames.AdminSystem.dataControls
 			{
 				ourValue = DateTime.Parse(ourProperty.GetValue(ourPage, null).ToString());
 				ourDateText.Text = String.Format("{0:dd/MM/yyyy}", ourValue);
-				HttpContext.Current.Trace.Warn("Rendering Control Value: " + ourDateText.Text);
+				HttpContext.Current.Trace.Write("Rendering Control Value: " + ourDateText.Text);
 			}
 
 			if (field.Attributes.Keys.Contains("defaultvalue"))

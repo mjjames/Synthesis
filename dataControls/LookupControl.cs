@@ -114,7 +114,7 @@ namespace mjjames.AdminSystem.dataControls
 					iPosition++;
 				}
 
-				HttpContext.Current.Trace.Warn("Rendering Control Value: " + selectedItem.Value);
+				HttpContext.Current.Trace.Write("Rendering Control Value: " + selectedItem.Value);
 			}
 
 			if (ourSM != null) ourSM.RegisterAsyncPostBackControl(pageListing);

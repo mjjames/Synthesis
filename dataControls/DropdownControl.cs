@@ -57,7 +57,7 @@ namespace mjjames.AdminSystem.dataControls
 					iPosition++;
 				}
 
-				HttpContext.Current.Trace.Warn("Rendering Control Value: " + ourDropDown.SelectedValue);
+				HttpContext.Current.Trace.Write("Rendering Control Value: " + ourDropDown.SelectedValue);
 			}
 
 			return ourDropDown;

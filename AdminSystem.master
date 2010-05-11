@@ -6,7 +6,7 @@
 <head id="Head1" runat="server">
 	<title>mjjames - Administration System - Version <%= GetVersionNumber() %></title>
 	<link rel="stylesheet" type="text/css" href="~/styles/web.css" />
-	<mjjames:jsLoader ID="jquery" runat="server" JSLibrary="jquery" />
+	<script type="text/javascript" src="http://jsresources.mjjames.co.uk/jquery/jquery.1.3.2.min.js"></script>
 </head>
 <body>
 	<div id="wrapper">

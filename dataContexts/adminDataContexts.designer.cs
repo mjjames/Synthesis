@@ -5961,7 +5961,7 @@ namespace mjjames.AdminSystem.DataEntities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastmodified", DbType="DateTime NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_lastmodified", AutoSync=AutoSync.OnInsert, DbType="DateTime NOT NULL", IsDbGenerated=true, IsVersion=true)]
 		public System.DateTime lastmodified
 		{
 			get

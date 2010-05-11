@@ -270,28 +270,28 @@
   </Table>
   <Table Name="dbo.pages" Member="pages">
     <Type Name="page">
-      <Column Name="page_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="page_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="pageid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="navtitle" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="accesskey" Type="System.Char" DbType="NChar(1)" CanBeNull="true" />
-      <Column Name="metadescription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="metakeywords" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="title" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="body" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="thumbnailimage" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
-      <Column Name="showinnav" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="showinfeaturednav" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="showonhome" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="showinfooter" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="active" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="sortorder" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="linkurl" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="lastmodified" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="page_url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="passwordprotect" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="password" Type="System.String" DbType="NVarChar(12)" CanBeNull="true" />
-      <Column Name="site_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="page_key" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" />
+      <Column Name="page_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="pageid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="navtitle" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="accesskey" Type="System.Char" DbType="NChar(1)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="metadescription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="metakeywords" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="body" Type="System.String" DbType="Text" CanBeNull="true" />
+      <Column Name="thumbnailimage" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="showinnav" Type="System.Boolean" DbType="Bit" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="showinfeaturednav" Type="System.Boolean" DbType="Bit" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="showonhome" Type="System.Boolean" DbType="Bit" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="showinfooter" Type="System.Boolean" DbType="Bit" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="sortorder" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="linkurl" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="lastmodified" AutoSync="OnInsert" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" UpdateCheck="Always" IsVersion="true" />
+      <Column Name="page_url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="passwordprotect" Type="System.Boolean" DbType="Bit" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="password" Type="System.String" DbType="NVarChar(12)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="site_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="Always" />
       <Association Name="site_page" Member="site" ThisKey="site_fkey" OtherKey="site_key" Type="site" IsForeignKey="true" />
     </Type>
   </Table>

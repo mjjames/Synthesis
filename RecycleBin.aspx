@@ -25,7 +25,6 @@
 			</asp:GridView>
 		</div>
 	</div>
-	<mjjames:jsLoader ID="jquery" runat="server" JSLibrary="jquery" />
 
 	<script type="text/javascript">
 		var deleteCheck = function() {

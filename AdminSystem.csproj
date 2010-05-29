@@ -155,7 +155,6 @@
     <Content Include="images\smiley\msn\whatchutalkingabout_smile.gif" />
     <Content Include="images\smiley\msn\wink_smile.gif" />
     <Content Include="images\spacer.gif" />
-    <Content Include="javascript\jquery-1.3.2.min.js" />
     <Content Include="usercontrols\SiteSelector.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -181,7 +180,8 @@
     <Compile Include="classes\Logger.cs" />
     <Compile Include="classes\NavigationSettings.cs" />
     <Compile Include="classes\PhotoInfoData.cs" />
-    <Compile Include="fckplugins\InternalUrl\InternalUrl.aspx.cs">
+    <Compile Include="DataControls\UrlTextBox.cs" />
+ 	<Compile Include="fckplugins\InternalUrl\InternalUrl.aspx.cs">
       <DependentUpon>InternalUrl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -392,6 +392,16 @@
     <Content Include="robots.txt" />
     <Content Include="styles\Web.config" />
     <Content Include="subscriptionmanagement.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\classes\ControlLibrary\ControlLibrary.csproj">
+      <Project>{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}</Project>
+      <Name>ControlLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
+      <Project>{B8488B6E-F1E4-4C64-A39D-5C853169DCE5}</Project>
+      <Name>mjjames.core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="admininc_defaults\adminsettings.config" />

@@ -3,7 +3,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 	<asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
-		AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
+		AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Release" ScriptMode="Release">
 	</asp:ScriptManager>
 	<asp:SqlDataSource ID="sdsData" runat="server" OnLoad="SetupTable" ConnectionString="<%$ ConnectionStrings:ourDatabase %>">
 	</asp:SqlDataSource>
@@ -63,7 +63,6 @@
 			</asp:UpdateProgress>
 		</div>
 	</div>
-	<mjjames:jsLoader ID="jquery" runat="server" JSLibrary="jquery" />
 
 	<script type="text/javascript">
 		var deleteCheck = function() {

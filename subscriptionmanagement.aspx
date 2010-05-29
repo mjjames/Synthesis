@@ -4,7 +4,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 	<asp:SiteMapDataSource ID="navigationSiteMap" runat="server" SiteMapProvider="newsletterNavigation"
 		ShowStartingNode="False" />
-	<asp:ScriptManager runat="server" ID="sm" OnAsyncPostBackError="errorStatus" />
+	<asp:ScriptManager runat="server" ID="sm" OnAsyncPostBackError="errorStatus"  CompositeScript-ScriptMode="Release" ScriptMode="Release" />
 	<h1 class="listingTitle">
 		Newsletter: Subscription Management
 	</h1>

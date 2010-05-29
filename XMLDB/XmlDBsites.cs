@@ -10,6 +10,7 @@ using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.DataContexts;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
+using System.Web;
 
 /// <summary>
 /// Summary description for xmlDB
@@ -34,19 +35,19 @@ namespace mjjames.AdminSystem
 		/// <returns>a general object that needs casting to the correct type on use</returns>
 		protected override object GetData()
 		{
-			
+
 			site ourSite = new site();
 			if (PKey > 0)
 			{
 				ourSite = (from p in AdminDC.sites
-							  where p.site_key == PKey
-							  select p).SingleOrDefault();
+						   where p.site_key == PKey
+						   select p).SingleOrDefault();
 			}
 
 			return ourSite;
 		}
 
-		
+
 		#endregion
 
 		#region button events
@@ -60,11 +61,11 @@ namespace mjjames.AdminSystem
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+			AdminDataContext ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			site ourData = new site();
 			if (PKey > 0)
 			{
-				ourData = ourPageDataContext.sites.Single(p => p.site_key== PKey);
+				ourData = ourPageDataContext.sites.Single(p => p.site_key == PKey);
 			}
 
 			foreach (AdminTab tab in Table.Tabs)
@@ -123,9 +124,46 @@ namespace mjjames.AdminSystem
 					{
 						Exception ex =
 							new Exception(String.Format("{0} doesn't contain a hidden control called {1}", Table.ID, TablePrimaryKeyField));
-						Logger.LogError("Unknown Field",ex);
+						Logger.LogError("Unknown Field", ex);
 						throw ex;
 					}
+
+					//now we have created our site automatically generate a "default" home page
+					var defaultHomePage = new page()
+					{
+						site_fkey = PKey,
+						page_fkey = 0,
+						pageid = "HOME",
+						navtitle = "home",
+						title = "home",
+						active = true,
+						showinnav = true,
+						page_url = "home"
+					};
+					ourPageDataContext.pages.InsertOnSubmit(defaultHomePage);
+
+					//now add the current user as a siteadmin
+					//lookup the userid 
+					var userid = ourPageDataContext.aspnet_Users.FirstOrDefault(u => u.LoweredUserName == HttpContext.Current.User.Identity.Name.ToLower());
+					//lookup the role id for the site admin
+					var roleid = ourPageDataContext.aspnet_Roles.FirstOrDefault(r => r.LoweredRoleName == "site admin");
+					if (userid != null && roleid != null)
+					{
+						var siteUserLevel = new site_user()
+						{
+							active = true,
+							roleid = roleid.RoleId,
+							site_fkey = PKey,
+							userid = userid.UserId
+						};
+						ourPageDataContext.site_users.InsertOnSubmit(siteUserLevel);
+					}
+					else
+					{
+						Logger.LogError("Unable to assign user as siteadmin to new site: " + PKey, new Exception("Unable to find user or role: username: " + HttpContext.Current.User.Identity.Name + " Role: site admin"));
+					}
+					
+					ourPageDataContext.SubmitChanges();
 
 				}
 				if (ourChanges.Updates.Count > 0)

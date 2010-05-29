@@ -229,6 +229,7 @@ namespace mjjames.AdminSystem
 					config.Add("query", strQuery);
 					config.Add("urlprefix", strURLPrefix);
 					config.Add("connectionStringName", "ourDatabase");
+					config.Add("DisableRootURLFix", "true");
 				
 					var cssmp = new CustomSqlSiteMapProvider
 					            	{

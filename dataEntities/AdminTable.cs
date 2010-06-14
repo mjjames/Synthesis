@@ -12,7 +12,7 @@ namespace mjjames.AdminSystem.dataentities
 		/// <summary>
 		/// Indicates whether to render the "email the content" button
 		/// </summary>
-		public bool bEmailButton
+		public bool EmailButton
 		{
 			get
 			{
@@ -24,8 +24,10 @@ namespace mjjames.AdminSystem.dataentities
 			}
 		}
 		public string ID { get; set; }
+		public string Name { get; set; }
 		public string Label { get; set; }
-		public bool bQuickEdit { get; set; }
+		public bool QuickEdit { get; set; }
+		public string Filter { get; set; }
 		public List<AdminField> Defaults { set; get; }
 		public List<AdminTab> Tabs { set; get; }
 	}

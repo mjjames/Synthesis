@@ -29,7 +29,7 @@ namespace mjjames.AdminSystem
 		protected int SiteFKey;
 		protected bool MultiTenancyTableEnabled = true;
 		protected readonly bool MultiTenancyEnabled;
-
+		private string _tableName;
        /// <summary>
 		/// Provide a ConnectionString for the DataSources
 		/// </summary>
@@ -70,7 +70,7 @@ namespace mjjames.AdminSystem
 			}
 		}
 
-		public bool TableQuickEdit { get { return Table.bQuickEdit; } }
+		public bool TableQuickEdit { get { return Table.QuickEdit; } }
 
         public XmlDBBase() : this(true)
         {
@@ -119,10 +119,12 @@ namespace mjjames.AdminSystem
 						   where table.Attribute("id").Value == InternalTableName
 						   select new AdminTable
 						   {
-							   bEmailButton = XmlConvert.ToBoolean(table.Attribute("emailbutton") != null ? table.Attribute("emailbutton").Value : "false"),
-							   bQuickEdit = XmlConvert.ToBoolean(table.Attribute("quickedit") != null ? table.Attribute("quickedit").Value : "false"),
+							   EmailButton = XmlConvert.ToBoolean(table.Attribute("emailbutton") != null ? table.Attribute("emailbutton").Value : "false"),
+							   QuickEdit = XmlConvert.ToBoolean(table.Attribute("quickedit") != null ? table.Attribute("quickedit").Value : "false"),
 							   ID = table.Attribute("id").Value,
+							   Name = table.Attribute("basetype") != null ? table.Attribute("basetype").Value : table.Attribute("id").Value,
 							   Label = table.Attribute("label").Value,
+							   Filter = table.Attribute("filter") != null ? table.Attribute("filter").Value : "",
 							   Defaults = (from fields in table.Element("defaults").Elements("field")
 										   select new AdminField
 										   {
@@ -211,14 +213,12 @@ namespace mjjames.AdminSystem
 				else
 				{
 					Logger.LogError("RenderControl Failed ", new TypeLoadException("Unknown ControlType: " + field.Type));
-                    HttpContext.Current.Trace.Warn("Unknown ControlType: " + field.Type);
 				
 				}
 			}
 			catch (TypeLoadException ex)
 			{
 				Logger.LogError("RenderControl Failed ", new Exception("Unknown ControlType: " + field.Type, ex));
-                HttpContext.Current.Trace.Warn("Unknown ControlType: " + field.Type);
 				bRenderControl = false;
 			}
 
@@ -297,7 +297,7 @@ namespace mjjames.AdminSystem
 				var cancelButton = new Button { Text = "Cancel", CommandName = "CancelEdit" };
 				cancelButton.Click += CancelEdit;
 
-				if (Table.bEmailButton)
+				if (Table.EmailButton)
 				{
 					var emailButton = new Button { Text = "Email", CommandName = "emailButton" };
 					emailButton.Click += SaveEdit;
@@ -463,7 +463,7 @@ namespace mjjames.AdminSystem
 
 				selectparams.AddRange(listfields.Select(field => "[" + field.ID + "]"));
 
-				selectCommand = String.Format("SELECT {0} FROM [{1}]", String.Join(" , ", selectparams.ToArray()), Table.ID);
+				selectCommand = String.Format("SELECT {0} FROM [{1}]", String.Join(" , ", selectparams.ToArray()), Table.Name);
 
 				var filter = "";
 				var bMultiWhere = false;
@@ -491,11 +491,21 @@ namespace mjjames.AdminSystem
 
 				}
 
+				if (!String.IsNullOrEmpty(Table.Filter))
+				{
+					filter += ApplyDataFilters(Table.Filter);
+				}
+
 				if(!String.IsNullOrEmpty(filter)){
 					selectCommand += "WHERE " + filter;
 				}
 			}
 			return selectCommand;
+		}
+
+		protected virtual string ApplyDataFilters(string filterName)
+		{
+			throw new NotImplementedException();
 		}
 
 		private string BuildDeleteCommand()

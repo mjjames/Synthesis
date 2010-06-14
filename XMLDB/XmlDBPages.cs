@@ -7,6 +7,7 @@ using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
+using System.Web.Configuration;
 
 namespace mjjames.AdminSystem
 {
@@ -88,6 +89,8 @@ namespace mjjames.AdminSystem
 		/// <param name="e"></param>
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
+			var clearSiteMapCache = false;
+			var idsThatCauseSiteMapCacheClear = new[] { "active", "showinnav", "showinfooter", "showonhome", "showinheader"};
 			var ourSender = (Button)sender;
 			var ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			var ourData = new page();
@@ -108,8 +111,13 @@ namespace mjjames.AdminSystem
 					var ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
-						Logger.LogInformation("Saving Content In: " + ourControl.ID);
-						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+                        //get our new value
+                        var newValue = GetDataValue(ourControl, field.Type, ourProperty.PropertyType);
+                        //if we haven't already got a clear sitemap cache value and our current id is that of one we must check compare the old and new values and assign to clearSiteMap
+                        if(!clearSiteMapCache && idsThatCauseSiteMapCacheClear.Contains(field.ID)){
+                            clearSiteMapCache = newValue.Equals(ourProperty.GetValue(ourData, null));
+                        }
+						ourProperty.SetValue(ourData, newValue , null);
 					}
 					else
 					{
@@ -181,6 +189,13 @@ namespace mjjames.AdminSystem
 				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
 				Logger.LogError("Page Update Failed", ex);
 			}
+            //following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
+            if(clearSiteMapCache){
+                //easiest way to force this is to open the main web.config and save it - performance eek but currently this is a work around
+                //ideally need to look at cache dependencies
+                WebConfigurationManager.OpenWebConfiguration("/").Save(ConfigurationSaveMode.Minimal, true);
+                System.Diagnostics.Debug.WriteLine("Restarted Site Following Page Navigation Changes", WebConfigurationManager.AppSettings["sitename"] + " Admin System");
+            }
 		}
 
 		#endregion

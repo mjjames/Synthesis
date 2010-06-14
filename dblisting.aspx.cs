@@ -37,7 +37,7 @@ namespace mjjames.AdminSystem
 				throw exception;
 			}
 
-			_xmldb.TableName = _sType;
+			_xmldb.TableName = String.IsNullOrEmpty(Request["id"]) ? _sType : Request["id"];
 			_xmldb.ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString;
 
 			//if we have no site key we have an error - assume this is because of an expired session so log the user out
@@ -174,6 +174,7 @@ namespace mjjames.AdminSystem
 				{
 					linkbuttonBack.NavigateUrl = String.Format("{0}{1}&{2}={3}", linkbuttonBack.NavigateUrl, _sType, xmldb.TablePrimaryKeyField, Request.QueryString[sForeignKeys]);
 				}
+				
 				if (Request.QueryString[sForeignKeys].Equals("0"))
 				{
 					linkbuttonBack.Visible = false;
@@ -183,6 +184,10 @@ namespace mjjames.AdminSystem
 			else
 			{
 				linkbuttonBack.Visible = false;
+			}
+			if (!String.IsNullOrEmpty(Request["id"]))
+			{
+				buttonAddPage.NavigateUrl += "&id=" + Request.QueryString["id"];
 			}
 
 		}

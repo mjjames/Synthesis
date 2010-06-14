@@ -47,7 +47,7 @@ namespace mjjames.AdminSystem
 				throw exception;
 			}
 
-			_xmldb.TableName = _sType;
+			_xmldb.TableName = String.IsNullOrEmpty(Request["id"]) ? _sType : Request["id"];
 
 
 			if (!String.IsNullOrEmpty(Request.QueryString[_xmldb.TablePrimaryKeyField]))
@@ -107,7 +107,10 @@ namespace mjjames.AdminSystem
 				linkbuttonBack.NavigateUrl = string.Format("~/dblisting.aspx?type={0}", _sType);
 			}
 
-
+			if (!String.IsNullOrEmpty(Request["id"]))
+			{
+				linkbuttonBack.NavigateUrl += "&id=" + Request.QueryString["id"];
+			}
 
 		}
 

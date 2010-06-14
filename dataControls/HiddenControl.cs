@@ -5,6 +5,8 @@ using System.Web.UI;
 using System.Reflection;
 using mjjames.AdminSystem.DataControls;
 using mjjames.AdminSystem.dataentities;
+using System.Configuration;
+using System.Linq;
 
 namespace mjjames.AdminSystem.dataControls
 {
@@ -37,6 +39,17 @@ namespace mjjames.AdminSystem.dataControls
 				string ourValue = (ourProperty.GetValue(ourPage, null) + "");
 				ourHidden.Value = "" + ourValue;
 				HttpContext.Current.Trace.Write("Rendering Control Value: " + ourHidden.Value);
+			}
+			if (PKey == 0 && field.Attributes.ContainsKey("lookupid"))
+			{
+				var AdminDC = new AdminSystem.DataContexts.AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+				var value = (from l in AdminDC.lookups
+							 where l.lookup_id == field.Attributes["lookupid"]
+							 select l.lookup_key).FirstOrDefault();
+				if (value != null)
+				{
+					ourHidden.Value = "" + value;
+				}
 			}
 			///TODO work out how to hide the label ourLabel.CssClass = "hidden";
 			return ourHidden;

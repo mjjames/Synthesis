@@ -27,13 +27,13 @@ namespace mjjames.AdminSystem
 		/// <returns>a general object that needs casting to the correct type on use</returns>
 		protected override object GetData()
 		{
-			
+
 			media ourMedia = new media();
 			if (PKey > 0)
 			{
 				ourMedia = (from p in AdminDC.medias
-							  where p.media_key == PKey
-							  select p).SingleOrDefault();
+							where p.media_key == PKey
+							select p).SingleOrDefault();
 			}
 
 			return ourMedia;
@@ -47,25 +47,25 @@ namespace mjjames.AdminSystem
 		public override void ArchiveData(int iKey)
 		{
 			media oldMedia = (from m in AdminDC.medias
-											where m.media_key == iKey
-											select m).SingleOrDefault();
-			
+							  where m.media_key == iKey
+							  select m).SingleOrDefault();
+
 			DataEntities.Archive.media archiveMedia = new DataEntities.Archive.media
-			                                          	{
-				active = oldMedia.active,
-				description = oldMedia.description,
-				filename = oldMedia.filename,
-				media_key = oldMedia.media_key,
-				mediatype_lookup = oldMedia.mediatype_lookup,
-				title = oldMedia.title,
-				DBName = AdminDC.Connection.Database
-			};
-			
+														{
+															active = oldMedia.active,
+															description = oldMedia.description,
+															filename = oldMedia.filename,
+															media_key = oldMedia.media_key,
+															mediatype_lookup = oldMedia.mediatype_lookup,
+															title = oldMedia.title,
+															DBName = AdminDC.Connection.Database
+														};
+
 			DataContexts.Archive.archiveDataContext archiveDC = new DataContexts.Archive.archiveDataContext();
-			
+
 			archiveDC.medias.InsertOnSubmit(archiveMedia);
 			AdminDC.medias.DeleteOnSubmit(oldMedia);
-			
+
 			archiveDC.SubmitChanges();
 			AdminDC.SubmitChanges();
 		}
@@ -81,7 +81,7 @@ namespace mjjames.AdminSystem
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
-			AdminDataContext ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+			AdminDataContext ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			media ourData = new media();
 			if (PKey > 0)
 			{
@@ -104,7 +104,7 @@ namespace mjjames.AdminSystem
 						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
 					}
 					else
-					{	
+					{
 						Logger.LogError("Save Content Failed", new Exception("Error Saving Content: " + ourControl.ID));
 					}
 				}
@@ -126,7 +126,7 @@ namespace mjjames.AdminSystem
 
 				labelStatus.Text = "Nothing to Save";
 
-				
+
 				ourPageDataContext.SubmitChanges();
 
 				if (ourChanges.Inserts.Count > 0)
@@ -166,7 +166,22 @@ namespace mjjames.AdminSystem
 			}
 		}
 
-
+		protected override string ApplyDataFilters(string filterName)
+		{
+			switch (filterName.ToLower())
+			{
+				case "podcasts":
+					var podcastKey = from l in AdminDC.lookups
+									 where l.lookup_id == "podcast"
+										&& l.type == "media_type"
+									 select l.lookup_key;
+					return String.Format("[mediatype_lookup] = {0}", podcastKey.FirstOrDefault());
+					break;
+				default:
+					return "";
+					break;
+			}
+		}
 
 		#endregion
 

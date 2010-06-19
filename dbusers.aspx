@@ -5,7 +5,13 @@
 	<h1 class="listingTitle">
 		User Administration
 	</h1>
-	<asp:ScriptManager ID="ScriptManager1" runat="server"  CompositeScript-ScriptMode="Release" ScriptMode="Release">
+	<asp:ScriptManager ID="ScriptManager1" runat="server"  CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
+        <CompositeScript>
+            <Scripts>
+                <asp:ScriptReference name="MicrosoftAjax.js"/>
+            	<asp:ScriptReference name="MicrosoftAjaxWebForms.js"/>
+            </Scripts>
+        </CompositeScript>
 	</asp:ScriptManager>
 	<div id="colContainer">
 		<asp:UpdatePanel ID="UpdatePanel" runat="server" UpdateMode="Conditional" ChildrenAsTriggers="true">

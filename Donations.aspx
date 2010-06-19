@@ -1,8 +1,15 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true" CodeBehind="Donations.aspx.cs" Inherits="mjjames.AdminSystem.Donations" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-	<asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
-		AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
-	</asp:ScriptManager>
+	   <asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
+        AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
+        <CompositeScript>
+            <Scripts>
+                <asp:scriptreference name="WebForms.js" assembly="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+                <asp:ScriptReference Name="MicrosoftAjax.js" />
+                <asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
+            </Scripts>
+        </CompositeScript>
+    </asp:ScriptManager>
 	
 	<h1 class="listingTitle">
 		Donations Listing View

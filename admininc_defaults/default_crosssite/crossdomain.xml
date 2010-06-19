@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<!DOCTYPE cross-domain-policy SYSTEM
+"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
+<!-- this cross domain xml file must be uploaded to each bucket within the storage provider -->
+<cross-domain-policy>
+	<!-- live site domain 
+	<allow-access-from domain="*.development.mjjames.co.uk" secure="false" / -->
+	
+	<!-- deveopment domains should always be accepted -->
+	<allow-access-from domain="*.development.mjjames.co.uk" secure="false" />
+	<!-- local development domains should always be accepted -->
+	<allow-access-from domain="*.laptop.mj" secure="false" />
+</cross-domain-policy>

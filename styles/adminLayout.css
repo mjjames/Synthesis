@@ -334,6 +334,21 @@ h4.title
     margin-left: 17.5em;
 }
 
+div.row div.fileuploadWrapper
+{
+	margin-left: 12em;
+}
+
+div.row div.fileuploadWrapper, div.row div.fileuploadWrapper div
+{
+	clear: none;
+}
+
+div.row div.fileuploadWrapper div.Flajaxian_FileBox
+{
+	display: none;
+}
+
 /* photogallery admin */
 
 div.row div

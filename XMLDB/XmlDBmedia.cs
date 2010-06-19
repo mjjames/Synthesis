@@ -168,6 +168,7 @@ namespace mjjames.AdminSystem
 
 		protected override string ApplyDataFilters(string filterName)
 		{
+            var filter = "";
 			switch (filterName.ToLower())
 			{
 				case "podcasts":
@@ -175,12 +176,13 @@ namespace mjjames.AdminSystem
 									 where l.lookup_id == "podcast"
 										&& l.type == "media_type"
 									 select l.lookup_key;
-					return String.Format("[mediatype_lookup] = {0}", podcastKey.FirstOrDefault());
+					filter = String.Format("[mediatype_lookup] = {0}", podcastKey.FirstOrDefault());
 					break;
 				default:
-					return "";
+					filter = "";
 					break;
 			}
+            return filter;
 		}
 
 		#endregion

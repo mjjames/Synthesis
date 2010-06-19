@@ -54,7 +54,7 @@ public partial class AdminSystem {
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::mjjames.ControlLibrary.AdminWebControls.AdminToolbar adminToolbar;
+    protected global::mjjames.AdminToolbar adminToolbar;
     
     /// <summary>
     /// ContentPlaceHolder1 control.

@@ -2,9 +2,16 @@
 	ValidateRequest="false" Inherits="mjjames.AdminSystem.ListPage" CodeBehind="dblisting.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-	<asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
-		AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Release" ScriptMode="Release">
-	</asp:ScriptManager>
+   <asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
+        AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
+        <CompositeScript>
+            <Scripts>
+                <asp:scriptreference name="WebForms.js" assembly="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+                <asp:ScriptReference Name="MicrosoftAjax.js" />
+                <asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
+            </Scripts>
+        </CompositeScript>
+    </asp:ScriptManager>
 	<asp:SqlDataSource ID="sdsData" runat="server" OnLoad="SetupTable" ConnectionString="<%$ ConnectionStrings:ourDatabase %>">
 	</asp:SqlDataSource>
 	<asp:SiteMapDataSource ID="navigationSiteMap" runat="server" ShowStartingNode="True"

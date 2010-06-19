@@ -313,14 +313,11 @@ namespace mjjames.AdminSystem
 				{
 					var deleteButton = new Button { Text = "Delete", CommandName = "DeleteEdit", CssClass = "buttonDelete" };
 					deleteButton.Click += DeleteEdit;
-					var deleteScript = new LiteralControl
-													{
-														Text =
-															"<script type=\"text/javascript\"> $(\".buttonDelete\").click(function(){ var bDelete = confirm(\"Are You Sure You Want To Delete This Item?\");	return bDelete;	}); </script>"
-													};
+                    var csm = ((Page) HttpContext.Current.CurrentHandler).Page.ClientScript;
+                    csm.RegisterStartupScript(typeof(XmlDBBase), "DeleteScript", 
+															"<script type=\"text/javascript\"> $(\".buttonDelete\").click(function(){ var bDelete = confirm(\"Are You Sure You Want To Delete This Item?\");	return bDelete;	}); </script>");
 
 					ourPage.Controls.Add(deleteButton);
-					ourPage.Controls.Add(deleteScript);
 				}
 			}
 			else

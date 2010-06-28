@@ -29,7 +29,7 @@ namespace mjjames.AdminSystem
 		protected int SiteFKey;
 		protected bool MultiTenancyTableEnabled = true;
 		protected readonly bool MultiTenancyEnabled;
-		private string _tableName;
+		//private string _tableName;
        /// <summary>
 		/// Provide a ConnectionString for the DataSources
 		/// </summary>

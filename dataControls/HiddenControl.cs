@@ -32,7 +32,7 @@ namespace mjjames.AdminSystem.dataControls
 
 		public Control GenerateControl(AdminField field, object ourPage)
 		{
-			HiddenField ourHidden = new HiddenField {ID = "control" + field.ID};
+			HiddenField ourHidden = new HiddenField { ID = "control" + field.ID };
 			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID);
 			if (PKey > 0 && ourProperty != null)
 			{
@@ -46,10 +46,9 @@ namespace mjjames.AdminSystem.dataControls
 				var value = (from l in AdminDC.lookups
 							 where l.lookup_id == field.Attributes["lookupid"]
 							 select l.lookup_key).FirstOrDefault();
-				if (value != null)
-				{
-					ourHidden.Value = "" + value;
-				}
+
+				ourHidden.Value = "" + value;
+
 			}
 			///TODO work out how to hide the label ourLabel.CssClass = "hidden";
 			return ourHidden;

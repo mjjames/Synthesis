@@ -133,6 +133,8 @@
     <Content Include="fckplugins\InternalUrl\fckplugin.js" />
     <Content Include="fckplugins\InternalUrl\InternalUrl.aspx" />
     <Content Include="fckplugins\InternalUrl\internalurl.js" />
+    <Content Include="fckplugins\InternalUrl\lang\en.js" />
+    <Content Include="fckplugins\OnlineVideo\lang\en.js" />
     <Content Include="images\anchor.gif" />
     <Content Include="images\arrow_ltr.gif" />
     <Content Include="images\arrow_rtl.gif" />
@@ -407,10 +409,6 @@
       <Project>{19803906-A886-42DF-8F5F-C1E5ACF47E50}</Project>
       <Name>com.flajaxian.DirectAmazonUploader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\classes\ControlLibrary\ControlLibrary.csproj">
-      <Project>{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}</Project>
-      <Name>ControlLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
       <Project>{B8488B6E-F1E4-4C64-A39D-5C853169DCE5}</Project>
       <Name>mjjames.core</Name>
@@ -465,7 +463,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="fckplugins\InternalUrl\lang\" />
     <Folder Include="fckplugins\OnlineVideo\lang\.svn\prop-base\" />
     <Folder Include="fckplugins\OnlineVideo\lang\.svn\props\" />
     <Folder Include="fckplugins\OnlineVideo\lang\.svn\tmp\prop-base\" />

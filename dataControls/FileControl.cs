@@ -134,7 +134,6 @@ namespace mjjames.AdminSystem.dataControls
             var accessKeyID = "";
             var acl = FileAccess.PublicRead;
             var bucket = field.Attributes.ContainsKey("storagebucket") ? field.Attributes["storagebucket"] : "";
-            var contentTypeStartsWith = "";
             var path = field.Attributes.ContainsKey("storagepath") ? field.Attributes["storagepath"] : "";
             var serviceHost = "";
             var secretKey = "";

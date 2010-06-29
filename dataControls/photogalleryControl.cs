@@ -18,6 +18,11 @@ namespace mjjames.AdminSystem.dataControls
 		private readonly ILogger _logger = new Logger("PhotogalleryControl");
 	
 		public int PKey { get; set; }
+        /// <summary>
+        /// Key of site this photogallery is being used in
+        /// </summary>
+        public int SiteKey { get; set; }
+
         private int _maxImages = 0;
 
 		public static object GetDataValue(Control ourControl, Type ourType)
@@ -60,6 +65,7 @@ namespace mjjames.AdminSystem.dataControls
 			ods.SelectParameters.Add("lookupid", sLookupID);
 
 			ods.InsertParameters.Add("lookupid", sLookupID);
+            ods.InsertParameters.Add("siteKey", SiteKey.ToString());
 
 			ods.InsertMethod = "SaveImages";
 			ods.UpdateMethod = "UpdateImages";

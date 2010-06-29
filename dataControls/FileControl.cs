@@ -100,14 +100,14 @@ namespace mjjames.AdminSystem.dataControls
 
         private void GenerateLocalStorageControl(AdminField field, ScriptManager ourSM, ClientScriptManager csm, UpdatePanel fileUpload)
         {
-            FileUpload ourUploader = new FileUpload();
-            Button uploadButton = new Button();
+            var ourUploader = new FileUpload();
+            var uploadButton = new Button();
 			
             uploadButton.Click += FileUploader;
             uploadButton.CommandName = "submit";
 
             csm.RegisterStartupScript(this.GetType(), "filecontrol-" + field.ID, "$('.uploadSubmit" + field.ID + "').click(function(){ if($('.uploaderFile" + field.ID +
-                                                            "')[0].value === ''){ alert('Please Ensure a File Is Provided Before Uploading'); return false; }else{ return true;}});");
+                                                            "')[0].value === ''){ alert('Please Ensure a File Is Provided Before Uploading'); return false; }else{ return true;}});", true);
 
             uploadButton.ID = "button" + field.ID;
             uploadButton.Text = "Upload";
@@ -202,7 +202,7 @@ namespace mjjames.AdminSystem.dataControls
             ///TODO swap this out for mjjames.core edition
             Button ourSender = (Button)sender;
 
-            FileUpload ourFile = (FileUpload)ourSender.Parent.FindControl(ourSender.ID.Replace("button", "control"));
+            FileUpload ourFile = (FileUpload)ourSender.Parent.FindControl(ourSender.ID.Replace("button", "file"));
             string strDir = ConfigurationManager.AppSettings["uploaddir"];
 
             if (ourFile == null || ourFile.PostedFile.ContentLength <= 0) return;

@@ -207,6 +207,13 @@ namespace mjjames.AdminSystem
 				{
 					var controlHandle = ourType.Unwrap();
 					controlHandle.GetType().GetProperty("PKey").SetValue(controlHandle, PKey, null);
+                    //see if the control has a site key property
+                    var siteKeyProperty = controlHandle.GetType().GetProperty("SiteKey");
+                    //if it does set it
+                    if (siteKeyProperty != null)
+                    {
+                        siteKeyProperty.SetValue(controlHandle, SiteKey, null);
+                    }
 					var ourControl = (Control)controlHandle.GetType().GetMethod("GenerateControl").Invoke(controlHandle, controlParams);
 					ourContainer.Controls.Add(ourControl);
 				}

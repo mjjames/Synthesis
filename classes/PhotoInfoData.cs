@@ -56,9 +56,10 @@ namespace mjjames.AdminSystem
 		/// </summary>
 		/// <param name="photoInfo">Photo Info to Insert</param>
 		/// <param name="linkKey">Link Key</param>
-		/// <param name="lookupid"></param>
+		/// <param name="lookupid">LookupID of link type</param>
+        /// <param name="siteKey">Key of the site to add these images too</param>
 		/// <returns></returns>
-		public int SaveImages(PhotoInfo photoInfo, int linkKey, string lookupid)
+		public int SaveImages(PhotoInfo photoInfo, int linkKey, string lookupid, int siteKey)
 		{
 			int iLookupKey = GetLookupKey(lookupid);
 		
@@ -68,14 +69,16 @@ namespace mjjames.AdminSystem
 			                 		description = photoInfo.Description,
 			                 		title = photoInfo.Title,
 			                 		filename = photoInfo.FileName,
-			                 		mediatype_lookup = iLookupKey
+			                 		mediatype_lookup = iLookupKey,
+                                    site_fkey = siteKey
 			                 	};
 
 			media_link newimagelink = new media_link
 			                          	{
 			                          		link_fkey = linkKey,
 			                          		linktype_lookup = iLookupKey,
-			                          		media_fkey = newimage.media_key
+			                          		media_fkey = newimage.media_key,
+                                            site_fkey = siteKey
 			                          	};
 
 			if(linkKey > 0)

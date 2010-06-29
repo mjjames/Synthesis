@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using mjjames.core;
 using System.Collections.Specialized;
 using System.Web.Security;
+using System.Configuration;
 
 namespace mjjames.AdminSystem.fckplugins.InternalUrl
 {
@@ -30,12 +31,15 @@ namespace mjjames.AdminSystem.fckplugins.InternalUrl
 			config.Add("urlwriting", "true");
 			config.Add("connectionStringName", "ourDatabase");
 
+            var siteKey = int.Parse(Session["userSiteKey"].ToString());
+
 			var cssmp = new CustomSqlSiteMapProvider
 							{
-								SiteKey = int.Parse(Session["userSiteKey"].ToString())
+								SiteKey = siteKey,
+                                SiteRootURL = LookupSitePath(siteKey)
 							};
 
-			cssmp.Initialize("Admin Navigation SiteMap", config);
+			cssmp.Initialize("Admin Internal Site Page Navigation SiteMap", config);
 			navigationSiteMap.Provider = cssmp;
 
 			Page.Trace.Write("CUSTOM SITEMAP QUERY: " + strQuery);
@@ -59,5 +63,33 @@ namespace mjjames.AdminSystem.fckplugins.InternalUrl
 
 			treePanel.ContentTemplateContainer.Controls.Add(treeview);
 		}
+
+
+        /// <summary>
+        /// Given a site key looks up its root path
+        /// </summary>
+        /// <param name="siteKey"></param>
+        /// <returns></returns>
+        private string LookupSitePath(int siteKey)
+        {
+            var cache = HttpContext.Current.Cache;
+            var cacheKey = "siteRootPath-" + siteKey;
+            if (cache[cacheKey] != null)
+            {
+                return cache[cacheKey] as String;
+            }
+            var context = new AdminSystem.DataContexts.AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+            var siteData = (from s in context.sites
+                            where s.site_key == siteKey && s.active
+                            select s.hostname).FirstOrDefault();
+            if (siteData == null)
+            {
+                return "";
+            }
+            var url = new Uri(siteData);
+            cache[cacheKey] = url.AbsolutePath;
+            return url.AbsolutePath;
+
+        }
 	}
 }

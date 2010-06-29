@@ -9,6 +9,7 @@ using mjjames.core;
 using System.Collections.Specialized;
 using System.Configuration;
 using mjjames.AdminSystem.DataEntities;
+using System.Web.UI;
 
 namespace mjjames.AdminSystem.dataControls
 {
@@ -30,25 +31,24 @@ namespace mjjames.AdminSystem.dataControls
 
             
             //create our zero clipboard JS include
-            //TODO: get this into the pages head
-            var script = new WebControl(System.Web.UI.HtmlTextWriterTag.Script)
-            {
-                ID="clipboardJSInclude"
-            };
-            script.Attributes.Add("type", "text/javascript");
-            script.Attributes.Add("src", "http://jsresources.mjjames.co.uk/zeroclipboard/ZeroClipboard.js");
 
-            //create a control for our loader JS
-            var setupScript = new WebControl(System.Web.UI.HtmlTextWriterTag.Script)
-            {
-                ID="clipboardJS"
-            };
-            //now inside that create a literal for our ACTUAL JS
-            setupScript.Controls.Add(new Literal()
-            {
-                Text = "ZeroClipboard.setMoviePath( 'http://jsresources.mjjames.co.uk/zeroclipboard/ZeroClipboard10.swf' );$(function(){ var clip = new ZeroClipboard.Client();clip.setText($('input.URLClipboard').val());clip.glue($('img.URLClipboard')[0], $('img.URLClipboard').parent()[0]); function clipboardComplete(client, text){alert('URL has been copied to your clipboard');}clip.addEventListener( 'onComplete', clipboardComplete );});"
-            });
+            var page = (Page)HttpContext.Current.Handler;
+            var ourSM = ScriptManager.GetCurrent(page);
+            var csm = page.ClientScript;
 
+            //we use the ClientScriptManager to ensure it all gets loaded properly
+
+            //has it already been registered?
+            if(!csm.IsClientScriptIncludeRegistered("ZeroClipboard")){
+                //register it
+                csm.RegisterClientScriptInclude("ZeroClipboard", "http://jsresources.mjjames.co.uk/zeroclipboard/ZeroClipboard.js");
+            }
+
+            if(!csm.IsStartupScriptRegistered("ZeroClipboard-" + field.ID)){
+                var script = "ZeroClipboard.setMoviePath( 'http://jsresources.mjjames.co.uk/zeroclipboard/ZeroClipboard10.swf' );$(function(){ var clip = new ZeroClipboard.Client();clip.setText($('input.URLClipboard').val());clip.glue($('img.URLClipboard')[0], $('img.URLClipboard').parent()[0]); function clipboardComplete(client, text){alert('URL has been copied to your clipboard');}clip.addEventListener( 'onComplete', clipboardComplete );});";
+                csm.RegisterStartupScript(this.GetType(), "ZeroClipboard-" + field.ID, script, true);
+            }
+            
             var clipImageWrapper = new WebControl(System.Web.UI.HtmlTextWriterTag.Div)
             {
                 ID = "clipboardImageWrapper",
@@ -70,10 +70,8 @@ namespace mjjames.AdminSystem.dataControls
             };
             //add our text box
             container.Controls.Add(textbox);
-            container.Controls.Add(script);
             container.Controls.Add(clipImageWrapper);
-            container.Controls.Add(setupScript);
-
+            
             return container;
         }
 
@@ -98,17 +96,49 @@ namespace mjjames.AdminSystem.dataControls
             {
                 //set our sitekey
                 ssmp.SiteKey = siteKey;
+                ssmp.SiteRootURL = LookupSitePath(siteKey);
             }
             //initialize and build the sitemap
 			ssmp.Initialize("Admin URL Lookup SiteMap", config);
+            
+            //if our key is that of the root node return the root url
+            if (PKey.ToString() == ssmp.RootNode.Key)
+            {
+                return ssmp.RootNode.Url;
+            }
             //lookup the node that matches this page
-
             //HACK: weird, the second time we load this the find method doesn't work even though there are nodes
             //so stick the method and linq it up, ideally we need to fix this
             var node = ssmp.RootNode.GetAllNodes().Cast<SiteMapNode>().FirstOrDefault(n => n.Key == PKey.ToString());
-            
             //return the url or a blank string
             return node != null ? node.Url.Replace("//", "/") : "";
+        }
+
+        /// <summary>
+        /// Given a site key looks up its root path
+        /// </summary>
+        /// <param name="siteKey"></param>
+        /// <returns></returns>
+        private string LookupSitePath(int siteKey)
+        {
+            var cache = HttpContext.Current.Cache;
+            var cacheKey = "siteRootPath-" + siteKey;
+            if (cache[cacheKey] != null)
+            {
+                return cache[cacheKey] as String;
+            }
+            var context = new AdminSystem.DataContexts.AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+            var siteData = (from s in context.sites
+                            where s.site_key == siteKey && s.active
+                            select s.hostname).FirstOrDefault();
+            if (siteData == null)
+            {
+                return "";
+            }
+            var url = new Uri(siteData);
+            cache[cacheKey] = url.AbsolutePath;
+            return url.AbsolutePath;
+
         }
 
         /// <summary>

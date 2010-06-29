@@ -8,7 +8,7 @@
 	<meta content="noindex, nofollow" name="robots" />
 
 	<script src="/admin/fckeditor/editor/dialog/common/fck_dialog_common.js" type="text/javascript"></script>
-	<script type="text/javascript" src="/admin/javascript/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="http://jsresources.mjjames.co.uk/jquery/jquery.1.3.2.min.js"></script>
 	<script src="internalurl.js" type="text/javascript"></script>
 
 	<link href="/admin/fckeditor/editor/dialog/common/fck_dialog_common.css" rel="stylesheet"
@@ -23,6 +23,18 @@
 	<form id="form1" runat="server">
 	<asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
 		AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
+          <CompositeScript>
+            <Scripts>
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+                <asp:ScriptReference Name="MicrosoftAjax.js" />
+                <asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
+                <asp:ScriptReference Name="AjaxControlToolkit.Common.Common.js" Assembly="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e" />
+                <asp:ScriptReference Name="AjaxControlToolkit.ExtenderBase.BaseScripts.js" Assembly="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e" />
+                <asp:ScriptReference Name="AjaxControlToolkit.Tabs.Tabs.js" Assembly="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e" />
+                <asp:ScriptReference Name="AjaxControlToolkit.DynamicPopulate.DynamicPopulateBehavior.js"
+                    Assembly="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e" />
+            </Scripts>
+        </CompositeScript>
 	</asp:ScriptManager>
 	<asp:SiteMapDataSource ID="navigationSiteMap" runat="server" ShowStartingNode="True"
 		OnLoad="LoadListing" />

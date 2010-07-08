@@ -74,7 +74,12 @@ namespace mjjames.AdminSystem.dataControls
             
             return container;
         }
-
+        
+        new public static object GetDataValue(Control ourControl, Type ourType)
+        {
+            //call the base type's GetDataValue method
+            return TextControl.GetDataValue(ourControl, ourType);
+        }
         /// <summary>
         /// Looks up the full url for the url parameter within our data
         /// </summary>

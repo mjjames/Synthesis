@@ -10,6 +10,8 @@ using mjjames.AdminSystem.dataentities;
 using System.Configuration;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
+using System.Collections.Generic;
+using mjjames.AdminSystem.Repositories;
 
 /// <summary>
 /// Summary description for xmlDB
@@ -87,7 +89,7 @@ namespace mjjames.AdminSystem
 			{
 				ourData = ourPageDataContext.medias.Single(p => p.media_key == PKey);
 			}
-
+			var keyvalues = new List<KeyValueData>();
 			foreach (AdminTab tab in Table.Tabs)
 			{
 				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
@@ -97,6 +99,20 @@ namespace mjjames.AdminSystem
 					Control ourControl = ourTab.FindControl("control" + field.ID);
 
 					if (ourControl == null) continue;
+
+					//if we are a key value get our data out and stash it for later
+					if (field.Attributes.ContainsKey("keyvalue"))
+					{
+						keyvalues.Add(new KeyValueData
+						{
+							LinkKey = PKey,
+							Value = GetDataValue(ourControl, field.Type, typeof(String)) as String,
+							LinkTypeID = "medialookup",
+							LookupID = field.Attributes["lookupid"]
+						});
+						continue;
+					}
+
 					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
@@ -128,13 +144,21 @@ namespace mjjames.AdminSystem
 
 
 				ourPageDataContext.SubmitChanges();
-
+				var updateType = UpdateType.None;
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+					updateType = UpdateType.Inserted;
 
 
 					PKey = ourData.media_key;
+					//when we do an insert update any keyvalues we have to have the correct primary key
+					keyvalues = keyvalues.Select(kv => new KeyValueData()
+					{
+						LinkKey = PKey,
+						LinkTypeID = kv.LinkTypeID,
+						LookupID = kv.LookupID,
+						Value = kv.Value
+					}).ToList();
 
 					string strPKeyField = TablePrimaryKeyField;
 
@@ -154,9 +178,31 @@ namespace mjjames.AdminSystem
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", Table.ID);
+					updateType = UpdateType.Updated;
+				}
+				if (keyvalues.Count > 0)
+				{
+					var keyValueRepository = new KeyValueRepository();
+					Logger.LogInformation("Updating Key Values");
+					keyValueRepository.UpdateKeyValues(keyvalues);
+					if (updateType.Equals(UpdateType.None))
+					{
+						updateType = UpdateType.Updated;
+					}
 				}
 
+				switch (updateType)
+				{
+					case UpdateType.None:
+						labelStatus.Text = "Nothing to Save";
+						break;
+					case UpdateType.Inserted:
+						labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+						break;
+					case UpdateType.Updated:
+						labelStatus.Text = String.Format("{0} Updated", Table.ID);
+						break;
+				}
 
 			}
 			catch (Exception ex)

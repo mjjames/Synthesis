@@ -380,7 +380,7 @@ namespace mjjames.AdminSystem
 			if (ourDType != null)
 			{
 				var controlHandle = ourDType.Unwrap();
-				dataValue = controlHandle.GetType().GetMethod("GetDataValue").Invoke(null, dataParams);
+                dataValue = controlHandle.GetType().GetMethod("GetDataValue").Invoke(null, dataParams);
 			}
 			else
 			{

@@ -37,6 +37,9 @@ namespace mjjames.AdminSystem.DataControls
 				case "marketingsite":
 					sourceType = "marketingsitelookup";
 					break;
+				case "media":
+					sourceType = "medialookup";
+					break;
 			}
 			return kvr.GetKeyValue(lookupID, PKey, sourceType);
 		}

@@ -10,6 +10,8 @@ using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
+using System.Collections.Generic;
+using mjjames.AdminSystem.Repositories;
 
 /// <summary>
 /// Summary description for xmlDB
@@ -60,7 +62,7 @@ namespace mjjames.AdminSystem
 			{
 				ourData = ourPageDataContext.projects.Single(p => p.project_key == PKey);
 			}
-
+			var keyvalues = new List<KeyValueData>();
 			foreach (AdminTab tab in Table.Tabs)
 			{
 				TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
@@ -70,6 +72,20 @@ namespace mjjames.AdminSystem
 					Control ourControl = ourTab.FindControl("control" + field.ID);
 
 					if (ourControl == null) continue;
+
+					//if we are a key value get our data out and stash it for later
+					if (field.Attributes.ContainsKey("keyvalue"))
+					{
+						keyvalues.Add(new KeyValueData
+						{
+							LinkKey = PKey,
+							Value = GetDataValue(ourControl, field.Type, typeof(String)) as String,
+							LinkTypeID = "projectlookup",
+							LookupID = field.Attributes["lookupid"]
+						});
+						continue;
+					}
+
 					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
@@ -104,10 +120,10 @@ namespace mjjames.AdminSystem
 
 				ourPageDataContext.SubmitChanges();
 
+				var updateType = UpdateType.None;
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
-
+					updateType = UpdateType.Inserted;
 
 					PKey = ourData.project_key;
 				
@@ -156,7 +172,30 @@ namespace mjjames.AdminSystem
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", Table.ID);
+					updateType = UpdateType.Updated;
+				}
+				if (keyvalues.Count > 0)
+				{
+					var keyValueRepository = new KeyValueRepository();
+					Logger.LogInformation("Updating Key Values");
+					keyValueRepository.UpdateKeyValues(keyvalues);
+					if (updateType.Equals(UpdateType.None))
+					{
+						updateType = UpdateType.Updated;
+					}
+				}
+
+				switch (updateType)
+				{
+					case UpdateType.None:
+						labelStatus.Text = "Nothing to Save";
+						break;
+					case UpdateType.Inserted:
+						labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+						break;
+					case UpdateType.Updated:
+						labelStatus.Text = String.Format("{0} Updated", Table.ID);
+						break;
 				}
 
 

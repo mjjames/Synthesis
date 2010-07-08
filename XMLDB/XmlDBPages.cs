@@ -8,6 +8,8 @@ using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
 using System.Web.Configuration;
+using System.Collections.Generic;
+using mjjames.AdminSystem.Repositories;
 
 namespace mjjames.AdminSystem
 {
@@ -98,17 +100,35 @@ namespace mjjames.AdminSystem
 			{
 				ourData = ourPageDataContext.pages.Single(p => p.page_key == PKey);
 			}
-
+			var keyvalues = new List<KeyValueData>();
 			foreach (AdminTab tab in Table.Tabs)
 			{
 				var ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
 				if (ourTab == null) continue;
 				foreach (var field in tab.Fields)
 				{
+                    //skip the url field as it's readonly
+                    if (field.ID.ToLower() == "page_url") continue;
+
 					var ourControl = ourTab.FindControl("control" + field.ID);
 
 					if (ourControl == null) continue;
+					
+					//if we are a key value get our data out and stash it for later
+					if (field.Attributes.ContainsKey("keyvalue"))
+					{
+						keyvalues.Add(new KeyValueData
+						{
+							LinkKey = PKey,
+							Value = GetDataValue(ourControl, field.Type, typeof(String)) as String,
+							LinkTypeID = "pagelookup",
+							LookupID = field.Attributes["lookupid"]
+						});
+						continue;
+					}
+
 					var ourProperty = ourData.GetType().GetProperty(field.ID);
+                    
 					if (ourProperty != null)
 					{
                         //get our new value
@@ -149,10 +169,10 @@ namespace mjjames.AdminSystem
 
 				ourPageDataContext.SubmitChanges();
 
+				var updateType = UpdateType.None;
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
-
+					updateType = UpdateType.Inserted;
 
 					PKey = ourData.page_key;
 					if (ourData.page_fkey != null) FKey = (int)ourData.page_fkey;
@@ -179,7 +199,30 @@ namespace mjjames.AdminSystem
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", Table.ID);
+					updateType = UpdateType.Updated;
+				}
+				if (keyvalues.Count > 0)
+				{
+					var keyValueRepository = new KeyValueRepository();
+					Logger.LogInformation("Updating Key Values");
+					keyValueRepository.UpdateKeyValues(keyvalues);
+					if (updateType.Equals(UpdateType.None))
+					{
+						updateType = UpdateType.Updated;
+					}
+				}
+
+				switch (updateType)
+				{
+					case UpdateType.None:
+						labelStatus.Text = "Nothing to Save";
+						break;
+					case UpdateType.Inserted:
+						labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+						break;
+					case UpdateType.Updated:
+						labelStatus.Text = String.Format("{0} Updated", Table.ID);
+						break;
 				}
 
 

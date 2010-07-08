@@ -138,6 +138,7 @@
     <Content Include="images\anchor.gif" />
     <Content Include="images\arrow_ltr.gif" />
     <Content Include="images\arrow_rtl.gif" />
+    <Content Include="images\clipboard.png" />
     <Content Include="images\smiley\msn\angel_smile.gif" />
     <Content Include="images\smiley\msn\angry_smile.gif" />
     <Content Include="images\smiley\msn\broken_heart.gif" />

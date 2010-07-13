@@ -28,7 +28,7 @@ namespace mjjames.AdminSystem.DataControls
 			var sourceType = String.Empty;
 			switch (ourPage.GetType().Name)
 			{
-				case "pages":
+				case "page":
 					sourceType = "pagelookup";
 					break;
 				case "projects":

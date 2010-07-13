@@ -52,29 +52,29 @@ namespace mjjames.AdminSystem
 							
 			var archiveDC = new DataContexts.Archive.archiveDataContext();
 			var archivePage = new DataEntities.Archive.page
-			                                        	{
-			                                        		page_key = ourPage.page_key,
-			                                        		page_fkey = ourPage.page_fkey,
-			                                        		accesskey = ourPage.accesskey,
-			                                        		active = ourPage.active,
-			                                        		body = ourPage.body,
-			                                        		linkurl = ourPage.linkurl,
-			                                        		metadescription = ourPage.metadescription,
-			                                        		metakeywords = ourPage.metakeywords,
-			                                        		navtitle = ourPage.navtitle,
-			                                        		page_url = ourPage.page_url,
-			                                        		pageid = ourPage.pageid,
-			                                        		password = ourPage.password,
-			                                        		passwordprotect = ourPage.passwordprotect,
-			                                        		showinfeaturednav = ourPage.showinfeaturednav,
-			                                        		showinfooter = ourPage.showinfooter,
-			                                        		showinnav = ourPage.showinnav,
-			                                        		showonhome = ourPage.showonhome,
-			                                        		sortorder = ourPage.sortorder,
-			                                        		thumbnailimage = ourPage.thumbnailimage,
-			                                        		title = ourPage.title,
-			                                        		DBName = AdminDC.Connection.Database
-			                                        	};
+														{
+															page_key = ourPage.page_key,
+															page_fkey = ourPage.page_fkey,
+															accesskey = ourPage.accesskey,
+															active = ourPage.active,
+															body = ourPage.body,
+															linkurl = ourPage.linkurl,
+															metadescription = ourPage.metadescription,
+															metakeywords = ourPage.metakeywords,
+															navtitle = ourPage.navtitle,
+															page_url = ourPage.page_url,
+															pageid = ourPage.pageid,
+															password = ourPage.password,
+															passwordprotect = ourPage.passwordprotect,
+															showinfeaturednav = ourPage.showinfeaturednav,
+															showinfooter = ourPage.showinfooter,
+															showinnav = ourPage.showinnav,
+															showonhome = ourPage.showonhome,
+															sortorder = ourPage.sortorder,
+															thumbnailimage = ourPage.thumbnailimage,
+															title = ourPage.title,
+															DBName = AdminDC.Connection.Database
+														};
 			Logger.LogInformation("Archiving Page - " + iKey);
 			archiveDC.pages.InsertOnSubmit(archivePage);
 			archiveDC.SubmitChanges();
@@ -107,8 +107,8 @@ namespace mjjames.AdminSystem
 				if (ourTab == null) continue;
 				foreach (var field in tab.Fields)
 				{
-                    //skip the url field as it's readonly
-                    if (field.ID.ToLower() == "page_url") continue;
+					//skip the url field as it's readonly
+					if (field.ID.ToLower() == "page_url") continue;
 
 					var ourControl = ourTab.FindControl("control" + field.ID);
 
@@ -128,15 +128,15 @@ namespace mjjames.AdminSystem
 					}
 
 					var ourProperty = ourData.GetType().GetProperty(field.ID);
-                    
+					
 					if (ourProperty != null)
 					{
-                        //get our new value
-                        var newValue = GetDataValue(ourControl, field.Type, ourProperty.PropertyType);
-                        //if we haven't already got a clear sitemap cache value and our current id is that of one we must check compare the old and new values and assign to clearSiteMap
-                        if(!clearSiteMapCache && idsThatCauseSiteMapCacheClear.Contains(field.ID)){
-                            clearSiteMapCache = newValue.Equals(ourProperty.GetValue(ourData, null));
-                        }
+						//get our new value
+						var newValue = GetDataValue(ourControl, field.Type, ourProperty.PropertyType);
+						//if we haven't already got a clear sitemap cache value and our current id is that of one we must check compare the old and new values and assign to clearSiteMap
+						if(!clearSiteMapCache && idsThatCauseSiteMapCacheClear.Contains(field.ID)){
+							clearSiteMapCache = newValue.Equals(ourProperty.GetValue(ourData, null));
+						}
 						ourProperty.SetValue(ourData, newValue , null);
 					}
 					else
@@ -232,13 +232,13 @@ namespace mjjames.AdminSystem
 				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
 				Logger.LogError("Page Update Failed", ex);
 			}
-            //following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
-            if(clearSiteMapCache){
-                //easiest way to force this is to open the main web.config and save it - performance eek but currently this is a work around
-                //ideally need to look at cache dependencies
-                WebConfigurationManager.OpenWebConfiguration("/").Save(ConfigurationSaveMode.Minimal, true);
-                System.Diagnostics.Debug.WriteLine("Restarted Site Following Page Navigation Changes", WebConfigurationManager.AppSettings["sitename"] + " Admin System");
-            }
+			//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
+			if(clearSiteMapCache){
+				//easiest way to force this is to open the main web.config and save it - performance eek but currently this is a work around
+				//ideally need to look at cache dependencies
+				WebConfigurationManager.OpenWebConfiguration("/").Save(ConfigurationSaveMode.Minimal, true);
+				System.Diagnostics.Debug.WriteLine("Restarted Site Following Page Navigation Changes", WebConfigurationManager.AppSettings["sitename"] + " Admin System");
+			}
 		}
 
 		#endregion

@@ -30,7 +30,7 @@ namespace mjjames.AdminSystem
 		protected bool MultiTenancyTableEnabled = true;
 		protected readonly bool MultiTenancyEnabled;
 		//private string _tableName;
-       /// <summary>
+	   /// <summary>
 		/// Provide a ConnectionString for the DataSources
 		/// </summary>
 		public string ConnectionString { set { Connectionstring = value; } get { return Connectionstring; } }
@@ -72,16 +72,16 @@ namespace mjjames.AdminSystem
 
 		public bool TableQuickEdit { get { return Table.QuickEdit; } }
 
-        public XmlDBBase() : this(true)
-        {
-        }
+		public XmlDBBase() : this(true)
+		{
+		}
 
 		/// <summary>
 		/// constructor
 		/// </summary>
 		public XmlDBBase(bool multiTenancyTableEnabled)
 		{
-		    MultiTenancyTableEnabled = multiTenancyTableEnabled;
+			MultiTenancyTableEnabled = multiTenancyTableEnabled;
 
 			XMLFilePath = ConfigurationManager.AppSettings["adminConfigXML"];
 			try
@@ -207,13 +207,13 @@ namespace mjjames.AdminSystem
 				{
 					var controlHandle = ourType.Unwrap();
 					controlHandle.GetType().GetProperty("PKey").SetValue(controlHandle, PKey, null);
-                    //see if the control has a site key property
-                    var siteKeyProperty = controlHandle.GetType().GetProperty("SiteKey");
-                    //if it does set it
-                    if (siteKeyProperty != null)
-                    {
-                        siteKeyProperty.SetValue(controlHandle, SiteKey, null);
-                    }
+					//see if the control has a site key property
+					var siteKeyProperty = controlHandle.GetType().GetProperty("SiteKey");
+					//if it does set it
+					if (siteKeyProperty != null)
+					{
+						siteKeyProperty.SetValue(controlHandle, SiteKey, null);
+					}
 					var ourControl = (Control)controlHandle.GetType().GetMethod("GenerateControl").Invoke(controlHandle, controlParams);
 					ourContainer.Controls.Add(ourControl);
 				}
@@ -320,8 +320,8 @@ namespace mjjames.AdminSystem
 				{
 					var deleteButton = new Button { Text = "Delete", CommandName = "DeleteEdit", CssClass = "buttonDelete" };
 					deleteButton.Click += DeleteEdit;
-                    var csm = ((Page) HttpContext.Current.CurrentHandler).Page.ClientScript;
-                    csm.RegisterStartupScript(typeof(XmlDBBase), "DeleteScript", 
+					var csm = ((Page) HttpContext.Current.CurrentHandler).Page.ClientScript;
+					csm.RegisterStartupScript(typeof(XmlDBBase), "DeleteScript", 
 															"<script type=\"text/javascript\"> $(\".buttonDelete\").click(function(){ var bDelete = confirm(\"Are You Sure You Want To Delete This Item?\");	return bDelete;	}); </script>");
 
 					ourPage.Controls.Add(deleteButton);
@@ -380,7 +380,7 @@ namespace mjjames.AdminSystem
 			if (ourDType != null)
 			{
 				var controlHandle = ourDType.Unwrap();
-                dataValue = controlHandle.GetType().GetMethod("GetDataValue").Invoke(null, dataParams);
+				dataValue = controlHandle.GetType().GetMethod("GetDataValue").Invoke(null, dataParams);
 			}
 			else
 			{
@@ -623,9 +623,13 @@ namespace mjjames.AdminSystem
 				ourPageDataContext.ExecuteQuery<object>(strDelete);
 
 				labelStatus.Text = String.Format("{0} Removed", Table.ID);
+				// if we delete a page we need to reset the sitemap
+				if(Table.ID.Equals("pages", StringComparison.InvariantCultureIgnoreCase)){
+					GenericFunctions.ResetSiteMap();
+				}
 
 				var prevPage = ourSender.Page.PreviousPage;
-				ourSender.Page.Response.Redirect(prevPage == null ? "~/" : prevPage.Request.RawUrl);
+				ourSender.Page.Response.Redirect(prevPage == null ? "~/" : prevPage.Request.RawUrl, false);
 			}
 			catch (Exception ex)
 			{

@@ -3,15 +3,15 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
    <asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
-        AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
-        <CompositeScript>
-            <Scripts>
-                <asp:scriptreference name="WebForms.js" assembly="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-                <asp:ScriptReference Name="MicrosoftAjax.js" />
-                <asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
-            </Scripts>
-        </CompositeScript>
-    </asp:ScriptManager>
+		AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
+		<CompositeScript>
+			<Scripts>
+				<asp:scriptreference name="WebForms.js" assembly="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+				<asp:ScriptReference Name="MicrosoftAjax.js" />
+				<asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
+			</Scripts>
+		</CompositeScript>
+	</asp:ScriptManager>
 	<asp:SqlDataSource ID="sdsData" runat="server" OnLoad="SetupTable" ConnectionString="<%$ ConnectionStrings:ourDatabase %>">
 	</asp:SqlDataSource>
 	<asp:SiteMapDataSource ID="navigationSiteMap" runat="server" ShowStartingNode="True"
@@ -44,8 +44,8 @@
 					Add Page
 				</asp:HyperLink>
 			</div>
-			<asp:UpdatePanel ID="upListing" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional"  >
-				<ContentTemplate>
+			<%--<asp:UpdatePanel ID="upListing" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional"  >
+				<ContentTemplate>--%>
 					<asp:GridView ID="pageListing" runat="server" AllowPaging="True" AllowSorting="True"
 						AutoGenerateColumns="False" DataSourceID="sdsData" OnSelectedIndexChanged="GridView1_SelectedIndexChanged"
 						EnableViewState="False" DataMember="DefaultView" CssClass="listingTable">
@@ -59,15 +59,15 @@
 						<HeaderStyle CssClass="pageListHeader" />
 						<AlternatingRowStyle CssClass="pageListRowAlternate" />
 					</asp:GridView>
-				</ContentTemplate>
-			</asp:UpdatePanel>
-			<asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="upListing"
+			<%--	</ContentTemplate>
+			</asp:UpdatePanel>--%>
+			<%--<asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="upListing"
 				DisplayAfter="500">
 				<ProgressTemplate>
 					<p class="loading">
 						Loading ...</p>
 				</ProgressTemplate>
-			</asp:UpdateProgress>
+			</asp:UpdateProgress>--%>
 		</div>
 	</div>
 

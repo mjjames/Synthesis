@@ -2,6 +2,14 @@ using System;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Xml;
+using System.Web.Configuration;
+using System.Configuration;
+using System.Web;
+using mjjames.core;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
 namespace mjjames.AdminSystem.classes
 {
@@ -10,7 +18,7 @@ namespace mjjames.AdminSystem.classes
 	/// </summary>
 	public class GenericFunctions
 	{
-
+				
 		/// <summary>
 		/// Function for extracting specific amount of content from an input. Strips all HTML Tags
 		/// </summary>
@@ -56,11 +64,11 @@ namespace mjjames.AdminSystem.classes
 		{
 			// Create a new XmlDocument  
 			XmlDocument doc = new XmlDocument();  
-               
+			   
 			// Load data  
 			// need to web.config the api key
 			doc.Load("http://local.yahooapis.com/MapsService/V1/geocode?appid=02p6cNjV34Fl7CkGOrYkTNvzgnLTC2N3sajX6471LGYhMSUXcDUCkLkaxCYNJ7mZoQ&street=" + address);  
-               
+			   
 			// Set up namespace manager for XPath  
 			XmlNamespaceManager ns = new XmlNamespaceManager(doc.NameTable);
 			ns.AddNamespace("urn:yahoo:maps", "http://local.yahooapis.com/MapsService/V1/GeocodeResponse.xsd");
@@ -71,5 +79,34 @@ namespace mjjames.AdminSystem.classes
 			string geocodedAddress = string.Format("{0},{1}", latitude.Value, longitude.Value);
 			return geocodedAddress;
 		}
+
+		internal static void ResetSiteMap()
+		{
+			var context = HttpContext.Current;
+			var itemsToRemove = new List<string>();
+			itemsToRemove.AddRange(context.Cache.Cast<DictionaryEntry>()
+										.Where(item => item.Key.ToString().StartsWith("__SiteMapCacheDependency"))
+										.Select(item => item.Key.ToString()));
+			itemsToRemove.ForEach(key => context.Cache.Remove(key));
+			System.Diagnostics.Debug.WriteLine("Restarted Site Following Page Navigation Changes", WebConfigurationManager.AppSettings["sitename"] + " Admin System");
+
+			
+			//following sitemap resets we also need to reset the caches of the website, to do this call the website's sitemapcacheexpirer script
+			using (var request = new System.Net.WebClient())
+			{
+				var url = new Uri(context.Request.Url, "/sitemapcacheexpirer.aspx");
+				try
+				{
+					request.OpenRead(url);
+				}
+				catch (Exception e)
+				{
+					ILogger logger = new Logger("GenericFunctions");
+					logger.LogError("Unable to reset sitemap caches for: " + WebConfigurationManager.AppSettings["sitename"] + " url: " + url.ToString(), e);
+				}
+			}
+			
+		}
+
 	}
 }

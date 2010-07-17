@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.dataControls;
 using mjjames.ControlLibrary.WebControls;
+using System.Web;
 
 namespace mjjames.AdminSystem
 {
@@ -68,6 +69,7 @@ namespace mjjames.AdminSystem
 			sdsData.DeleteCommand = datasource.DeleteCommand;
 			pageListing.DataKeyNames = new[] { _xmldb.TablePrimaryKeyField };
 			sdsData.Deleting += SdsDataDeleting;
+			sdsData.Deleted += SdsDataDeleted;
 
 			var cfSelect = new CommandField {ShowSelectButton = true, SelectText = "Edit"};
 
@@ -142,6 +144,23 @@ namespace mjjames.AdminSystem
 		void SdsDataDeleting(object sender, SqlDataSourceCommandEventArgs e)
 		{
 			_xmldb.ArchiveData((int)e.Command.Parameters["@" + _xmldb.TablePrimaryKeyField].Value);
+		}
+
+		//upon deletion of a page reset the sitemap
+		void SdsDataDeleted(object sender, SqlDataSourceStatusEventArgs e)
+		{
+			// if we dont have a quick edit drop out
+			if(!_xmldb.TableQuickEdit){
+				return;
+			}
+			//following a deletion you have to reset the sitemap and then reload the tree listing
+			GenericFunctions.ResetSiteMap();
+			var control = treePanel.ContentTemplateContainer.FindControl("treeListing") as TreeView;
+			treePanel.ContentTemplateContainer.Controls.Remove(control);
+			System.Diagnostics.Debug.WriteLine("Reload Page Tree Listing");
+			LoadListing(sender, e);
+			
+			
 		}
 
 		protected void UpdateLabels(string label, XmlDBBase xmldb)
@@ -238,12 +257,12 @@ namespace mjjames.AdminSystem
 				
 					var cssmp = new CustomSqlSiteMapProvider
 					            	{
-					            		SiteKey = int.Parse(Session["userSiteKey"].ToString())
+										SiteKey = int.Parse(Session["userSiteKey"].ToString())
 					            	};
 					cssmp.Initialize("Admin Navigation SiteMap", config);
-					
+					cssmp.ParentProvider = SiteMap.Provider;
+					System.Diagnostics.Debug.WriteLine("Admin Navigation SiteMap");
 					navigationSiteMap.Provider = cssmp;
-
 					Page.Trace.Write("CUSTOM SITEMAP QUERY: " + strQuery);
 				}
 				var treeview = new TreeView

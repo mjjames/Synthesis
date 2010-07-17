@@ -176,12 +176,12 @@ namespace mjjames.AdminSystem
 					config.Add("query", strQuery);
 					config.Add("urlprefix", strURLPrefix);
 					config.Add("connectionStringName", "ourDatabase");
-                    config.Add("DisableRootURLFix", "true");
+					config.Add("DisableRootURLFix", "true");
 
 					var cssmp = new CustomSqlSiteMapProvider
-					            	{
-					            		SiteKey = int.Parse(Session["userSiteKey"].ToString())
-					            	};
+									{
+										SiteKey = int.Parse(Session["userSiteKey"].ToString())
+									};
 
 					cssmp.Initialize("Admin Navigation SiteMap", config);
 					navigationSiteMap.Provider = cssmp;
@@ -189,19 +189,19 @@ namespace mjjames.AdminSystem
 					Page.Trace.Write("CUSTOM SITEMAP QUERY: " + strQuery);
 				}
 				var treeview = new TreeView
-				                    	{
-				                    		ID = "treeListing",
-				                    		PopulateNodesFromClient = true,
-				                    		EnableClientScript = true,
-				                    		ShowExpandCollapse = true,
-				                    		ShowLines = true,
-				                    		ExpandDepth = 1,
-				                    		CssClass = "treeView",
-				                    		EnableViewState = false,
-				                    		CollapseImageToolTip = "hide child items",
-				                    		ExpandImageToolTip = "show child items",
-				                    		DataSource = navigationSiteMap
-				                    	};
+										{
+											ID = "treeListing",
+											PopulateNodesFromClient = true,
+											EnableClientScript = true,
+											ShowExpandCollapse = true,
+											ShowLines = true,
+											ExpandDepth = 1,
+											CssClass = "treeView",
+											EnableViewState = false,
+											CollapseImageToolTip = "hide child items",
+											ExpandImageToolTip = "show child items",
+											DataSource = navigationSiteMap
+										};
 
 				treeview.DataBind();
 

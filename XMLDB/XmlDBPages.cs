@@ -133,9 +133,10 @@ namespace mjjames.AdminSystem
 					{
 						//get our new value
 						var newValue = GetDataValue(ourControl, field.Type, ourProperty.PropertyType);
-						//if we haven't already got a clear sitemap cache value and our current id is that of one we must check compare the old and new values and assign to clearSiteMap
+						//if we haven't already got a clear sitemap cache value and our current id is that of one we must check 
+						//compare the old and new values and assign to clearSiteMap we only want true if the values aren't equal as thats a change
 						if(!clearSiteMapCache && idsThatCauseSiteMapCacheClear.Contains(field.ID)){
-							clearSiteMapCache = newValue.Equals(ourProperty.GetValue(ourData, null));
+							clearSiteMapCache = !newValue.Equals(ourProperty.GetValue(ourData, null));
 						}
 						ourProperty.SetValue(ourData, newValue , null);
 					}
@@ -183,7 +184,7 @@ namespace mjjames.AdminSystem
 
 					var ourPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "pkey");
 					var ourControlPKey = (HiddenField)FindControlRecursive(labelStatus.Parent, "control" + strPKeyField);
-
+					clearSiteMapCache = true; //new page so clear the caches
 
 					try
 					{
@@ -234,10 +235,7 @@ namespace mjjames.AdminSystem
 			}
 			//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
 			if(clearSiteMapCache){
-				//easiest way to force this is to open the main web.config and save it - performance eek but currently this is a work around
-				//ideally need to look at cache dependencies
-				WebConfigurationManager.OpenWebConfiguration("/").Save(ConfigurationSaveMode.Minimal, true);
-				System.Diagnostics.Debug.WriteLine("Restarted Site Following Page Navigation Changes", WebConfigurationManager.AppSettings["sitename"] + " Admin System");
+				GenericFunctions.ResetSiteMap();
 			}
 		}
 

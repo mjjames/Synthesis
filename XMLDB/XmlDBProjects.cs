@@ -71,7 +71,8 @@ namespace mjjames.AdminSystem
 				{
 					Control ourControl = ourTab.FindControl("control" + field.ID);
 
-					if (ourControl == null) continue;
+					//if we cant find a control for that ID or its of type photogallery skip it
+					if (ourControl == null || field.Type.Equals("photogallery", StringComparison.InvariantCultureIgnoreCase)) continue;
 
 					//if we are a key value get our data out and stash it for later
 					if (field.Attributes.ContainsKey("keyvalue"))
@@ -101,13 +102,12 @@ namespace mjjames.AdminSystem
 
 			if (PKey == 0)
 			{
-				string prefix = ConfigurationManager.AppSettings["urlprefixProject"] ?? String.Empty;
-				prefix = prefix.Replace("[*year]*", ourData.start_date.GetValueOrDefault(DateTime.Now).Year.ToString());
-				ourData.url = String.Format("{0}{1}", prefix, SQLHelpers.URLSafe(ourData.title));
+				
 				if (MultiTenancyEnabled)
 				{
 					ourData.site_fkey = SiteFKey;
 				}
+				generateURL<project>(ourData, AdminDC);
 				ourPageDataContext.projects.InsertOnSubmit(ourData);
 			}
 
@@ -238,7 +238,39 @@ namespace mjjames.AdminSystem
 			AdminDC.SubmitChanges();
 		}
 
+		/// <summary>
+		/// Checks to see if we already have data with this url, if it does makes the url unique
+		/// </summary>
+		/// <typeparam name="T">type of data</typeparam>
+		/// <param name="ourData">data</param>
+		/// <param name="dataContext">db context</param>
+		override protected void generateURL<T>(T ourData, AdminDataContext dataContext)
+		{
+			var data = ourData as project;
 
+			string prefix = ConfigurationManager.AppSettings["urlprefixProject"] ?? String.Empty;
+			prefix = prefix.Replace("[*year]*", data.start_date.GetValueOrDefault(DateTime.Now).Year.ToString());
+			data.url = String.Format("{0}{1}", prefix, SQLHelpers.URLSafe(data.title));
+
+			//pull out all of our sibling pages and then try to find pages that start with our page-url 
+			var siblings = (from p in dataContext.projects
+							where p.site_fkey == data.site_fkey
+							select p.url).ToArray();
+
+			//if we don't have an item that matches our url exactly there's no need to do anything else
+			if (!siblings.Contains(data.url))
+			{
+				return;
+			}
+
+			var existingUrls = siblings.Where(u => u.StartsWith(data.url));
+
+			//now if we have siblings with the same starting url suffix our url with a numerical value, i.e the total existing sibling pages + 1
+			if (existingUrls.Count() > 0)
+			{
+				data.url += "-" + existingUrls.Count();
+			}
+		}
 	}
 
 }

@@ -68,7 +68,9 @@ namespace mjjames.AdminSystem
 				{
 					Control ourControl = ourTab.FindControl("control" + field.ID);
 
-					if (ourControl == null) continue;
+					//if we cant find a control for that ID or its of type photogallery skip it
+					if (ourControl == null || field.Type.Equals("photogallery", StringComparison.InvariantCultureIgnoreCase)) continue;
+
 					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{

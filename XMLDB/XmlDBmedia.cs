@@ -98,7 +98,8 @@ namespace mjjames.AdminSystem
 				{
 					Control ourControl = ourTab.FindControl("control" + field.ID);
 
-					if (ourControl == null) continue;
+					//if we cant find a control for that ID or its of type photogallery skip it
+					if (ourControl == null || field.Type.Equals("photogallery", StringComparison.InvariantCultureIgnoreCase)) continue;
 
 					//if we are a key value get our data out and stash it for later
 					if (field.Attributes.ContainsKey("keyvalue"))
@@ -214,7 +215,7 @@ namespace mjjames.AdminSystem
 
 		protected override string ApplyDataFilters(string filterName)
 		{
-            var filter = "";
+			var filter = "";
 			switch (filterName.ToLower())
 			{
 				case "podcasts":
@@ -228,7 +229,7 @@ namespace mjjames.AdminSystem
 					filter = "";
 					break;
 			}
-            return filter;
+			return filter;
 		}
 
 		#endregion

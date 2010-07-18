@@ -162,9 +162,26 @@ namespace mjjames.AdminSystem
 					{
 						Logger.LogError("Unable to assign user as siteadmin to new site: " + PKey, new Exception("Unable to find user or role: username: " + HttpContext.Current.User.Identity.Name + " Role: site admin"));
 					}
-					
-					ourPageDataContext.SubmitChanges();
 
+					//now add the system admins to the site
+					var systemAdmins = (from ur in ourPageDataContext.aspnet_UsersInRoles
+									   where ur.aspnet_Role.LoweredRoleName == "system admin"
+									   select new 
+									   {
+										   roleid = ur.RoleId,
+										   userid = ur.UserId,
+									   }).ToArray();
+
+					ourPageDataContext.site_users.InsertAllOnSubmit(systemAdmins.Select(p => new site_user { 
+						active = true,
+						roleid = p.roleid,
+						site_fkey = PKey,
+						userid = p.userid
+					
+					}));
+					ourPageDataContext.SubmitChanges();
+					
+					GenericFunctions.ResetSiteMap(); //inserted a new site so rebuild sitemap caches
 				}
 				if (ourChanges.Updates.Count > 0)
 				{

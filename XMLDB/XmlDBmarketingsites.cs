@@ -7,6 +7,7 @@ using AjaxControlToolkit;
 using mjjames.AdminSystem.DataContexts;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.Repositories;
+using mjjames.AdminSystem.classes;
 
 namespace mjjames.AdminSystem
 {
@@ -62,7 +63,8 @@ namespace mjjames.AdminSystem
 				{
 					var ourControl = ourTab.FindControl("control" + field.ID);
 
-					if (ourControl == null) continue;
+					//if we cant find a control for that ID or its of type photogallery skip it
+					if (ourControl == null || field.Type.Equals("photogallery", StringComparison.InvariantCultureIgnoreCase)) continue;
 
 					//if we are a key value get our data out and stash it for later
 					if (field.Attributes.ContainsKey("keyvalue"))
@@ -140,6 +142,7 @@ namespace mjjames.AdminSystem
 						Logger.LogError("Unknown Field", ex);
 						throw ex;
 					}
+					GenericFunctions.ResetSiteMap(); //inserted a new marketing site so rebuild sitemap caches
 
 				}
 				if (ourChanges.Updates.Count > 0)

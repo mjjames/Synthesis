@@ -639,6 +639,17 @@ namespace mjjames.AdminSystem
 			}
 		}
 
+		/// <summary>
+		/// Generates a URL for the type, check for duplicates and ensure a unique url is generated
+		/// </summary>
+		/// <typeparam name="T">Type of data</typeparam>
+		/// <param name="ourData">Data</param>
+		/// <param name="dataContext">AdminDataContext</param>
+		protected virtual void generateURL<T>(T ourData, AdminDataContext dataContext)
+		{
+			throw new NotImplementedException();
+		}
+
 		#endregion
 
 		internal enum UpdateType

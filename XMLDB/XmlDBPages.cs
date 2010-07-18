@@ -49,7 +49,7 @@ namespace mjjames.AdminSystem
 			page ourPage = (from p in AdminDC.pages
 							where p.page_key == iKey
 							select p).SingleOrDefault();
-							
+
 			var archiveDC = new DataContexts.Archive.archiveDataContext();
 			var archivePage = new DataEntities.Archive.page
 														{
@@ -92,9 +92,9 @@ namespace mjjames.AdminSystem
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			var clearSiteMapCache = false;
-			var idsThatCauseSiteMapCacheClear = new[] { "active", "showinnav", "showinfooter", "showonhome", "showinheader"};
+			var idsThatCauseSiteMapCacheClear = new[] { "active", "showinnav", "showinfooter", "showonhome", "showinheader" };
 			var ourSender = (Button)sender;
-			var ourPageDataContext =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
+			var ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			var ourData = new page();
 			if (PKey > 0)
 			{
@@ -111,9 +111,9 @@ namespace mjjames.AdminSystem
 					if (field.ID.ToLower() == "page_url") continue;
 
 					var ourControl = ourTab.FindControl("control" + field.ID);
+					//if we cant find a control for that ID or its of type photogallery skip it
+					if (ourControl == null || field.Type.Equals("photogallery", StringComparison.InvariantCultureIgnoreCase)) continue;
 
-					if (ourControl == null) continue;
-					
 					//if we are a key value get our data out and stash it for later
 					if (field.Attributes.ContainsKey("keyvalue"))
 					{
@@ -128,17 +128,18 @@ namespace mjjames.AdminSystem
 					}
 
 					var ourProperty = ourData.GetType().GetProperty(field.ID);
-					
+
 					if (ourProperty != null)
 					{
 						//get our new value
 						var newValue = GetDataValue(ourControl, field.Type, ourProperty.PropertyType);
 						//if we haven't already got a clear sitemap cache value and our current id is that of one we must check 
 						//compare the old and new values and assign to clearSiteMap we only want true if the values aren't equal as thats a change
-						if(!clearSiteMapCache && idsThatCauseSiteMapCacheClear.Contains(field.ID)){
+						if (!clearSiteMapCache && idsThatCauseSiteMapCacheClear.Contains(field.ID))
+						{
 							clearSiteMapCache = !newValue.Equals(ourProperty.GetValue(ourData, null));
 						}
-						ourProperty.SetValue(ourData, newValue , null);
+						ourProperty.SetValue(ourData, newValue, null);
 					}
 					else
 					{
@@ -149,14 +150,14 @@ namespace mjjames.AdminSystem
 
 			if (PKey == 0)
 			{
-				var prefix = ConfigurationManager.AppSettings["urlprefixPage"] ?? String.Empty;
-				ourData.page_url= String.Format("{0}{1}", prefix, SQLHelpers.URLSafe(ourData.title));
-				//we always set the sitefkey as we must always have a site
-				//if(MultiTenancyEnabled){
-					ourData.site_fkey = SiteFKey;
-				//}
-				ourPageDataContext.pages.InsertOnSubmit(ourData);
+				//set the parent page
 				ourData.page_fkey = FKey;
+				//we always set the sitefkey as we must always have a site
+				ourData.site_fkey = SiteFKey;
+				//ensure our url is unique
+				generateURL<page>(ourData, ourPageDataContext);
+				ourPageDataContext.pages.InsertOnSubmit(ourData);
+				
 
 
 			}
@@ -190,7 +191,7 @@ namespace mjjames.AdminSystem
 					{
 						ourControlPKey.Value = PKey.ToString();
 						ourPKey.Value = PKey.ToString();
-						
+
 					}
 					catch
 					{
@@ -206,6 +207,8 @@ namespace mjjames.AdminSystem
 				{
 					var keyValueRepository = new KeyValueRepository();
 					Logger.LogInformation("Updating Key Values");
+
+					//TODO: updatekeyvalues should return whether it updated anything so we can still set our status to UpdateType.None if needed
 					keyValueRepository.UpdateKeyValues(keyvalues);
 					if (updateType.Equals(UpdateType.None))
 					{
@@ -234,8 +237,43 @@ namespace mjjames.AdminSystem
 				Logger.LogError("Page Update Failed", ex);
 			}
 			//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
-			if(clearSiteMapCache){
+			if (clearSiteMapCache)
+			{
 				GenericFunctions.ResetSiteMap();
+			}
+		}
+
+		/// <summary>
+		/// Checks to see if we already have data with this url, if it does makes the url unique
+		/// </summary>
+		/// <typeparam name="T">type of data</typeparam>
+		/// <param name="ourData">data</param>
+		/// <param name="dataContext">db context</param>
+		override protected void generateURL<T>(T ourData, AdminDataContext dataContext)
+		{
+			var data = ourData as page;
+			
+			var prefix = ConfigurationManager.AppSettings["urlprefixPage"] ?? String.Empty;
+			data.page_url = String.Format("{0}{1}", prefix, SQLHelpers.URLSafe(data.title));
+
+			//pull out all of our sibling pages and then try to find pages that start with our page-url 
+			var siblings = (from p in dataContext.pages
+								where p.page_fkey == data.page_fkey
+								&& p.site_fkey == data.site_fkey
+								select p.page_url).ToArray();
+			
+			//if we don't have a page that matches our url exactly there's no need to do anything else
+			if(!siblings.Contains(data.page_url)){
+				return;
+			}
+
+			//if we already have a sibling with this name then we need to find all the siblings that have url's that start with our url
+			var existingUrls = siblings.Where(u => u.StartsWith(data.page_url));
+
+			//now if we have siblings with the same starting url suffix our url with a numerical value, i.e the total existing sibling pages
+			if (existingUrls.Count() > 0)
+			{
+				data.page_url += "-" + existingUrls.Count();
 			}
 		}
 

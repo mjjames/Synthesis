@@ -200,7 +200,10 @@ namespace mjjames.AdminSystem
 
 		#endregion
 
-
+		public override void ArchiveData(int iKey)
+		{
+			throw new Exception("Site's can not be deleted as they are referenced by everything, please mark as inactive");
+		}
 	}
 
 }

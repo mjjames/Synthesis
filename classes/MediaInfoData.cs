@@ -11,7 +11,7 @@ using mjjames.AdminSystem.DataEntities;
 /// </summary>
 namespace mjjames.AdminSystem
 {
-	public class PhotoInfoData
+	public class MediaInfoData
 	{
 
 		private readonly AdminDataContext _adminDC =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
@@ -22,24 +22,24 @@ namespace mjjames.AdminSystem
 		private int GetLookupKey(string lookupID)
 		{	
 			int iLookupKey = (from l in _adminDC.lookups
-			 			  where l.lookup_id == lookupID
+						  where l.lookup_id == lookupID
 						  select l.lookup_key).SingleOrDefault();
 			return iLookupKey;
 		}
 
 		/// <summary>
-		/// Returns all the images attached to a link key
+		/// Returns all the media attached to a link key
 		/// </summary>
 		/// <param name="linkkey">Key of Link Item</param>
 		/// <param name="lookupid"></param>
-		/// <returns>List of PhotoInfo</returns>
-		public List<PhotoInfo> GetImages(int linkkey, string lookupid)
+		/// <returns>List of MediaInfo</returns>
+		public List<MediaInfo> GetMedia(int linkkey, string lookupid)
 		{
 			int iLookupKey = GetLookupKey(lookupid);
-			List<PhotoInfo> galleryimages = (from ml in _adminDC.media_links
+			List<MediaInfo> mediaitems = (from ml in _adminDC.media_links
 											 where ml.link_fkey == linkkey
 												 && ml.linktype_lookup == iLookupKey
-											 select new PhotoInfo
+											 select new MediaInfo
 											 {
 												 Key = ml.media_fkey,
 												 Title = ml.media.title,
@@ -47,39 +47,39 @@ namespace mjjames.AdminSystem
 												 FileName = ml.media.filename,
 												 Description = ml.media.description
 											 }).ToList();
-			return galleryimages;
+			return mediaitems;
 		}
 
 
 		/// <summary>
-		/// Saves New Image to Database
+		/// Saves New Item to Database
 		/// </summary>
-		/// <param name="photoInfo">Photo Info to Insert</param>
+		/// <param name="mediaInfo">Media Info to Insert</param>
 		/// <param name="linkKey">Link Key</param>
 		/// <param name="lookupid">LookupID of link type</param>
-        /// <param name="siteKey">Key of the site to add these images too</param>
+		/// <param name="siteKey">Key of the site to add these media items too</param>
 		/// <returns></returns>
-		public int SaveImages(PhotoInfo photoInfo, int linkKey, string lookupid, int siteKey)
+		public int SaveMedia(MediaInfo mediaInfo, int linkKey, string lookupid, int siteKey)
 		{
 			int iLookupKey = GetLookupKey(lookupid);
 		
 			media newimage = new media
-			                 	{
-			                 		active = true,
-			                 		description = photoInfo.Description,
-			                 		title = photoInfo.Title,
-			                 		filename = photoInfo.FileName,
-			                 		mediatype_lookup = iLookupKey,
-                                    site_fkey = siteKey
-			                 	};
+								{
+									active = true,
+									description = mediaInfo.Description,
+									title = mediaInfo.Title,
+									filename = mediaInfo.FileName,
+									mediatype_lookup = iLookupKey,
+									site_fkey = siteKey
+								};
 
 			media_link newimagelink = new media_link
-			                          	{
-			                          		link_fkey = linkKey,
-			                          		linktype_lookup = iLookupKey,
-			                          		media_fkey = newimage.media_key,
-                                            site_fkey = siteKey
-			                          	};
+										{
+											link_fkey = linkKey,
+											linktype_lookup = iLookupKey,
+											media_fkey = newimage.media_key,
+											site_fkey = siteKey
+										};
 
 			if(linkKey > 0)
 			{
@@ -94,23 +94,23 @@ namespace mjjames.AdminSystem
 		}
 
 		/// <summary>
-		/// Updates an existing image with new photo details
+		/// Updates an existing media item with new details
 		/// </summary>
-		/// <param name="photoInfo">Photo Info to Update</param>
+		/// <param name="mediaInfo">Media Info to Update</param>
 		/// <param name="key">key of item to update</param>
-		public void UpdateImages(PhotoInfo photoInfo, int key)
+		public void UpdateMedia(MediaInfo mediaInfo, int key)
 		{
 			media image = (from m in _adminDC.medias
 						   where m.media_key == key
 						   select m).SingleOrDefault();
 
-			if (!String.IsNullOrEmpty(photoInfo.FileName))
+			if (!String.IsNullOrEmpty(mediaInfo.FileName))
 			{
-				image.filename = photoInfo.FileName;
+				image.filename = mediaInfo.FileName;
 			}
 
-			image.description = photoInfo.Description;
-			image.title = photoInfo.Title;
+			image.description = mediaInfo.Description;
+			image.title = mediaInfo.Title;
 
 			_adminDC.SubmitChanges();
 		}
@@ -118,7 +118,7 @@ namespace mjjames.AdminSystem
 		/// <summary>
 		/// Removes an image
 		/// </summary>
-		public void DeleteImage(int key, int linkkey, string lookupid)
+		public void DeleteMedia(int key, int linkkey, string lookupid)
 		{
 			int iLookupKey = GetLookupKey(lookupid);
 		

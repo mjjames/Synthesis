@@ -144,6 +144,12 @@ div.previewbanner {
 	background: #fff;
 }
 
+label.error
+{
+	margin-left: 0.5em;
+	color: Red;
+}
+
 .listingTable {
 	
 }

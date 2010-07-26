@@ -13,10 +13,13 @@ using mjjames.Imaging;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class PhotogalleryControl : IDataControl
+	/// <summary>
+	/// Although very similar to the photogallery control, the media gallery control allows the use of photo's and online videos
+	/// </summary>
+	public class MediaControl : IDataControl
 	{
-		private readonly ILogger _logger = new Logger("PhotogalleryControl");
-	
+		private readonly ILogger _logger = new Logger("MediaControl");
+
 		public int PKey { get; set; }
 		/// <summary>
 		/// Key of site this photogallery is being used in
@@ -33,32 +36,32 @@ namespace mjjames.AdminSystem.dataControls
 		public Control GenerateControl(AdminField field, object ourPage)
 		{
 			UpdatePanel panelGallery = new UpdatePanel
-										{
-											ID = "panelGallery-"+field.ID,
-											UpdateMode = UpdatePanelUpdateMode.Conditional,
-											ChildrenAsTriggers = true
-										};
+			{
+				ID = "panelMediaGallery-" + field.ID,
+				UpdateMode = UpdatePanelUpdateMode.Conditional,
+				ChildrenAsTriggers = true
+			};
 
 
 			_logger.LogInformation("Primary Key: " + PKey + " Total Galery Items:");
-			
-			//Hack: Basically if we try to load and use a photogallery before it's even saved we have no primary key
+
+			//Hack: Basically if we try to load and use a mediagallery before it's even saved we have no primary key
 			//rather than try and save and then save this I'm going to bodge in a "save message" and look at this at a later date
-			if(PKey <= 0)
+			if (PKey <= 0)
 			{
 				panelGallery.ContentTemplateContainer.Controls.Add(
 					new LiteralControl
-						{
-							Text = "<h2 class=\"information\">Please save your changes before adding any images to your gallery</h2>",
-							ID = "control" + field.ID
-						});
+					{
+						Text = "<h2 class=\"information\">Please save your changes before proceeding</h2>",
+						ID = "control" + field.ID
+					});
 				return panelGallery;
 			}
 
-			AdminPhotoGallery gallery = new AdminPhotoGallery { ID = "control" + field.ID };
-			gallery.Attributes.Add("cssclass", "photogalleryContainer");
+			AdminMediaGallery gallery = new AdminMediaGallery { ID = "control" + field.ID };
+			gallery.Attributes.Add("cssclass", "mediagalleryContainer");
 
-			string sLookupID = field.Attributes.ContainsKey("lookupid") ? field.Attributes["lookupid"] : "galleryimage";
+			string sLookupID = field.Attributes.ContainsKey("lookupid") ? field.Attributes["lookupid"] : "mediaimage";
 
 			ObjectDataSource ods = new ObjectDataSource("mjjames.AdminSystem.MediaInfoData", "GetMedia") { ID = "ods" + field.ID };
 			ods.SelectParameters.Add("linkkey", PKey.ToString());
@@ -88,9 +91,9 @@ namespace mjjames.AdminSystem.dataControls
 				int.TryParse(field.Attributes["thumbheight"], out iHeight);
 			}
 
-			if (field.Attributes.ContainsKey("maximages"))
+			if (field.Attributes.ContainsKey("maxitems"))
 			{
-				int.TryParse(field.Attributes["maximages"], out _maxImages);
+				int.TryParse(field.Attributes["maxitems"], out _maxImages);
 			}
 
 			gallery.DataKeyNames = new[] { "key" };
@@ -104,7 +107,7 @@ namespace mjjames.AdminSystem.dataControls
 			gallery.DataSourceID = "ods" + field.ID;
 			gallery.ThumbResizeProperties = new ResizerImage { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
 			gallery.FileUploadPath = ConfigurationManager.AppSettings["uploaddir"];
-			
+
 
 			sAction = field.Attributes.ContainsKey("previewaction") ? field.Attributes["previewaction"] : "resize";
 			iWidth = 90;
@@ -127,7 +130,7 @@ namespace mjjames.AdminSystem.dataControls
 			gallery.PreRender += new EventHandler(GalleryLoad);
 			panelGallery.ContentTemplateContainer.Controls.Add(gallery);
 			panelGallery.ContentTemplateContainer.Controls.Add(ods);
-			
+
 			return panelGallery;
 		}
 
@@ -141,8 +144,9 @@ namespace mjjames.AdminSystem.dataControls
 			var page = (Page)HttpContext.Current.Handler;
 			page.MaintainScrollPositionOnPostBack = true;
 			//during a postback we find that the control has not always been databound - counter this by databinding here if we are a postback`
-			if(page.IsPostBack){
-				 gallery.DataBind();
+			if (page.IsPostBack)
+			{
+				gallery.DataBind();
 			}
 
 			ScriptManager ourSM = ScriptManager.GetCurrent(page);
@@ -205,7 +209,7 @@ namespace mjjames.AdminSystem.dataControls
 			if (title == null || desc == null)
 			{
 				//something's gone wrong so STOP
-				LiteralControl labelStatus = new LiteralControl { Text = "Please ensure you provide a title and description"};
+				LiteralControl labelStatus = new LiteralControl { Text = "Please ensure you provide a title and description" };
 				gallery.Parent.Controls.Add(labelStatus);
 				e.Cancel = true;
 				return;
@@ -215,7 +219,7 @@ namespace mjjames.AdminSystem.dataControls
 			if (fud.error)
 			{
 				//something's gone wrong so STOP
-				LiteralControl labelStatus = new LiteralControl {Text = "Invalid File: " + fud.errormessage};
+				LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };
 				gallery.Parent.Controls.Add(labelStatus);
 				e.Cancel = true;
 				return;
@@ -231,7 +235,7 @@ namespace mjjames.AdminSystem.dataControls
 		void UpdateTotalImages(object sender, EventArgs e)
 		{
 			//0 indicates unlimited
-			if(_maxImages == 0 ) return;
+			if (_maxImages == 0) return;
 			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
 			//if we have more or equal images to our max images hide the insert item
 			if (gallery.Items.Count >= _maxImages)

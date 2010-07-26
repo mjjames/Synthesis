@@ -135,6 +135,7 @@
     <Content Include="fckplugins\InternalUrl\internalurl.js" />
     <Content Include="fckplugins\InternalUrl\lang\en.js" />
     <Content Include="fckplugins\OnlineVideo\lang\en.js" />
+    <Content Include="Global.asax" />
     <Content Include="images\anchor.gif" />
     <Content Include="images\arrow_ltr.gif" />
     <Content Include="images\arrow_rtl.gif" />
@@ -187,7 +188,8 @@
     <Compile Include="classes\ILogger.cs" />
     <Compile Include="classes\Logger.cs" />
     <Compile Include="classes\NavigationSettings.cs" />
-    <Compile Include="classes\PhotoInfoData.cs" />
+    <Compile Include="classes\MediaInfoData.cs" />
+    <Compile Include="DataControls\MediaControl.cs" />
     <Compile Include="DataControls\UrlTextBox.cs" />
     <Compile Include="fckplugins\InternalUrl\InternalUrl.aspx.cs">
       <DependentUpon>InternalUrl.aspx</DependentUpon>
@@ -195,6 +197,9 @@
     </Compile>
     <Compile Include="fckplugins\InternalUrl\InternalUrl.aspx.designer.cs">
       <DependentUpon>InternalUrl.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Repositories\KeyValueRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />

@@ -27,7 +27,14 @@ namespace mjjames.AdminSystem.dataControls
 			{
 				return null;
 			}
-			return ourType.FullName.Contains("Int") ? int.Parse("" + ourTextBox.Text) : Convert.ChangeType(ourTextBox.Text, ourType);
+			
+			if(ourType.FullName.Contains("Int")){
+				return int.Parse("" + ourTextBox.Text);
+			}
+			if(ourType.FullName.Contains("Char")){
+				return ourTextBox.Text.ToCharArray()[0];
+			}
+			return Convert.ChangeType(ourTextBox.Text, ourType);
 		}
 
 		/// <summary>
@@ -48,7 +55,8 @@ namespace mjjames.AdminSystem.dataControls
 				var iMaxLength = int.Parse(field.Attributes["maxlength"]);
 				if (iMaxLength > 0)
 				{
-					validationScript.AppendFormat(".maxlength({0})",iMaxLength);
+					//validationScript.AppendFormat(".maxlength({0})",iMaxLength);
+					validationRules.Add(String.Format("maxlength:{0}", iMaxLength));
 					ourControl.MaxLength = iMaxLength;
 					ourControl.Columns = iMaxLength;
 				}

@@ -149,7 +149,7 @@ namespace mjjames.AdminSystem.dataControls
             TextBox desc = helpers.FindControlRecursive(gallery.EditItem, "txtDescription") as TextBox;
             //TextBox alttag = helpers.FindControlRecursive(gallery.EditItem, "txtAltTag") as TextBox;
             if (title == null || desc == null) return;
-            PhotoInfo pi = new PhotoInfo { Title = title.Text, Description = desc.Text };
+            MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text };
             //pi.AltTag = alttag.Text;
 
             if (fu != null && fu.HasFile)
@@ -184,7 +184,7 @@ namespace mjjames.AdminSystem.dataControls
                 }
                 if (title != null && desc != null)
                 {
-                    PhotoInfo pi = new PhotoInfo { Title = title.Text, Description = desc.Text, FileName = fud.filepath };
+                    MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text, FileName = fud.filepath };
                     //pi.AltTag = alttag.Text;
                     e.Values.Add("PhotoInfo", pi);
                 }

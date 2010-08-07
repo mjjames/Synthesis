@@ -5563,6 +5563,8 @@ namespace mjjames.AdminSystem.DataEntities
 		
 		private System.Nullable<int> _site_fkey;
 		
+		private string _pagetitle;
+		
 		private EntityRef<site> _site;
 		
     #region Extensibility Method Definitions
@@ -5613,6 +5615,8 @@ namespace mjjames.AdminSystem.DataEntities
     partial void OnpasswordChanged();
     partial void Onsite_fkeyChanging(System.Nullable<int> value);
     partial void Onsite_fkeyChanged();
+    partial void OnpagetitleChanging(string value);
+    partial void OnpagetitleChanged();
     #endregion
 		
 		public page()
@@ -6061,6 +6065,26 @@ namespace mjjames.AdminSystem.DataEntities
 					this._site_fkey = value;
 					this.SendPropertyChanged("site_fkey");
 					this.Onsite_fkeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pagetitle", DbType="nvarchar(max)")]
+		public string pagetitle
+		{
+			get
+			{
+				return this._pagetitle;
+			}
+			set
+			{
+				if ((this._pagetitle != value))
+				{
+					this.OnpagetitleChanging(value);
+					this.SendPropertyChanging();
+					this._pagetitle = value;
+					this.SendPropertyChanged("pagetitle");
+					this.OnpagetitleChanged();
 				}
 			}
 		}

@@ -375,3 +375,10 @@ ALTER TABLE [dbo].[keyvalues] CHECK CONSTRAINT [FK_keyvalues_lookup1]
 GO
 
 
+-- AFTER CREATING A SITE PUT ALL THE USERS INTO THE SITE_USERS TABLE
+/*
+insert into [site_users]
+([site_fkey], [userid], [roleid], [active])
+select 1, userid, roleid, 1 from aspnet_UsersInRoles
+
+*/

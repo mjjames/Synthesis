@@ -44,10 +44,10 @@
         <elementListCompartment Id="49536e8b-bfb8-45ce-857b-1835640da074" absoluteBounds="1.0150000000000001, 9.21, 1.9700000000000002, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="9d5868e5-9a7f-4577-8f16-47d6bbf1e59b" absoluteBounds="10, 0.75, 2, 5.2323225911458326">
+    <classShape Id="9d5868e5-9a7f-4577-8f16-47d6bbf1e59b" absoluteBounds="10, 0.75, 2, 5.4246240234375">
       <DataClassMoniker Name="/archiveDataContext/page" />
       <nestedChildShapes>
-        <elementListCompartment Id="550e76b9-5456-4327-b7f8-854ce0d8bf22" absoluteBounds="10.015, 1.21, 1.9700000000000002, 4.672322591145833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="550e76b9-5456-4327-b7f8-854ce0d8bf22" absoluteBounds="10.015, 1.21, 1.9700000000000002, 4.8646240234375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
     <classShape Id="2e052088-b0e9-44b1-ab0a-053612cfbe92" absoluteBounds="10, 6.75, 2, 3.1170068359375014">

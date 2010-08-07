@@ -127,7 +127,7 @@ namespace mjjames.AdminSystem.dataControls
 			////pull in our storage service js
 			if (!csm.IsClientScriptIncludeRegistered("storageservice"))
 			{
-				csm.RegisterClientScriptInclude("storageservice", "javascript/storageservices.js");
+				csm.RegisterClientScriptInclude("storageservice", page.ResolveClientUrl("~/javascript/storageservices.js"));
 			}
 
 			//setup our vars

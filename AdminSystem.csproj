@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Admin Only|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -126,6 +129,7 @@
     <Content Include="admininc_defaults\newsletterbuilder.xml" />
     <Content Include="admininc_defaults\styles.xml" />
     <Content Include="authentication\default.aspx" />
+    <Content Include="dbchanges\dbchanges.sql" />
     <Content Include="dbchanges\GenerateDBJune2009.sql" />
     <Content Include="dbchanges\Upgrade 1.2 to 1.6 Admin Tool.sql" />
     <Content Include="dbchanges\Upgrade 1.5 to 1.6 Admin Tool.sql" />
@@ -163,7 +167,9 @@
     <Content Include="images\smiley\msn\whatchutalkingabout_smile.gif" />
     <Content Include="images\smiley\msn\wink_smile.gif" />
     <Content Include="images\spacer.gif" />
+    <Content Include="javascript\mediagallery.js" />
     <Content Include="javascript\storageservices.js" />
+    <Content Include="tests\MediaGallery.aspx" />
     <Content Include="usercontrols\SiteSelector.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -345,6 +351,13 @@
     </Compile>
     <Compile Include="authentication\ResetPassword.aspx.designer.cs">
       <DependentUpon>ResetPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="tests\MediaGallery.aspx.cs">
+      <DependentUpon>MediaGallery.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="tests\MediaGallery.aspx.designer.cs">
+      <DependentUpon>MediaGallery.aspx</DependentUpon>
     </Compile>
     <Compile Include="usercontrols\SiteSelector.ascx.cs">
       <DependentUpon>SiteSelector.ascx</DependentUpon>

@@ -185,7 +185,7 @@ namespace mjjames.AdminSystem.dataControls
 			//if we aren't cancelling add the image
 			if (!e.Cancel)
 			{
-				e.NewValues.Add("PhotoInfo", pi);
+				e.NewValues.Add("MediaInfo", pi);
 			}
 		}
 
@@ -224,7 +224,7 @@ namespace mjjames.AdminSystem.dataControls
 			//all is well if we get here so do your stuff
 			MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text, FileName = fud.filepath };
 			//pi.AltTag = alttag.Text;
-			e.Values.Add("PhotoInfo", pi);
+			e.Values.Add("MediaInfo", pi);
 			e.Values.Add("LinkKey", PKey);
 		}
 

@@ -73,6 +73,9 @@ namespace mjjames.AdminSystem.dataControls
 				HttpContext.Current.Trace.Write("Rendering Control Value: " + ourDateText.Text);
 			}
 
+			//default date is today
+			ourValue = DateTime.Today;
+			//if we have a default value attribute try to use it
 			if (field.Attributes.Keys.Contains("defaultvalue"))
 			{
 				if (!DateTime.TryParse(field.Attributes["defaultvalue"], out ourValue)) //try to parse default value, else revert to today
@@ -89,7 +92,8 @@ namespace mjjames.AdminSystem.dataControls
 														ID = "calendar" + field.ID,
 														PopupPosition = CalendarPosition.TopRight,
 														TargetControlID = "control" + field.ID,
-														Format = "dd/MM/yyyy"
+														Format = "dd/MM/yyyy",
+														SelectedDate = ourValue
 													};
 
 			container.Controls.Add(ourDateText);

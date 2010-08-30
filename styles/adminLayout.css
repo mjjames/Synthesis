@@ -1,19 +1,19 @@
 ﻿.clear
 {
-    clear: both;
+	clear: both;
 }
 
 hr.clear
 {
-    border: none;
-    height: 1px;
-    margin: 0;
-    padding: 0;
+	border: none;
+	height: 1px;
+	margin: 0;
+	padding: 0;
 }
 
 body * .hidden
 {
-    display: none;
+	display: none;
 }
 
 body
@@ -22,133 +22,133 @@ body
 
 #wrapper
 {
-    position: relative;
-    width: 90%;
-    margin: auto;
+	position: relative;
+	width: 90%;
+	margin: auto;
 }
 
 #header
 {
-    position: relative;
-    padding: 0 0em;
-    width: 100%;
+	position: relative;
+	padding: 0 0em;
+	width: 100%;
 }
 #headerimage
 {
-    float: left;
-    width: 40%;
+	float: left;
+	width: 40%;
 }
 
 #banner
 {
-    padding-left: 41%;
-    width: 38%;
-    min-height: 90px;
+	padding-left: 41%;
+	width: 38%;
+	min-height: 90px;
 }
 
 #navbar
 {
-    clear: both;
-    position: relative;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+	clear: both;
+	position: relative;
+	width: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 #navbar ul
 {
-    margin: 0;
-    padding: 0;
-    line-height: 2em;
+	margin: 0;
+	padding: 0;
+	line-height: 2em;
 }
 
 #navbar ul li
 {
-    position: relative;
-    display: inline;
-    margin: 0;
-    padding: 0.4em 10px;
-    list-style: none;
+	position: relative;
+	display: inline;
+	margin: 0;
+	padding: 0.4em 10px;
+	list-style: none;
 }
 
 #navbar ul li a
 {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 
 #body
 {
-    position: relative;
-    width: auto;
-    min-height: 400px;
+	position: relative;
+	width: auto;
+	min-height: 400px;
 }
 
 #footer
 {
-    clear: both;
-    position: relative;
-    width: 100%;
+	clear: both;
+	position: relative;
+	width: 100%;
 }
 
 
 #copyrightinfo
 {
-    position: relative;
-    float: right;
-    width: 45%;
-    text-align: right;
-    margin: 0.25em;
+	position: relative;
+	float: right;
+	width: 45%;
+	text-align: right;
+	margin: 0.25em;
 }
 
 
 h1.listingTitle, h2
 {
-    margin: 0pt;
-    padding: 0.25em;
+	margin: 0pt;
+	padding: 0.25em;
 }
 
 .signout
 {
-    display: block;
-    height: 2em;
-    line-height: 2em;
-    position: absolute;
-    right: 0pt;
-    text-align: right;
-    top: 0pt;
-    width: 5em;
-    z-index: 100;
+	display: block;
+	height: 2em;
+	line-height: 2em;
+	position: absolute;
+	right: 0pt;
+	text-align: right;
+	top: 0pt;
+	width: 5em;
+	z-index: 100;
 }
 
 .siteSelector
 {
-    display: block;
-    position: absolute;
-    top: 20px;
-    right: 0;
-    z-index: 100;
+	display: block;
+	position: absolute;
+	top: 20px;
+	right: 0;
+	z-index: 100;
 }
 
 /* pageListing */
 
 .addPage, .subPages
 {
-    display: block;
-    margin: 0em 0pt 0 50%;
-    padding: 0 0 0;
-    position: relative;
-    width: 50%;
+	display: block;
+	margin: 0em 0pt 0 50%;
+	padding: 0 0 0;
+	position: relative;
+	width: 50%;
 }
 
 .backUp, .pageBanner, .backListing
 {
-    position: relative;
-    width: 50%;
-    float: left;
-    padding: 0;
-    display: block;
+	position: relative;
+	width: 50%;
+	float: left;
+	padding: 0;
+	display: block;
 }
 
 
@@ -169,169 +169,169 @@ h1.listingTitle, h2
 
 #adminContent
 {
-    padding: 0 0.5em;
+	padding: 0 0.5em;
 }
 /**** edit / add page ****/
 #pageEditor
 {
-    clear: both;
+	clear: both;
 }
 
 .ajax__tab_body
 {
-    min-height: 550px;
+	min-height: 550px;
 }
 
 .row
 {
-    clear: both;
-    position: relative;
-    display: block;
+	clear: both;
+	position: relative;
+	display: block;
 }
 
 .label, .labelwide
 {
-    position: relative;
-    width: 12em;
-    display: block;
-    float: left;
+	position: relative;
+	width: 12em;
+	display: block;
+	float: left;
 }
 
 .labelwide
 {
-    width: 16em;
+	width: 16em;
 }
 
 
 input.textbox
 {
-    width: 300px;
+	width: 300px;
 }
 
 div.banners
 {
-    margin-top: 0.5em;
+	margin-top: 0.5em;
 }
 
 div .previewbanner
 {
-    width: 600px;
-    margin: 1em auto;
+	width: 600px;
+	margin: 1em auto;
 }
 
 span.thumbnail
 {
-    margin: 0.25em 0;
-    padding: 0.25em;
+	margin: 0.25em 0;
+	padding: 0.25em;
 }
 
 .previewThumbnailIMG
 {
-    width: 124px;
+	width: 124px;
 }
 
 h4.title
 {
-    padding: 0;
-    margin: 0;
-    display: block;
-    position: relative;
-    clear: both;
-    width: 100%;
+	padding: 0;
+	margin: 0;
+	display: block;
+	position: relative;
+	clear: both;
+	width: 100%;
 }
 
 .listingTable
 {
-    position: relative;
-    width: 90%;
-    margin: 0.5em 0;
-    overflow: visible;
+	position: relative;
+	width: 90%;
+	margin: 0.5em 0;
+	overflow: visible;
 }
 
 .listingTable td, .listingTable th
 {
-    padding: 0.25em;
+	padding: 0.25em;
 }
 
 
 .addBanner
 {
-    float: right;
-    position: relative;
-    width: 50%;
+	float: right;
+	position: relative;
+	width: 50%;
 }
 
 #colContainer
 {
-    position: relative;
-    clear: both;
-    width: 100%;
-    margin-top: 1em;
-    z-index: 0;
+	position: relative;
+	clear: both;
+	width: 100%;
+	margin-top: 1em;
+	z-index: 0;
 }
 
 #leftCol, .leftCol
 {
-    width: 20%;
-    float: left;
-    position: relative;
+	width: 20%;
+	float: left;
+	position: relative;
 }
 
 #rightCol
 {
-    width: 78%;
-    float: right;
-    position: relative;
+	width: 78%;
+	float: right;
+	position: relative;
 }
 
 #rightCol h2
 {
-    display: inline-block;
+	display: inline-block;
 }
 
 .previewImg
 {
-    clear: both;
-    display: block;
+	clear: both;
+	display: block;
 }
 
 
 /* login */
 #loginWrapper
 {
-    width: 25em;
-    position: relative;
-    margin: 0 auto;
-    padding: 0.5em;
+	width: 25em;
+	position: relative;
+	margin: 0 auto;
+	padding: 0.5em;
 }
 #loginForm
 {
-    width: 100%;
-    position: relative;
-    z-index: 2;
+	width: 100%;
+	position: relative;
+	z-index: 2;
 }
 
 #centerBG
 {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
 }
 
 
 * html #centerBG
 {
-    height: 10em !important;
+	height: 10em !important;
 }
 
 .submit
 {
-    width: auto;
-    margin-left: 17.5em;
+	width: auto;
+	margin-left: 17.5em;
 }
 
 div.row div.fileuploadWrapper
@@ -353,141 +353,150 @@ div.row div.fileuploadWrapper div.Flajaxian_FileBox
 
 div.row div
 {
-    clear: both;
+	clear: both;
 }
 
 
-.photogallery
+.photogallery, .mediagallery
 {
-    clear: both;
-    margin: 0;
-    padding: 0.5em 0;
+	clear: both;
+	margin: 0;
+	padding: 0.5em 0;
 }
 
-.photogallery .photo
+.photogallery .photo, .mediagallery .mediaItem
 {
-    width: 160px;
-    float: left;
-    margin-right: 1%;
-    padding: 0.5em;
+	width: 160px;
+	float: left;
+	margin-right: 1%;
+	padding: 0.5em;
 }
 
-.photo p.title, .photo p.description
+.photo p.title, .photo p.description, .mediaItem p.title, .mediaItem p.description
 {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
-.photo img
+.photo img, .mediaItem img, .mediaItem object
 {
-    margin: 0.5em auto;
-    padding: 0;
-    display: block;
+	margin: 0.5em auto;
+	padding: 0;
+	display: block;
 }
 
-.photogallery .insertphoto
+.photogallery .insertphoto, .mediagallery .insertMediaItem
 {
-    clear: both;
-    margin-top: 0.5em;
-    padding: 0.5em;
+	clear: both;
+
+	margin-top: 0.5em;
+	padding: 0.5em;
 }
 
-.photogallery .insertphoto label
+.photogallery .insertphoto label, .mediagallery .insertMediaItem label
 {
-    clear: both;
+	clear: both;
 }
 
 span.buttons
 {
-    display: block;
-    margin-top: 0.5em;
+	display: block;
+	margin-top: 0.5em;
 }
 
 span.buttons .submit
 {
-    margin: 0;
+	margin: 0;
 }
 
-ul.photogallery li.editphoto
+ul.photogallery li.editphoto, ul.mediagallery li.editmedia
 {
-    width: 320px; /* double normal width */
+	width: 320px; /* double normal width */
 }
 
-.editphoto label
+.editphoto label, .editmedia label
 {
-    float: none;
+	float: none;
 }
 
-.editphoto
+.editphoto, .editmedia
 {
-    position: relative;
+	position: relative;
 }
 
-.insertphoto
+.insertphoto, .insertMediaItem
 {
-    width: 230px;
+	width: 230px;
 }
 
-.insertphoto input, .insertphoto textarea
+.insertphoto input, .insertphoto textarea, .insertMediaItem input, .insertMediaItem textarea
 {
-    width: 220px;
+	width: 220px;
 }
 
-.editphoto input, .editphoto textarea
+.editphoto input, .editphoto textarea, .editmedia input, .editmedia textarea
 {
-    width: 155px;
+	width: 155px;
 }
 
 .previewWrapper
 {
-    position: absolute;
-    width: 155px;
-    top: 0.5em;
-    right: 0;
+	position: absolute;
+	width: 155px;
+	top: 0.5em;
+	right: 0;
 }
 
-.editphoto span.buttons input, .insertphoto span.buttons input
+.editphoto span.buttons input, .insertphoto span.buttons input, .insertMediaItem span.buttons input, .editmedia span.buttons input
 {
-    width: auto;
+	width: auto;
 }
 
+.mediagallery .accordian .headerText{
+	padding: 5px;
+}
 
 /* calendar */
 div.ajax__calendar div
 {
-    clear: none;
+	clear: none;
 }
 
 /* recycle bin */
 
 #leftCol p.description
 {
-    padding: 0.5em 0.25em;
+	padding: 0.5em 0.25em;
 }
 
 /* copy to clipboard */
 
 div.row div.URLClipboardWrapper
 {
-    clear: none;
-    float: left;
-    height: 16px;
-    left: 330px;
-    margin-left: -16px;
-    position: relative;
-    top: 2px;
-    width: 16px;
+	clear: none;
+	float: left;
+	height: 16px;
+	left: 330px;
+	margin-left: -16px;
+	position: relative;
+	top: 2px;
+	width: 16px;
 }
 
 div.row div.URLClipboardWrapper img
 {
-    display: block;
+	display: block;
 }
 
 div.row div.URLClipboardWrapper embed
 {
-    display: block;
-    padding: 0;
-    margin: 0;
-    border: none;
+	display: block;
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+img.previewImage{
+	clear: both;
+	display: block;
 }

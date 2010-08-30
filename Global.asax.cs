@@ -50,5 +50,15 @@ namespace mjjames.AdminSystem
 		{
 
 		}
+
+		public override void Init()
+		{
+			base.Init();
+			this.BeginRequest += new EventHandler(OnBeginRequest);
+		}
+		void OnBeginRequest(object sender, EventArgs e)
+		{
+			com.flajaxian.FileUploader.RegisterAspCookies();
+		}
 	}
 }

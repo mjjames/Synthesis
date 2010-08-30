@@ -39,9 +39,12 @@
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+    <Reference Include="AjaxControlToolkit, Version=3.5.40412.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Resources\AjaxControlToolkit\AjaxControlToolkit.dll</HintPath>
+      <HintPath>..\..\..\..\Resources\AjaxControlToolkit\April2010\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="com.flajaxian.FileUploader">
+      <HintPath>..\..\..\..\Resources\Flajaxian\com.flajaxian.FileUploader.dll</HintPath>
     </Reference>
     <Reference Include="Dimebrain.TweetSharp, Version=1.0.14.37163, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -197,6 +200,9 @@
     <Compile Include="classes\MediaInfoData.cs" />
     <Compile Include="DataControls\MediaControl.cs" />
     <Compile Include="DataControls\UrlTextBox.cs" />
+    <Compile Include="dbeditor.aspx.designer.cs">
+      <DependentUpon>dbeditor.aspx</DependentUpon>
+    </Compile>
     <Compile Include="fckplugins\InternalUrl\InternalUrl.aspx.cs">
       <DependentUpon>InternalUrl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -271,9 +277,6 @@
     <Compile Include="dbeditor.aspx.cs">
       <DependentUpon>dbeditor.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="dbeditor.aspx.designer.cs">
-      <DependentUpon>dbeditor.aspx</DependentUpon>
     </Compile>
     <Compile Include="dblisting.aspx.cs">
       <DependentUpon>dblisting.aspx</DependentUpon>
@@ -420,13 +423,13 @@
     <Content Include="subscriptionmanagement.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Resources\FlajaxianFileUpload\com.flajaxian.FileUploader.csproj">
-      <Project>{5F5502C7-7492-4AF4-84E9-CCFF180AD743}</Project>
-      <Name>com.flajaxian.FileUploader</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Resources\FlajaxiansS3Direct\com.flajaxian.DirectAmazonUploader.csproj">
       <Project>{19803906-A886-42DF-8F5F-C1E5ACF47E50}</Project>
       <Name>com.flajaxian.DirectAmazonUploader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\classes\ControlLibrary\mjjames.ControlLibrary.csproj">
+      <Project>{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}</Project>
+      <Name>mjjames.ControlLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
       <Project>{B8488B6E-F1E4-4C64-A39D-5C853169DCE5}</Project>
@@ -438,6 +441,7 @@
     <Content Include="admininc_defaults\connectionsettings.config" />
     <Content Include="admininc_defaults\mjjames.config" />
     <Content Include="admininc_defaults\adminDB.config" />
+    <Content Include="adminimages\Web.config" />
     <None Include="dataContexts\adminDataContexts.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>adminDataContexts.designer.cs</LastGenOutput>
@@ -453,6 +457,8 @@
     <Content Include="SystemSettings.aspx" />
     <Content Include="authentication\ResetPassword.aspx" />
     <Content Include="javascript\jquery-1.3.2-vsdoc.js" />
+    <Content Include="tests\Web.config" />
+    <Content Include="javascript\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -489,10 +495,6 @@
     <Folder Include="fckplugins\OnlineVideo\lang\.svn\tmp\text-base\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\classes\ControlLibrary\mjjames.ControlLibrary.csproj">
-      <Project>{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}</Project>
-      <Name>mjjames.ControlLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
       <Project>{B8488B6E-F1E4-4C64-A39D-5C853169DCE5}</Project>
       <Name>mjjames.core</Name>

@@ -26,7 +26,7 @@ namespace mjjames.AdminSystem.dataControls
 		/// </summary>
 		public int SiteKey { get; set; }
 
-		private int _maxImages = 0;
+		private int _maxMedia = 0;
 
 		public static object GetDataValue(Control ourControl, Type ourType)
 		{
@@ -38,9 +38,10 @@ namespace mjjames.AdminSystem.dataControls
 			UpdatePanel panelGallery = new UpdatePanel
 			{
 				ID = "panelMediaGallery-" + field.ID,
-				UpdateMode = UpdatePanelUpdateMode.Conditional,
-				ChildrenAsTriggers = true
+				UpdateMode = UpdatePanelUpdateMode.Always
 			};
+
+
 
 
 			_logger.LogInformation("Primary Key: " + PKey + " Total Galery Items:");
@@ -58,10 +59,10 @@ namespace mjjames.AdminSystem.dataControls
 				return panelGallery;
 			}
 
-			AdminMediaGallery gallery = new AdminMediaGallery { ID = "control" + field.ID };
+			var gallery = new AdminMediaGallery { ID = "control" + field.ID };
 			gallery.Attributes.Add("cssclass", "mediagalleryContainer");
 
-			string sLookupID = field.Attributes.ContainsKey("lookupid") ? field.Attributes["lookupid"] : "mediaimage";
+			string sLookupID = field.Attributes.ContainsKey("lookupid") ? field.Attributes["lookupid"] : "media_item";
 
 			ObjectDataSource ods = new ObjectDataSource("mjjames.AdminSystem.MediaInfoData", "GetMedia") { ID = "ods" + field.ID };
 			ods.SelectParameters.Add("linkkey", PKey.ToString());
@@ -93,16 +94,16 @@ namespace mjjames.AdminSystem.dataControls
 
 			if (field.Attributes.ContainsKey("maxitems"))
 			{
-				int.TryParse(field.Attributes["maxitems"], out _maxImages);
+				int.TryParse(field.Attributes["maxitems"], out _maxMedia);
 			}
 
 			gallery.DataKeyNames = new[] { "key" };
 			gallery.InsertItemPosition = InsertItemPosition.LastItem;
 			gallery.ItemInserting += GalleryItemInserting;
 			gallery.ItemUpdating += GalleryItemUpdating;
-			gallery.ItemDeleted += UpdateTotalImages;
-			gallery.ItemInserted += UpdateTotalImages;
-			gallery.DataBound += UpdateTotalImages;
+			gallery.ItemDeleted += UpdateTotalMedia;
+			gallery.ItemInserted += UpdateTotalMedia;
+			gallery.DataBound += UpdateTotalMedia;
 
 			gallery.DataSourceID = "ods" + field.ID;
 			gallery.ThumbResizeProperties = new ResizerImage { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
@@ -130,16 +131,20 @@ namespace mjjames.AdminSystem.dataControls
 			gallery.PreRender += new EventHandler(GalleryLoad);
 			panelGallery.ContentTemplateContainer.Controls.Add(gallery);
 			panelGallery.ContentTemplateContainer.Controls.Add(ods);
-
 			return panelGallery;
+
+			//var placeholder = new PlaceHolder();
+			//placeholder.Controls.Add(gallery);
+			//placeholder.Controls.Add(ods);
+			//return placeholder;
 		}
 
-		//registers the insert button as a full postback control
-		//this is because at present we don't have an async file uploader
-		//once we do we can look at making the entire photogallery propery async
+		////registers the insert button as a full postback control
+		////this is because at present we don't have an async file uploader
+		////once we do we can look at making the entire photogallery propery async
 		static void GalleryLoad(object sender, EventArgs e)
 		{
-			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
+			var gallery = sender as AdminMediaGallery;
 
 			var page = (Page)HttpContext.Current.Handler;
 			page.MaintainScrollPositionOnPostBack = true;
@@ -159,43 +164,53 @@ namespace mjjames.AdminSystem.dataControls
 
 		static void GalleryItemUpdating(object sender, ListViewUpdateEventArgs e)
 		{
-			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
+			var gallery = sender as AdminMediaGallery;
 			if (gallery == null) return;
+			
 			FileUpload fu = helpers.FindControlRecursive(gallery.EditItem, "fileupload") as FileUpload;
 			TextBox title = helpers.FindControlRecursive(gallery.EditItem, "txtTitle") as TextBox;
 			TextBox desc = helpers.FindControlRecursive(gallery.EditItem, "txtDescription") as TextBox;
-			//TextBox alttag = helpers.FindControlRecursive(gallery.EditItem, "txtAltTag") as TextBox;
-			if (title == null || desc == null) return;
-			MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text };
-			//pi.AltTag = alttag.Text;
+			HiddenField file = helpers.FindControlRecursive(gallery.EditItem, "hiddenFilePath") as HiddenField;
+			TextBox videoURL = helpers.FindControlRecursive(gallery.EditItem, "videoURL") as TextBox;
 
-			//if we don't have a file something is wrong so cancel
-			if (fu == null)
+			var filePath = file.Value;
+
+			//if we have a null field something is wrong
+			if (title == null || desc == null || file == null)
 			{
 				e.Cancel = true;
+				return;
 			}
-
+			
 			if (fu.HasFile)
 			{
 				FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
 				if (fud.error)
 				{
+					//something's gone wrong so STOP
 					LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };
 					gallery.Parent.Controls.Add(labelStatus);
 					e.Cancel = true;
+					return;
+					//throw new Exception("File Upload Error: " + fud.errormessage);
 				}
-				pi.FileName = fud.filepath;
+				filePath = fud.filepath;
 			}
+			else if(!String.IsNullOrEmpty(videoURL.Text))
+			{
+				filePath = helpers.MakeFriendlyVideoURL(videoURL.Text);
+			}
+			MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text, FileName = filePath };
 			//if we aren't cancelling add the image
 			if (!e.Cancel)
 			{
-				e.NewValues.Add("PhotoInfo", pi);
+				e.NewValues.Add("MediaInfo", pi);
 			}
 		}
 
 		void GalleryItemInserting(object sender, ListViewInsertEventArgs e)
 		{
-			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
+			var gallery = sender as AdminMediaGallery;
 			if (gallery == null)
 			{
 				e.Cancel = true;
@@ -205,6 +220,9 @@ namespace mjjames.AdminSystem.dataControls
 			FileUpload fu = helpers.FindControlRecursive(gallery.InsertItem, "fileupload") as FileUpload;
 			TextBox title = helpers.FindControlRecursive(gallery.InsertItem, "txtTitle") as TextBox;
 			TextBox desc = helpers.FindControlRecursive(gallery.InsertItem, "txtDescription") as TextBox;
+			TextBox videoURL = helpers.FindControlRecursive(gallery.InsertItem, "videoURL") as TextBox;
+
+			var filePath = "";
 
 			if (title == null || desc == null)
 			{
@@ -214,31 +232,38 @@ namespace mjjames.AdminSystem.dataControls
 				e.Cancel = true;
 				return;
 			}
-
-			FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
-			if (fud.error)
+			if (fu.HasFile)
 			{
-				//something's gone wrong so STOP
-				LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };
-				gallery.Parent.Controls.Add(labelStatus);
-				e.Cancel = true;
-				return;
-				//throw new Exception("File Upload Error: " + fud.errormessage);
+				FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
+				if (fud.error)
+				{
+					//something's gone wrong so STOP
+					LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };
+					gallery.Parent.Controls.Add(labelStatus);
+					e.Cancel = true;
+					return;
+					//throw new Exception("File Upload Error: " + fud.errormessage);
+				}
+				filePath = fud.filepath;
+			}
+			else
+			{
+				filePath = helpers.MakeFriendlyVideoURL(videoURL.Text);
 			}
 			//all is well if we get here so do your stuff
-			MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text, FileName = fud.filepath };
+			MediaInfo mi = new MediaInfo { Title = title.Text, Description = desc.Text, FileName = filePath };
 			//pi.AltTag = alttag.Text;
-			e.Values.Add("PhotoInfo", pi);
+			e.Values.Add("MediaInfo", mi);
 			e.Values.Add("LinkKey", PKey);
 		}
 
-		void UpdateTotalImages(object sender, EventArgs e)
+		void UpdateTotalMedia(object sender, EventArgs e)
 		{
 			//0 indicates unlimited
-			if (_maxImages == 0) return;
-			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
+			if (_maxMedia == 0) return;
+			var gallery = sender as AdminMediaGallery;
 			//if we have more or equal images to our max images hide the insert item
-			if (gallery.Items.Count >= _maxImages)
+			if (gallery.Items.Count >= _maxMedia)
 			{
 				gallery.InsertItemPosition = InsertItemPosition.None;
 			}

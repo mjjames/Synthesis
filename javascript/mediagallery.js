@@ -2,10 +2,17 @@
 
 var mjjames = mjjames || {};
 mjjames.MediaGallery = function () {
-	var _fileInputSelector;
+	var _accordianSelector;
+	var _uploadPath = "";
+	var SetupVideoPreview = function () {
+
+	};
+
 	return {
-		Init: function (fileInputSelector) {
-			_fileInputSelector = fileInputSelector;
+		Init: function (accordianSelector, uploadPath) {
+			_accordianSelector = accordianSelector;
+			_uploadPath = uploadPath; 
+			SetupVideoPreview();
 		}
-	}
+	};
 } ();

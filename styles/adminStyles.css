@@ -217,13 +217,12 @@ label.error
 
 
 
-.photogallery 
+.photogallery , .mediagallery
 {
 	list-style: none;
-	
 }
 
-.photo
+.photo, .mediaItem, .insertMediaItem
 {
 	list-style: none;
 	border: 1px solid #BED2EE;	
@@ -231,7 +230,7 @@ label.error
 	font-size: 0.85em;
 }
 
-.photo img
+.photo img, .mediaItem img, .editmedia img, .mediaItem object, .editmedia object
 {
 	border: 1px solid #BED2EE;
 }
@@ -246,9 +245,28 @@ span.buttons input
 	vertical-align: middle;
 }
 
-.editphoto
+.editphoto, .editmedia
 {
 	text-align: left;
+}
+
+.mediagallery .accordian .headerText{
+	background: #BED2EE;
+	color: #000;
+	text-align: left;
+}
+
+.mediagallery .accordian .headerText:hover{
+	text-decoration: underline;
+}
+
+.mediagallery .accordian .accordianHeaderSelected .headerText{
+	background: #8799FF;
+	color: #fff;
+}
+
+.photogallery .insertphoto label, .mediagallery .insertMediaItem label {
+	text-align:left;
 }
 
 /** calendar **/

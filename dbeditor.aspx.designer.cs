@@ -19,7 +19,7 @@ namespace mjjames.AdminSystem {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.ScriptManager scriptmanagerAdmin;
+        protected global::AjaxControlToolkit.ToolkitScriptManager scriptmanagerAdmin;
         
         /// <summary>
         /// navigationSiteMap control.

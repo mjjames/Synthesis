@@ -49,7 +49,8 @@ namespace mjjames.AdminSystem.dataControls
 			TextBox ourDateText = new TextBox { ID = "control" + field.ID };
 
 			PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID);
-			DateTime ourValue = new DateTime();
+			//default date is today
+			DateTime ourValue = DateTime.Today;
 
 			if (PKey > 0 && field.Attributes.ContainsKey("keyvalue"))
 			{
@@ -68,24 +69,27 @@ namespace mjjames.AdminSystem.dataControls
 					
 				}
 			}
-			if(ourValue != null){
+			//if we have a value use it
+			if (ourValue != null)
+			{
 				ourDateText.Text = String.Format("{0:dd/MM/yyyy}", ourValue);
 				HttpContext.Current.Trace.Write("Rendering Control Value: " + ourDateText.Text);
 			}
-
-			//default date is today
-			ourValue = DateTime.Today;
-			//if we have a default value attribute try to use it
-			if (field.Attributes.Keys.Contains("defaultvalue"))
+			//otherwise try and set a default value
+			else
 			{
-				if (!DateTime.TryParse(field.Attributes["defaultvalue"], out ourValue)) //try to parse default value, else revert to today
+				
+				//if we have a default value attribute try to use it
+				if (field.Attributes.Keys.Contains("defaultvalue"))
 				{
-					ourValue = DateTime.Today;
+					if (!DateTime.TryParse(field.Attributes["defaultvalue"], out ourValue)) //try to parse default value, else revert to today
+					{
+						ourValue = DateTime.Today;
+					}
+					ourDateText.Text = String.Format("{0:dd/MM/yyyy}", ourValue);
+
 				}
-				ourDateText.Text = String.Format("{0:dd/MM/yyyy}", ourValue);
-
 			}
-
 			CalendarExtender datetimeCalendar = new CalendarExtender
 													{
 														Animated = true,

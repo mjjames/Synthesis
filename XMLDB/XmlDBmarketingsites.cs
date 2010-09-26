@@ -46,6 +46,9 @@ namespace mjjames.AdminSystem
 		/// <param name="e"></param>
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
+			var clearSiteMapCache = false;
+			var idsThatCauseSiteMapCacheClear = new[] { "active"};
+
 			var ourSender = (Button)sender;
 			var ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			var ourData = new marketingsite();
@@ -82,8 +85,15 @@ namespace mjjames.AdminSystem
 					var ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
-						Logger.LogInformation("Saving Content In: " + ourControl.ID);
-						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+						Logger.LogInformation("Saving Content In: " + ourControl.ID);//get our new value
+						var newValue = GetDataValue(ourControl, field.Type, ourProperty.PropertyType);
+						//if we haven't already got a clear sitemap cache value and our current id is that of one we must check 
+						//compare the old and new values and assign to clearSiteMap we only want true if the values aren't equal as thats a change
+						if (!clearSiteMapCache && idsThatCauseSiteMapCacheClear.Contains(field.ID))
+						{
+							clearSiteMapCache = !newValue.Equals(ourProperty.GetValue(ourData, null));
+						}
+						ourProperty.SetValue(ourData, newValue, null);
 					}
 					else
 					{
@@ -142,7 +152,7 @@ namespace mjjames.AdminSystem
 						Logger.LogError("Unknown Field", ex);
 						throw ex;
 					}
-					GenericFunctions.ResetSiteMap(); //inserted a new marketing site so rebuild sitemap caches
+					clearSiteMapCache = true; //new page so clear the caches
 
 				}
 				if (ourChanges.Updates.Count > 0)
@@ -172,6 +182,11 @@ namespace mjjames.AdminSystem
 					case UpdateType.Updated:
 						labelStatus.Text = String.Format("{0} Updated", Table.ID);
 						break;
+				}
+				//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
+				if (clearSiteMapCache)
+				{
+					GenericFunctions.ResetSiteMap();
 				}
 
 			}

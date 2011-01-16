@@ -16,18 +16,20 @@ var FCKTools = oEditor.FCKTools;
 dialog.AddTab('Info', oEditor.FCKLang.DlgInfoTab);
 
 // Get the selected flash embed (if available).
-var oHyperlink = FCK.Selection.GetSelectedElement();
+var oHyperLink = dialog.Selection.GetSelection().MoveToAncestorNode('A');
+if (oHyperLink)
+	FCK.Selection.SelectNode(oHyperLink);
 
 //if what is selected isn't a hyperlink set to null
-if (oHyperlink&& oHyperlink.tagName != 'A') {
-	oHyperlink = null;
+if (oHyperLink && oHyperLink.tagName != 'A') {
+    oHyperLink = null;
 }
 
 function LoadSelection() {
-	if (!oHyperlink) {
+    if (!oHyperLink) {
 		return;
 	}
-	var url = oHyperlink.getAttribute('href');
+    var url = oHyperLink.getAttribute('href');
 
 	GetE('txtUrl').value = url;
 	
@@ -45,15 +47,32 @@ function Ok() {
 	}
 
 	oEditor.FCKUndo.SaveUndoStep();
-	if (oHyperlink) {	// Modifying an existent link.
-		oHyperlink.href = url;
+	// If no link is selected, create a new one (it may result in more than one link creation - #220).
+	var aLinks = oHyperLink ? [oHyperLink] : oEditor.FCK.CreateLink(url, true);
+
+	// If no selection, no links are created, so use the uri as the link text (by dom, 2006-05-26)
+	var aHasSelection = (aLinks.length > 0);
+	if (!aHasSelection) {
+	    sInnerHtml = url;
+        // Create a new (empty) anchor.
+	    aLinks = [oEditor.FCK.InsertElement('a')];
 	}
-	else			// Creating a new link.
-	{
-		oHyperlink = oEditor.FCK.InsertElement('a');
-		oHyperlink.href = url;
-		oHyperlink.innerHTML = url;
+	var sInnerHtml;
+
+	for (var i = 0; i < aLinks.length; i++) {
+	    oHyperLink = aLinks[i];
+
+	    if (aHasSelection)
+	        sInnerHtml = oHyperLink.innerHTML; 	// Save the innerHTML (IE changes it if it is like an URL).
+
+	    oHyperLink.href = url;
+	    SetAttribute(oHyperLink, '_fcksavedurl', url);
+
+	    oHyperLink.innerHTML = sInnerHtml; 	// Set (or restore) the innerHTML
 	}
+
+	// Select the (first) link.
+	oEditor.FCKSelection.SelectNode(aLinks[0]);
 	return true;
 }
 

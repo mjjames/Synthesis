@@ -28,7 +28,7 @@ namespace mjjames.AdminSystem.fckplugins.InternalUrl {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.WebParts.ScriptManager scriptmanagerAdmin;
+        protected global::System.Web.UI.ScriptManager scriptmanagerAdmin;
         
         /// <summary>
         /// navigationSiteMap control.
@@ -46,6 +46,6 @@ namespace mjjames.AdminSystem.fckplugins.InternalUrl {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.WebParts.UpdatePanel treePanel;
+        protected global::System.Web.UI.UpdatePanel treePanel;
     }
 }

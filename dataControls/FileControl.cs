@@ -155,7 +155,7 @@ namespace mjjames.AdminSystem.dataControls
 
 			if (String.IsNullOrEmpty(serviceAlias))
 			{
-				serviceAlias = String.Format("http://{0}.{1}/", bucket, serviceHost);
+                serviceAlias = String.Format("http://{0}.{1}/{2}/", bucket, serviceHost, path);
 			}
 
 			

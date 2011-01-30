@@ -61,6 +61,8 @@ namespace mjjames.AdminSystem
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			Button ourSender = (Button)sender;
+			var idsThatCauseSiteMapCacheClear = new[] { "active" };
+			var clearSiteMapCache = false;
 			AdminDataContext ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			site ourData = new site();
 			if (PKey > 0)
@@ -80,8 +82,15 @@ namespace mjjames.AdminSystem
 					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
-						Logger.LogInformation("Saving Content In: " + ourControl.ID);
-						ourProperty.SetValue(ourData, GetDataValue(ourControl, field.Type, ourProperty.PropertyType), null);
+						//get our new value
+						var newValue = GetDataValue(ourControl, field.Type, ourProperty.PropertyType);
+						//if we haven't already got a clear sitemap cache value and our current id is that of one we must check 
+						//compare the old and new values and assign to clearSiteMap we only want true if the values aren't equal as thats a change
+						if (!clearSiteMapCache && idsThatCauseSiteMapCacheClear.Contains(field.ID))
+						{
+							clearSiteMapCache = !newValue.Equals(ourProperty.GetValue(ourData, null));
+						}
+						ourProperty.SetValue(ourData, newValue, null);
 					}
 					else
 					{
@@ -165,30 +174,33 @@ namespace mjjames.AdminSystem
 
 					//now add the system admins to the site
 					var systemAdmins = (from ur in ourPageDataContext.aspnet_UsersInRoles
-									   where ur.aspnet_Role.LoweredRoleName == "system admin"
-									   select new 
-									   {
-										   roleid = ur.RoleId,
-										   userid = ur.UserId,
-									   }).ToArray();
+										where ur.aspnet_Role.LoweredRoleName == "system admin"
+										select new
+										{
+											roleid = ur.RoleId,
+											userid = ur.UserId,
+										}).ToArray();
 
-					ourPageDataContext.site_users.InsertAllOnSubmit(systemAdmins.Select(p => new site_user { 
+					ourPageDataContext.site_users.InsertAllOnSubmit(systemAdmins.Select(p => new site_user
+					{
 						active = true,
 						roleid = p.roleid,
 						site_fkey = PKey,
 						userid = p.userid
-					
+
 					}));
 					ourPageDataContext.SubmitChanges();
-					
-					GenericFunctions.ResetSiteMap(); //inserted a new site so rebuild sitemap caches
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
 					labelStatus.Text = String.Format("{0} Updated", Table.ID);
 				}
 
-
+				//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
+				if (clearSiteMapCache)
+				{
+					GenericFunctions.ResetSiteMap();
+				}
 
 			}
 			catch (Exception ex)
@@ -196,6 +208,7 @@ namespace mjjames.AdminSystem
 				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
 				Logger.LogError("Failed Update", ex);
 			}
+
 		}
 
 		#endregion

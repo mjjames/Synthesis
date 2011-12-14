@@ -293,6 +293,7 @@
       <Column Name="password" Type="System.String" DbType="NVarChar(12)" CanBeNull="true" UpdateCheck="Always" />
       <Column Name="site_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" UpdateCheck="Always" />
       <Column Name="pagetitle" Type="System.String" DbType="nvarchar(max)" CanBeNull="true" UpdateCheck="Always" />
+      <Column Name="showinsecondaryfeatured" Type="System.Boolean" DbType="bit" CanBeNull="false" UpdateCheck="Always" />
       <Association Name="site_page" Member="site" ThisKey="site_fkey" OtherKey="site_key" Type="site" IsForeignKey="true" />
     </Type>
   </Table>

@@ -92,7 +92,7 @@ namespace mjjames.AdminSystem
 		protected override void SaveEdit(object sender, EventArgs e)
 		{
 			var clearSiteMapCache = false;
-			var idsThatCauseSiteMapCacheClear = new[] { "active", "showinnav", "showinfooter", "showonhome", "showinheader" };
+            var idsThatCauseSiteMapCacheClear = new[] { "active", "showinnav", "showinfooter", "showonhome", "showinheader", "showinsecondaryfeatured" };
 			var ourSender = (Button)sender;
 			var ourPageDataContext = new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
 			var ourData = new page();

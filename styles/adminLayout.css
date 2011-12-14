@@ -39,6 +39,11 @@ body
 	width: 40%;
 }
 
+#headerimage img
+{
+    max-height: 100px;
+}
+
 #banner
 {
 	padding-left: 41%;

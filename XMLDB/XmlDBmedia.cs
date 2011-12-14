@@ -225,6 +225,13 @@ namespace mjjames.AdminSystem
 									 select l.lookup_key;
 					filter = String.Format("[mediatype_lookup] = {0}", podcastKey.FirstOrDefault());
 					break;
+				case "featuredpodcasts":
+					var featuredKey = from l in AdminDC.lookups
+									 where l.lookup_id == "featuredpodcast"
+										&& l.type == "media_type"
+									 select l.lookup_key;
+					filter = String.Format("[mediatype_lookup] = {0}", featuredKey.FirstOrDefault());
+					break;
 				default:
 					filter = "";
 					break;

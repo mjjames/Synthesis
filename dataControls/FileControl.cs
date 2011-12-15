@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -6,11 +7,11 @@ using mjjames.AdminSystem.DataControls;
 using mjjames.AdminSystem.dataentities;
 using System.Reflection;
 using System.Configuration;
-using mjjames.core.dataentities;
-using mjjames.core;
 using System.Xml;
 using System.Web.UI.HtmlControls;
 using com.flajaxian;
+using mjjames.core;
+using mjjames.core.dataentities;
 
 namespace mjjames.AdminSystem.dataControls
 {
@@ -102,6 +103,7 @@ namespace mjjames.AdminSystem.dataControls
 		{
 			var ourUploader = new FileUpload();
 			var uploadButton = new Button();
+            var isWithinStorageLimit = IsWithinStorageLimit();
 			
 			uploadButton.Click += FileUploader;
 			uploadButton.CommandName = "submit";
@@ -116,11 +118,26 @@ namespace mjjames.AdminSystem.dataControls
 			ourUploader.ID = "file" + field.ID;
 			ourUploader.CssClass = "uploaderFile" + field.ID;
 
+		    ourUploader.Enabled = isWithinStorageLimit;
+		    uploadButton.Enabled = isWithinStorageLimit;
+
 			fileUpload.ContentTemplateContainer.Controls.Add(ourUploader);
 			fileUpload.ContentTemplateContainer.Controls.Add(uploadButton);
 			fileUpload.UpdateMode = UpdatePanelUpdateMode.Conditional;
 			if (ourSM != null) ourSM.RegisterPostBackControl(uploadButton);
 		}
+
+        private bool IsWithinStorageLimit()
+        {
+            double maxStorage = 0;
+            if(!double.TryParse(ConfigurationManager.AppSettings["StorageLimitInGigabytes"], out maxStorage))
+            {
+                maxStorage = 2;
+            }
+            maxStorage = maxStorage * 1073741824; //1 gb in bytes
+            var totalSize = System.IO.Directory.GetFiles(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["uploaddir"]), "*", System.IO.SearchOption.AllDirectories).Sum(x => (double)(new System.IO.FileInfo(x).Length));
+            return totalSize < maxStorage;
+        }
 
 		private void GenerateStorageServiceControl(AdminField field, Page page, ClientScriptManager csm, UpdatePanel fileUpload)
 		{
@@ -132,7 +149,7 @@ namespace mjjames.AdminSystem.dataControls
 
 			//setup our vars
 			var accessKeyID = "";
-			var acl = FileAccess.PublicRead;
+            var acl = FileAccess.PublicRead;
 			var bucket = field.Attributes.ContainsKey("storagebucket") ? field.Attributes["storagebucket"] : "";
 			var path = field.Attributes.ContainsKey("storagepath") ? field.Attributes["storagepath"] : "";
 			var serviceHost = "";

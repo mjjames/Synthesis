@@ -505,3 +505,10 @@ img.previewImage{
 	clear: both;
 	display: block;
 }
+
+div.fileStorage {
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+    text-align: right;
+}

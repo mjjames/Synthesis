@@ -48,6 +48,42 @@ public partial class AdminSystem {
     protected global::mjjames.AdminSystem.usercontrols.SiteSelector siteSelector;
     
     /// <summary>
+    /// fileStorage control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel fileStorage;
+    
+    /// <summary>
+    /// usedSpace control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Literal usedSpace;
+    
+    /// <summary>
+    /// totalSpace control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Literal totalSpace;
+    
+    /// <summary>
+    /// OutOfDiskSpace control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Panel OutOfDiskSpace;
+    
+    /// <summary>
     /// adminToolbar control.
     /// </summary>
     /// <remarks>

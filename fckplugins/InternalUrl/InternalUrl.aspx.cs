@@ -25,7 +25,7 @@ namespace mjjames.AdminSystem.fckplugins.InternalUrl
 		protected void LoadListing(object sender, EventArgs e)
 		{
 
-			var strQuery = String.Format("SELECT [page_key] AS [id], [page_fkey] AS [parent], [navtitle] AS [title], CAST([page_url] AS nvarchar) AS [url], '' AS [roles] FROM [pages] WHERE [site_fkey] = @siteKey ORDER BY [parent], [title]");
+			var strQuery = String.Format("SELECT [page_key] AS [id], [page_fkey] AS [parent], [navtitle] AS [title], CAST([page_url] AS nvarchar(max)) AS [url], '' AS [roles], '' AS [description] FROM [pages] WHERE [site_fkey] = @siteKey ORDER BY [parent], [title]");
 			var config = new NameValueCollection();
 			config.Add("query", strQuery);
 			config.Add("urlwriting", "true");

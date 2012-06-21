@@ -31,8 +31,8 @@ namespace mjjames.AdminSystem
         public override void ArchiveData(int iKey)
         {
             banner ban = (from b in AdminDC.banners
-                         where b.bannerdid == iKey
-                         select b).SingleOrDefault();
+                          where b.bannerdid == iKey
+                          select b).SingleOrDefault();
 
             DataEntities.Archive.banner oldBanner = new DataEntities.Archive.banner
             {
@@ -88,10 +88,7 @@ namespace mjjames.AdminSystem
 
             if (PKey == 0)
             {
-				if (MultiTenancyEnabled)
-				{
-					ourData.site_fkey = SiteFKey;
-				}
+                ourData.site_fkey = SiteFKey;
                 ourPageDataContext.banners.InsertOnSubmit(ourData);
             }
 

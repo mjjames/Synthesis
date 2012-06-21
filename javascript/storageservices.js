@@ -3,8 +3,7 @@
 var mjjames = mjjames || {};
 mjjames.StorageServices = function () {
 	var _fileInputSelector;
-	var serviceAlias;
-
+	
 	var FileUploadError = function () {
 		alert("Sorry there has been a problem uploading your file, please try again");
 	};
@@ -80,8 +79,13 @@ mjjames.StorageServices = function () {
 										.closest("div.row")
 										.find("img.storageservicefile");
 		}
-		//set the textboxes value to the hidden input
-		$storageservicefile.attr("src", $fileInput.val());
+	    //set the loading image
+		$storageservicefile.attr("src", "images/loading.gif");
+	    //then in a few seconds update the image to the file we just updated, we have to wait as amazon sometimes takes a few seconds to have the permissions sorted
+		setTimeout(function () {
+	        //set the textboxes value to the hidden input
+	        $storageservicefile.attr("src", $fileInput.val());
+	    }, 5000);
 		//if someone clicks the clear button ensure our textbox value is also cleared
 		$fileInput.siblings("input[type=submit]").click(function () {
 			$storageservicefile.attr("src", "");

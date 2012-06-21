@@ -49,7 +49,8 @@ public partial class AdminSystem : System.Web.UI.MasterPage
         {
             return (double) Cache["UsedDiskSpace"];
         }
-        var usedDiskSpace = System.IO.Directory.GetFiles(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["uploaddir"]), "*", System.IO.SearchOption.AllDirectories).Sum(x => (double)(new System.IO.FileInfo(x).Length));
+        
+        var usedDiskSpace = ConfigurationManager.AppSettings["uploaddir"].StartsWith("http") ? 0 : System.IO.Directory.GetFiles(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["uploaddir"]), "*", System.IO.SearchOption.AllDirectories).Sum(x => (double)(new System.IO.FileInfo(x).Length));
         Cache["UsedDiskSpace"] = usedDiskSpace;
         return usedDiskSpace;
     }

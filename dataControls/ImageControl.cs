@@ -12,6 +12,7 @@ using mjjames.ControlLibrary.AdminWebControls;
 using mjjames.core;
 using mjjames.core.dataentities;
 using mjjames.AdminSystem.DataControls;
+using mjjames.ControlLibrary;
 
 namespace mjjames.AdminSystem.dataControls
 {
@@ -51,7 +52,7 @@ namespace mjjames.AdminSystem.dataControls
                 return panelGallery;
             }
 
-            AdminPhotoGallery gallery = new AdminPhotoGallery { ID = "control" + field.ID };
+            AdminPhotoGallery gallery = new AdminPhotoGallery(ConfigurationManager.AppSettings["uploaddir"]) { ID = "control" + field.ID };
             gallery.Attributes.Add("cssclass", "photogalleryContainer");
 
             string sLookupID = field.Attributes.ContainsKey("lookupid") ? field.Attributes["lookupid"] : "thumbnailimage";
@@ -90,7 +91,7 @@ namespace mjjames.AdminSystem.dataControls
 
             gallery.DataSourceID = "ods" + field.ID;
             gallery.ThumbResizeProperties = new ResizerImage { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
-            gallery.FileUploadPath = ConfigurationManager.AppSettings["uploaddir"];
+
 
 
             sAction = field.Attributes.ContainsKey("previewaction") ? field.Attributes["previewaction"] : "resize";
@@ -110,13 +111,13 @@ namespace mjjames.AdminSystem.dataControls
             gallery.PreviewResizeProperties = new ResizerImage { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
 
             int maxImages = 0;
-            
+
             if (field.Attributes.ContainsKey("maximages"))
             {
                 int.TryParse(field.Attributes["maximages"], out maxImages);
             }
 
-            if (maxImages> 0)
+            if (maxImages > 0)
             {
                 gallery.MaximumImages = maxImages;
             }
@@ -140,11 +141,11 @@ namespace mjjames.AdminSystem.dataControls
             if (ourSM != null && gallery != null) ourSM.RegisterPostBackControl(gallery.InsertItem);
         }
 
-       static void GalleryItemUpdating(object sender, ListViewUpdateEventArgs e)
+        static void GalleryItemUpdating(object sender, ListViewUpdateEventArgs e)
         {
             AdminPhotoGallery gallery = sender as AdminPhotoGallery;
             if (gallery == null) return;
-            FileUpload fu = helpers.FindControlRecursive(gallery.EditItem, "fileupload") as FileUpload;
+
             TextBox title = helpers.FindControlRecursive(gallery.EditItem, "txtTitle") as TextBox;
             TextBox desc = helpers.FindControlRecursive(gallery.EditItem, "txtDescription") as TextBox;
             //TextBox alttag = helpers.FindControlRecursive(gallery.EditItem, "txtAltTag") as TextBox;
@@ -152,9 +153,9 @@ namespace mjjames.AdminSystem.dataControls
             MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text };
             //pi.AltTag = alttag.Text;
 
-            if (fu != null && fu.HasFile)
+            if (gallery.EditFileUploadControl.HasFile)
             {
-                FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
+                FileUploadDetails fud = gallery.EditFileUploadControl.UploadFile();
                 if (fud.error)
                 {
                     LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };
@@ -172,10 +173,9 @@ namespace mjjames.AdminSystem.dataControls
             AdminPhotoGallery gallery = sender as AdminPhotoGallery;
             if (gallery != null)
             {
-                FileUpload fu = helpers.FindControlRecursive(gallery.InsertItem, "fileupload") as FileUpload;
                 TextBox title = helpers.FindControlRecursive(gallery.InsertItem, "txtTitle") as TextBox;
                 TextBox desc = helpers.FindControlRecursive(gallery.InsertItem, "txtDescription") as TextBox;
-                FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
+                FileUploadDetails fud = gallery.InsertFileUploadControl.UploadFile();
                 if (fud.error)
                 {
                     LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };

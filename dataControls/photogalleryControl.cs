@@ -10,6 +10,7 @@ using mjjames.core;
 using mjjames.core.dataentities;
 using mjjames.AdminSystem.dataentities;
 using mjjames.Imaging;
+using mjjames.ControlLibrary;
 
 namespace mjjames.AdminSystem.dataControls
 {
@@ -55,7 +56,7 @@ namespace mjjames.AdminSystem.dataControls
 				return panelGallery;
 			}
 
-			AdminPhotoGallery gallery = new AdminPhotoGallery { ID = "control" + field.ID };
+            AdminPhotoGallery gallery = new AdminPhotoGallery(ConfigurationManager.AppSettings["uploaddir"]) { ID = "control" + field.ID };
 			gallery.Attributes.Add("cssclass", "photogalleryContainer");
 
 			string sLookupID = field.Attributes.ContainsKey("lookupid") ? field.Attributes["lookupid"] : "galleryimage";
@@ -103,7 +104,7 @@ namespace mjjames.AdminSystem.dataControls
 
 			gallery.DataSourceID = "ods" + field.ID;
 			gallery.ThumbResizeProperties = new ResizerImage { Action = (ResizerImage.ResizerAction)Enum.Parse(typeof(ResizerImage.ResizerAction), sAction, true), Height = iHeight, Width = iWidth };
-			gallery.FileUploadPath = ConfigurationManager.AppSettings["uploaddir"];
+		
 			
 
 			sAction = field.Attributes.ContainsKey("previewaction") ? field.Attributes["previewaction"] : "resize";
@@ -157,7 +158,7 @@ namespace mjjames.AdminSystem.dataControls
 		{
 			AdminPhotoGallery gallery = sender as AdminPhotoGallery;
 			if (gallery == null) return;
-			FileUpload fu = helpers.FindControlRecursive(gallery.EditItem, "fileupload") as FileUpload;
+
 			TextBox title = helpers.FindControlRecursive(gallery.EditItem, "txtTitle") as TextBox;
 			TextBox desc = helpers.FindControlRecursive(gallery.EditItem, "txtDescription") as TextBox;
 			//TextBox alttag = helpers.FindControlRecursive(gallery.EditItem, "txtAltTag") as TextBox;
@@ -165,15 +166,9 @@ namespace mjjames.AdminSystem.dataControls
 			MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text };
 			//pi.AltTag = alttag.Text;
 
-			//if we don't have a file something is wrong so cancel
-			if (fu == null)
+            if (gallery.EditFileUploadControl.HasFile)
 			{
-				e.Cancel = true;
-			}
-
-			if (fu.HasFile)
-			{
-				FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
+                FileUploadDetails fud = gallery.EditFileUploadControl.UploadFile();
 				if (fud.error)
 				{
 					LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };
@@ -198,8 +193,7 @@ namespace mjjames.AdminSystem.dataControls
 				return;
 			}
 
-			FileUpload fu = helpers.FindControlRecursive(gallery.InsertItem, "fileupload") as FileUpload;
-			TextBox title = helpers.FindControlRecursive(gallery.InsertItem, "txtTitle") as TextBox;
+            TextBox title = helpers.FindControlRecursive(gallery.InsertItem, "txtTitle") as TextBox;
 			TextBox desc = helpers.FindControlRecursive(gallery.InsertItem, "txtDescription") as TextBox;
 
 			if (title == null || desc == null)
@@ -211,7 +205,7 @@ namespace mjjames.AdminSystem.dataControls
 				return;
 			}
 
-			FileUploadDetails fud = helpers.fileUploader(fu, gallery.FileUploadPath);
+			FileUploadDetails fud = gallery.InsertFileUploadControl.UploadFile();
 			if (fud.error)
 			{
 				//something's gone wrong so STOP
@@ -219,7 +213,6 @@ namespace mjjames.AdminSystem.dataControls
 				gallery.Parent.Controls.Add(labelStatus);
 				e.Cancel = true;
 				return;
-				//throw new Exception("File Upload Error: " + fud.errormessage);
 			}
 			//all is well if we get here so do your stuff
 			MediaInfo pi = new MediaInfo { Title = title.Text, Description = desc.Text, FileName = fud.filepath };

@@ -76,7 +76,7 @@ namespace mjjames.AdminSystem
                 SelectText = "Edit",
             };
 
-            cfSelect.ControlStyle.CssClass = "btn btn-primary";
+            cfSelect.ControlStyle.CssClass = "btn btn-primary btn-small";
 
 			pageListing.Columns.Add(cfSelect);
 
@@ -141,7 +141,7 @@ namespace mjjames.AdminSystem
                 ShowDeleteButton = true
             };
 
-			cfDelete.ControlStyle.CssClass = "btn btn-danger buttonDelete";
+			cfDelete.ControlStyle.CssClass = "btn btn-danger btn-small buttonDelete";
 			pageListing.Columns.Add(cfDelete);
 
 			UpdateLabels(_xmldb.TableLabel, _xmldb);

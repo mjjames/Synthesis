@@ -31,7 +31,7 @@ namespace mjjames.AdminSystem.DataControls
 				case "page":
 					sourceType = "pagelookup";
 					break;
-				case "projects":
+				case "project":
 					sourceType = "projectlookup";
 					break;
 				case "marketingsite":

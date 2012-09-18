@@ -123,6 +123,14 @@ namespace mjjames.AdminSystem
                     updateType = UpdateType.Inserted;
 
                     PKey = ourData.project_key;
+                    //when we do an insert update any keyvalues we have to have the correct primary key
+                    keyvalues = keyvalues.Select(kv => new KeyValueData()
+                    {
+                        LinkKey = PKey,
+                        LinkTypeID = kv.LinkTypeID,
+                        LookupID = kv.LookupID,
+                        Value = kv.Value
+                    }).ToList();
 
                     string strPKeyField = TablePrimaryKeyField;
 

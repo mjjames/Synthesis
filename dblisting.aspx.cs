@@ -71,7 +71,12 @@ namespace mjjames.AdminSystem
 			sdsData.Deleting += SdsDataDeleting;
 			sdsData.Deleted += SdsDataDeleted;
 
-			var cfSelect = new CommandField {ShowSelectButton = true, SelectText = "Edit"};
+			var cfSelect = new CommandField {
+                ShowSelectButton = true, 
+                SelectText = "Edit",
+            };
+
+            cfSelect.ControlStyle.CssClass = "btn btn-primary";
 
 			pageListing.Columns.Add(cfSelect);
 
@@ -132,9 +137,11 @@ namespace mjjames.AdminSystem
 					}
 				}
 			}
-			var cfDelete = new CommandField {ShowDeleteButton = true};
+			var cfDelete = new CommandField {
+                ShowDeleteButton = true
+            };
 
-			cfDelete.ControlStyle.CssClass = "buttonDelete";
+			cfDelete.ControlStyle.CssClass = "btn btn-danger buttonDelete";
 			pageListing.Columns.Add(cfDelete);
 
 			UpdateLabels(_xmldb.TableLabel, _xmldb);

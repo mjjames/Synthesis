@@ -358,7 +358,7 @@
 											<asp:ListItem Text="New International Reader's Version" Value="76" />
 											<asp:ListItem Text="New International Version" Value="31" />
 											<asp:ListItem Text="New International Version - UK" Value="64" />
-											<asp:ListItem Text="New King James Version Value="50"  />
+											<asp:ListItem Text="New King James Version" Value="50"  />
 											<asp:ListItem Text="New Living Translation" Value="51"  />
 											<asp:ListItem Text="Today's New International Version" Value="72"  />
 											<asp:ListItem Text="Worldwide English (New Testament" Value="73" />

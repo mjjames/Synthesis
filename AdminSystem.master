@@ -1,60 +1,75 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="AdminSystem" CodeBehind="AdminSystem.master.cs" %>
 
 <%@ Register TagPrefix="mjjames" Namespace="mjjames" Assembly="mjjames.AdminSystem" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!DOCTYPE html>
+<html lang="en">
 <head id="Head1" runat="server">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mjjames - Administration System - Version
         <%= GetVersionNumber() %></title>
-    <link rel="stylesheet" type="text/css" href="~/styles/web.css" />
+    <%--<link rel="stylesheet" type="text/css" href="~/styles/web.css" />--%>
+
+    <link rel="Stylesheet" type="text/css" href="~/content/bootstrap.css" />
+    <link rel="Stylesheet" type="text/css" href="~/content/bootstrap-responsive.css" />
+    <link rel="Stylesheet" type="text/css" href="~/content/site.css" />
     <script type="text/javascript" src="http://jsresources.mjjames.co.uk/jquery/jquery.1.3.2.min.js"></script>
 </head>
 <body>
-    <div id="wrapper">
+    <div class="container">
         <form id="form1" runat="server">
-        <div id="header">
-            <div id="headerimage">
-                <img src="/images/logo.png" alt="" runat="server" />
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <a class="brand" href="~/" runat="server">Synthesis v2.0</a>
+                        <div class="nav-collapse collapse">
+                            <mjjames:AdminToolbar runat="server" ID="adminToolbar" AccessLevel="0" Visible="false"
+                                OnInit="SetAccessLevel" />
+                            <div class="navbar-form pull-right">
+                                <asp:LinkButton runat="server" ID="signout" Visible="false" CausesValidation="false"
+                                    OnClick="btnSignOut_ServerClick" CssClass="signout pull-right btn btn-inverse" Text="Sign Out" />
+                                <mjjames:SiteSelector runat="server" ID="siteSelector" Visible="false" causesvalidation="false" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="banner">
-                <asp:LinkButton runat="server" ID="signout" Visible="false" CausesValidation="false"
-                    OnClick="btnSignOut_ServerClick" CssClass="signout" Text="Sign Out" />
-                <mjjames:siteselector runat="server" id="siteSelector" visible="false" causesvalidation="false" />
-                <asp:Panel runat="server" ID="fileStorage" Visible="False" CssClass="fileStorage">
-                    <p>
-                        Disk Usage: <span class="used">
-                            <asp:Literal runat="server" ID="usedSpace" />
-                            MB</span> of <span class="totalSpace">
-                                <asp:Literal runat="server" ID="totalSpace" />
-                                MB</span>
-                    </p>
-                    <asp:Panel runat="server" ID="OutOfDiskSpace">
-                        <p>
-                            You are over your disk space quota - Please contact MJJames
-                        </p>
-                    </asp:Panel>
-                </asp:Panel>
-            </div>
-            <div id="navbar">
-                <mjjames:admintoolbar runat="server" id="adminToolbar" accesslevel="0" visible="false"
-                    oninit="SetAccessLevel" />
-            </div>
-        </div>
-        <div id="body">
+
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>
-        </div>
-        <div id="footer">
-            <div id="footernav">
-            </div>
-            <div id="copyrightinfo">
-                &copy;
-                <%=DateTime.Now.Year %>
-                <a href="http://mjjames.co.uk">mjjames Technologies</a>
-            </div>
-            <br class="clear" />
-        </div>
         </form>
     </div>
+    <footer class="footer">
+        <div class="container">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+
+            <p>
+                &copy; <%=DateTime.Now.Year %>
+                <a href="http://mjjames.co.uk" target="_blank">mjjames Technologies</a>
+            </p>
+            <asp:Panel runat="server" ID="fileStorage" Visible="False" CssClass="fileStorage pull-right">
+                <p>
+                    Disk Usage: <span class="used">
+                        <asp:Literal runat="server" ID="usedSpace" />
+                        MB</span> of <span class="totalSpace">
+                            <asp:Literal runat="server" ID="totalSpace" />
+                            MB</span>
+                </p>
+                <asp:Panel runat="server" ID="OutOfDiskSpace">
+                    <p>
+                        You are over your disk space quota - Please contact MJJames
+                    </p>
+                </asp:Panel>
+            </asp:Panel>
+            <p>Icons from <a href="http://glyphicons.com">Glyphicons Free</a>, licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+
+            <p>
+                <a href="mailto:cases@mjjames.co.uk">Submit issues</a>
+            </p>
+        </div>
+    </footer>
+
 </body>
 </html>

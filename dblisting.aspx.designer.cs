@@ -20,6 +20,7 @@ namespace mjjames.AdminSystem {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.ScriptManager scriptmanagerAdmin;
+        
         /// <summary>
         /// sdsData control.
         /// </summary>
@@ -64,6 +65,15 @@ namespace mjjames.AdminSystem {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel treePanel;
+        
+        /// <summary>
+        /// rightCol control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl rightCol;
         
         /// <summary>
         /// levelLabel control.

@@ -30,6 +30,15 @@ public partial class AdminSystem {
     protected global::System.Web.UI.HtmlControls.HtmlForm form1;
     
     /// <summary>
+    /// adminToolbar control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::mjjames.ControlLibrary.AdminWebControls.AdminToolbar adminToolbar;
+    
+    /// <summary>
     /// signout control.
     /// </summary>
     /// <remarks>
@@ -46,6 +55,15 @@ public partial class AdminSystem {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::mjjames.AdminSystem.usercontrols.SiteSelector siteSelector;
+    
+    /// <summary>
+    /// ContentPlaceHolder1 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder1;
     
     /// <summary>
     /// fileStorage control.
@@ -82,22 +100,4 @@ public partial class AdminSystem {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Panel OutOfDiskSpace;
-    
-    /// <summary>
-    /// adminToolbar control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::mjjames.ControlLibrary.AdminWebControls.AdminToolbar adminToolbar;
-    
-    /// <summary>
-    /// ContentPlaceHolder1 control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder1;
 }

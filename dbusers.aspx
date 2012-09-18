@@ -204,7 +204,7 @@
                             <ItemTemplate>
                                 <tr class="pageListRow">
                                     <td>
-                                        <asp:LinkButton runat="server" ID="_edit" CommandName="Edit" Text="Edit"  CssClass="btn btn-small btn-primary" />
+                                        <asp:LinkButton runat="server" ID="_edit" CommandName="Edit" Text="Edit" CssClass="btn btn-small btn-primary" />
                                     </td>
                                     <td>
                                         <asp:Literal runat="server" ID="_username" Text='<%# Eval("UserName") %>' />
@@ -220,8 +220,8 @@
                                         <asp:Literal runat="server" ID="_lastLogin" Text='<%# Eval("LastLogin")%>' />
                                     </td>
                                     <td>
-                                        <asp:LinkButton runat="server" ID="_resetPassword" CommandName="ResetPassword" Text="Reset Password"  CssClass="btn btn-small  btn-warning" />
-                                        <asp:LinkButton runat="server" ID="_deleteUser" CommandName="Delete" Text="Delete"  CssClass="btn btn-small  btn-danger"/>
+                                        <asp:LinkButton runat="server" ID="_resetPassword" CommandName="ResetPassword" Text="Reset Password" CssClass="btn btn-small  btn-warning" />
+                                        <asp:LinkButton runat="server" ID="_deleteUser" CommandName="Delete" Text="Delete" CssClass="btn btn-small  btn-danger" />
                                     </td>
                                 </tr>
                             </ItemTemplate>
@@ -259,4 +259,5 @@
                 </ProgressTemplate>
             </asp:UpdateProgress>
         </div>
+    </div>
 </asp:Content>

@@ -344,13 +344,6 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Donations.aspx.cs">
-      <DependentUpon>Donations.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Donations.aspx.designer.cs">
-      <DependentUpon>Donations.aspx</DependentUpon>
-    </Compile>
     <Compile Include="error.aspx.cs">
       <DependentUpon>error.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -486,6 +479,7 @@
     <Content Include="admininc_defaults\connectionsettings.config" />
     <Content Include="admininc_defaults\mjjames.config" />
     <Content Include="admininc_defaults\adminDB.config" />
+    <Content Include="Content\Web.config" />
     <None Include="dataContexts\adminDataContexts.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>adminDataContexts.designer.cs</LastGenOutput>
@@ -519,7 +513,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="authentication\web.config" />
-    <Content Include="Donations.aspx" />
     <None Include="dataContexts\archiveDataContexts.dbml.layout">
       <DependentUpon>archiveDataContexts.dbml</DependentUpon>
     </None>

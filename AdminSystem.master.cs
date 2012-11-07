@@ -63,7 +63,7 @@ public partial class AdminSystem : System.Web.UI.MasterPage
     protected void btnSignOut_ServerClick(object sender, System.EventArgs e)
     {
         FormsAuthentication.SignOut();
-        Response.Redirect("/admin/authentication/default.aspx", true);
+        Response.Redirect("~/", true);
     }
 
     protected void SetAccessLevel(object sender, EventArgs e)

@@ -64,7 +64,7 @@ namespace mjjames.AdminSystem
 			//if we have no site key we have an error - assume this is because of an expired session so log the user out
 			if(Session["userSiteKey"] == null){
 				FormsAuthentication.SignOut();
-				Response.Redirect("/admin/authentication/default.aspx?ReturnUrl=" + Server.UrlEncode(Page.Request.Url.PathAndQuery), true);
+				Response.Redirect("~/authentication/default.aspx?ReturnUrl=" + Server.UrlEncode(Page.Request.Url.PathAndQuery), true);
 			}
 			
 			_xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());
@@ -139,10 +139,18 @@ namespace mjjames.AdminSystem
 			}
 
 			dbeditorLabel.Text = sName;
-			linkbuttonBack.Text = String.Format("Back To {0} Listing", sName);
-			linkbuttonBack.ToolTip = String.Format("Back To {0} Listing", sName);
-			linkbuttonSubPages.Text = String.Format("Sub {0}s", sName);
-			linkbuttonSubPages.ToolTip = String.Format("Show Sub {0}s", sName);
+            if (_xmldb.TableDefaults.Find(d => d.Attributes.ContainsKey("foreignkey")) != null)
+            {
+                linkbuttonBack.Text = String.Format("View sibling {0}s", sName.ToLower());
+                linkbuttonBack.ToolTip = String.Format("View sibling {0}s, these are {0}s that are at the same navigational level as this {0}", sName.ToLower());
+            }
+            else
+            {
+                linkbuttonBack.Text = String.Format("Back To {0} Listing", sName);
+                linkbuttonBack.ToolTip = String.Format("Back To {0} Listing", sName);
+            }
+			linkbuttonSubPages.Text = String.Format("Child {0}s", sName);
+			linkbuttonSubPages.ToolTip = String.Format("Show Child {0}s", sName);
 
 		}
 

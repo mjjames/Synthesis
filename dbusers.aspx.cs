@@ -153,7 +153,8 @@ namespace mjjames.AdminSystem
 			
 			string hostName = Request.Url.Host;
 			string timeOut = ua.GenerateTimeOut();
-			string resetURL = String.Format("http://{0}/admin/authentication/resetPassword.aspx?u={1}&v={2}", hostName, userID, timeOut);
+            
+			string resetURL = String.Format("http://{0}/{1}?u={1}&v={2}", hostName, this.ResolveUrl("~/authentication/resetPassword.aspx"), userID, timeOut);
 			errorMessage.Text = ua.SendResetPasswordEmail(resetURL, userID) ? "Password Reset Email Sent" : "Error: Unable to send password reset email <br /> Please ensure the user has a valid email address";
 		}
 

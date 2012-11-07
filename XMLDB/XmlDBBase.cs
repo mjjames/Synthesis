@@ -313,6 +313,10 @@ namespace mjjames.AdminSystem
             {
 
                 ourPage.Controls.Add(GenerateTabs());
+                var formactions = new WebControl(HtmlTextWriterTag.Div)
+                {
+                    CssClass = "form-actions"
+                };
 
                 var buttonContainer = new WebControl(HtmlTextWriterTag.Div)
                 {
@@ -328,7 +332,7 @@ namespace mjjames.AdminSystem
                 {
                     saveButton.Click += RedirectToEdit; //this should only work for an insert
                 }
-                var cancelButton = new Button { Text = "Cancel", CommandName = "CancelEdit", CssClass="btn" };
+                var cancelButton = new Button { Text = "Cancel", CommandName = "CancelEdit", CssClass="btn btn-inverse" };
                 cancelButton.Click += CancelEdit;
 
                 if (Table.EmailButton)
@@ -339,7 +343,7 @@ namespace mjjames.AdminSystem
                     buttonContainer.Controls.Add(emailButton);
                 }
 
-               
+                buttonContainer.Controls.Add(saveButton);
 
                 if (PKey > 0) //this is optional
                 {
@@ -352,9 +356,10 @@ namespace mjjames.AdminSystem
                     buttonContainer.Controls.Add(deleteButton);
                 }
 
-                buttonContainer.Controls.Add(saveButton);
+                
                 buttonContainer.Controls.Add(cancelButton);
-                ourPage.Controls.Add(buttonContainer);
+                formactions.Controls.Add(buttonContainer);
+                ourPage.Controls.Add(formactions);
 
             }
             else

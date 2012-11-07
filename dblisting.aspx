@@ -38,11 +38,11 @@
                 </div>
             </div>
             <div class="span9" runat="server" id="rightCol">
-                <h2 runat="server" id="levelLabel">at this Level</h2>
+                <h4 runat="server" id="levelLabel">at this Level</h4>
                 <div class="listingTable">
-                    <asp:HyperLink ID="linkbuttonBack" runat="server" CssClass="backUp btn btn-link" ToolTip="Up a Level"
+                    <asp:HyperLink ID="linkbuttonBack" runat="server" CssClass="backUp btn btn-link" ToolTip="View parent"
                         NavigateUrl="~/DBEditor.aspx?type=" Visible="true">
-					&lt; &lt; Up a Level
+					View parent
                     </asp:HyperLink>
                     <asp:HyperLink ID="buttonAddPage" runat="server" CssClass="addPage btn btn-link pull-right" ToolTip="Add a New "
                         NavigateUrl="~/DBEditor.aspx?type=" Visible="false">

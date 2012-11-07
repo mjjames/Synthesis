@@ -12,7 +12,7 @@ namespace mjjames.AdminSystem.authentication
 		{
 			if (ConfigurationManager.AppSettings["SiteName"] == null) return;
 			HtmlHead head = Page.Header;
-			head.Title = ConfigurationManager.AppSettings["SiteName"] + ": Admin - System Login";
+			head.Title = ConfigurationManager.AppSettings["SiteName"] + ": Synthesis - System Login";
 		}
 		/// <summary>
 		/// Validate Our User
@@ -34,7 +34,7 @@ namespace mjjames.AdminSystem.authentication
 		{
 			if (ValidateUser(inputUserName.Value, inputPassword.Value))
 			{
-				FormsAuthenticationTicket tkt = new FormsAuthenticationTicket(1, inputUserName.Value, DateTime.Now, DateTime.Now.AddMinutes(30), false, "MJJames Admin Tool");
+				FormsAuthenticationTicket tkt = new FormsAuthenticationTicket(1, inputUserName.Value, DateTime.Now, DateTime.Now.AddMinutes(30), false, "Synthesis");
 			
 				string cookiestr = FormsAuthentication.Encrypt(tkt);
 				HttpCookie ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr);
@@ -48,7 +48,7 @@ namespace mjjames.AdminSystem.authentication
 			}
 			else
 			{
-				lblMsg.Text = "System Login: Login Failed";
+				lblMsg.Text = "System Login: <span class=\"text-error\">Login Failed</span>";
 			}
 		}
 	}

@@ -52,7 +52,10 @@ header.hero-unit small {
         text-align: center;
     }
 
-
+.backListing, .subPages, .addPage, .backUp{
+    padding-left: 0;
+    padding-right: 0;
+}
 
 .footer {
     padding: 70px 0;
@@ -60,3 +63,5 @@ header.hero-unit small {
     border-top: 1px solid #E5E5E5;
     background-color: whiteSmoke;
 }
+
+

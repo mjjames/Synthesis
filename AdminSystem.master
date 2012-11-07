@@ -7,7 +7,9 @@
 <head id="Head1" runat="server">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%--<link rel="stylesheet" type="text/css" href="~/styles/web.css" />--%>
+    <link rel="icon" 
+      type="image/png" 
+      href="favicon.png" />
 
     <link rel="Stylesheet" type="text/css" href="~/content/bootstrap.css" />
     <link rel="Stylesheet" type="text/css" href="~/content/bootstrap-responsive.css" />

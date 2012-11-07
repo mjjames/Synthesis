@@ -190,6 +190,7 @@
     <Content Include="dbchanges\Upgrade 1.2 to 1.6 Admin Tool.sql" />
     <Content Include="dbchanges\Upgrade 1.5 to 1.6 Admin Tool.sql" />
     <Content Include="dbchanges\UPgrade 1.6 to 1.7 Admin Tool.sql" />
+    <Content Include="favicon.png" />
     <Content Include="fckplugins\OnlineVideo\lang\en.js" />
     <Content Include="fckplugins\SimpleImage\fckplugin.js" />
     <Content Include="fckplugins\SimpleImage\SimpleImagePreview.html" />

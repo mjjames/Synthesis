@@ -10,9 +10,7 @@ namespace mjjames.AdminSystem.authentication
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			if (ConfigurationManager.AppSettings["SiteName"] == null) return;
-			HtmlHead head = Page.Header;
-			head.Title = ConfigurationManager.AppSettings["SiteName"] + ": Synthesis - System Login";
+			Title = "System Login";
 		}
 		/// <summary>
 		/// Validate Our User

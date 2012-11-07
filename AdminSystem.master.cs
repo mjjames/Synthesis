@@ -41,6 +41,8 @@ public partial class AdminSystem : System.Web.UI.MasterPage
         usedSpace.Text = Math.Round(usedDiskSpace/(gigaByte/1024), 2).ToString();
         OutOfDiskSpace.Visible = usedDiskSpace >= maxStorage;
 
+        Page.Title += String.Format(" | {0} | Synthesis CMS - {1}", ConfigurationManager.AppSettings["SiteName"], GetVersionNumber());
+
     }
 
     private double GetUsedDiskSpace()

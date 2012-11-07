@@ -18,6 +18,7 @@ namespace mjjames.AdminSystem.Authentication
 		{
 			if(!ValidateRequest()) return;
 			_ChangePassword.Visible = true;
+            Title = "Reset Password";
 		}
 		
 		private bool ValidateRequest()

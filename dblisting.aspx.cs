@@ -55,8 +55,7 @@ namespace mjjames.AdminSystem
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            var head = Page.Header;
-            head.Title = ConfigurationManager.AppSettings["SiteName"] + ": Admin - Page Listing";
+            Title = _xmldb.TableLabel + " Editor: Listing View";
         }
 
         protected void SetupTable(object sender, EventArgs e)

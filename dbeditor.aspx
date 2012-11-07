@@ -24,7 +24,7 @@
         <div class="page-header">
             <h1 class="listingTitle">
                 <asp:Literal runat="server" ID="dbeditorLabel" />
-                Editor <small>Editing</small>
+                Editor <small>Edit View</small>
             </h1>
         </div>
         <div class="row">

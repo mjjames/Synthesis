@@ -132,12 +132,8 @@ namespace mjjames.AdminSystem
 		{
 			string sName = _xmldb.TableLabel;
 
-			if (ConfigurationManager.AppSettings["SiteName"] != null)
-			{
-				HtmlHead head = Page.Header;
-				head.Title = String.Format("{0}:Admin - Edit {1}", ConfigurationManager.AppSettings["SiteName"], sName);
-			}
-
+			Title = String.Format("{0} Editor: Edit View", sName);
+			
 			dbeditorLabel.Text = sName;
             if (_xmldb.TableDefaults.Find(d => d.Attributes.ContainsKey("foreignkey")) != null)
             {

@@ -20,7 +20,7 @@ namespace mjjames.AdminSystem
 		private readonly NavigationSettings _navsettings = new NavigationSettings();
 		protected void Page_Load(object sender, EventArgs e)
 		{
-
+            Title = "System Settings";
 		}
 
 		public string GetSetting(string key)

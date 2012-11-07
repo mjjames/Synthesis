@@ -19,12 +19,8 @@ namespace mjjames.AdminSystem
 			if (User.IsInRole("Site Admin") || User.IsInRole("System Admin")) return;
 			dbuserDropDownList.Visible = false;
 			labelDBUser.Visible = false;
-			// should no longer be needed as the gen script should sort this
-			//if (Request.QueryString["createroles"] == "true")
-			//{
-			//    Roles.CreateRole("Administrators");
-			//    Roles.CreateRole("Editors");
-			//}
+
+            Title = "User Administration";
 		}
 
 		protected void ChangeView(object sender, EventArgs e)

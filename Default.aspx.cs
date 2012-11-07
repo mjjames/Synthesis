@@ -7,9 +7,7 @@ public partial class _Default : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
-	    if (ConfigurationManager.AppSettings["SiteName"] == null) return;
-	    HtmlHead head = Page.Header;
-	    head.Title = ConfigurationManager.AppSettings["SiteName"] + ": Admin - Welcome Page";
+	    Title = "Welcome";
 	}
 
     protected string GetVersionNumber()

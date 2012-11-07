@@ -7,7 +7,6 @@
 <head id="Head1" runat="server">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Synthesis - Version <%= GetVersionNumber() %></title>
     <%--<link rel="stylesheet" type="text/css" href="~/styles/web.css" />--%>
 
     <link rel="Stylesheet" type="text/css" href="~/content/bootstrap.css" />

@@ -5,7 +5,7 @@
 
     <div class="container">
         <header class="hero-unit">
-            <h1>Welcome to your Admin Tool! <small>Version <%= GetVersionNumber() %></small></h1>
+            <h1>Welcome to your Admin Tool! <small>Synthesis Version <%= GetVersionNumber() %></small></h1>
             <p class="lead">
                 Please choose an area to administer using the navigation bar.<br />
                 For more help and information refer to the <a href="help/admintool.pdf" title="MJJames Admin Tool User Guide">user guide</a>.

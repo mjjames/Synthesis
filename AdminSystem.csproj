@@ -19,6 +19,8 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\MK Software Solutions\KSLPrefab\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,54 +46,72 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxControlToolkit, Version=3.5.40412.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+    <Reference Include="AjaxControlToolkit">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\AjaxControlToolkit.4.1.60919\lib\40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="com.flajaxian.DirectAmazonUploader, Version=1.0.3420.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\AjaxControlToolkit\April2010\AjaxControlToolkit.dll</HintPath>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\com.flajaxian.FileUploader.1.0.1\lib\net35\com.flajaxian.DirectAmazonUploader.dll</HintPath>
     </Reference>
-    <Reference Include="com.flajaxian.DirectAmazonUploader">
-      <HintPath>..\..\..\..\Resources\FlajaxiansS3Direct\bin\Debug\com.flajaxian.DirectAmazonUploader.dll</HintPath>
-    </Reference>
-    <Reference Include="com.flajaxian.FileUploader">
-      <HintPath>..\..\..\..\Resources\Flajaxian\com.flajaxian.FileUploader.dll</HintPath>
-    </Reference>
-    <Reference Include="Dimebrain.TweetSharp, Version=1.0.14.37163, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL">
+    <Reference Include="com.flajaxian.FileUploader, Version=2.0.3430.0, Culture=neutral, PublicKeyToken=98ef6b70d9d62bae, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\TweetSharp\Dimebrain.TweetSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\com.flajaxian.FileUploader.1.0.1\lib\net35\com.flajaxian.FileUploader.dll</HintPath>
     </Reference>
-    <Reference Include="FlickrNet, Version=2.1.5.19851, Culture=neutral, PublicKeyToken=2491df59efa5d132">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\flickrNet\Release\FlickrNet.dll</HintPath>
+    <Reference Include="Dimebrain.TweetSharp">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\Dimebrain.TweetSharp.1.0.0\lib\net35\Dimebrain.TweetSharp.dll</HintPath>
     </Reference>
-    <Reference Include="FredCK.FCKeditorV2, Version=2.6.3.22452, Culture=neutral, PublicKeyToken=4f86767c9b519a06, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\fckeditor\fckeditor.net 2.6.3\bin\Debug\2.0\FredCK.FCKeditorV2.dll</HintPath>
+    <Reference Include="FlickrNet">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\FlickrNet.3.5.0\lib\net20\FlickrNet.dll</HintPath>
     </Reference>
-    <Reference Include="Google.GData.Calendar, Version=1.0.9.6, Culture=neutral, PublicKeyToken=aa6748391206b888">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\gdata.net.1096\clients\cs\lib\Release\Google.GData.Calendar.dll</HintPath>
+    <Reference Include="FredCK.FCKeditorV2">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\FCKEditor.Net.2.6.3\lib\net20\FredCK.FCKeditorV2.dll</HintPath>
     </Reference>
-    <Reference Include="Google.GData.Client, Version=1.0.9.6, Culture=neutral, PublicKeyToken=04a59ca9b0273830">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\gdata.net.1096\clients\cs\lib\Release\Google.GData.Client.dll</HintPath>
+    <Reference Include="Google.GData.AccessControl">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\Google.GData.AccessControl.2.1.0.0\lib\Google.GData.AccessControl.dll</HintPath>
     </Reference>
-    <Reference Include="Google.GData.Extensions, Version=1.0.9.6, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876">
+    <Reference Include="Google.GData.Calendar, Version=2.1.0.0, Culture=neutral, PublicKeyToken=aa6748391206b888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\gdata.net.1096\clients\cs\lib\Release\Google.GData.Extensions.dll</HintPath>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\Google.GData.Calendar.2.1.0.0\lib\Google.GData.Calendar.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+    <Reference Include="Google.GData.Client, Version=2.1.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\log4net-1.2.10\bin\net\2.0\release\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\Google.GData.Client.2.1.0.0\lib\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\Google.GData.Extensions.2.1.0.0\lib\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.Net20">
-      <HintPath>..\..\..\..\Resources\Newtonsoft.Json\Bin\DotNet20\Newtonsoft.Json.Net20.dll</HintPath>
-    </Reference>
-    <Reference Include="Recaptcha, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="mjjames.ControlLibrary, Version=1.1.4693.26236, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Resources\reCaptcha\bin\Release\Recaptcha.dll</HintPath>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\mjjames.ControlLibrary.1.1.4693.26236\lib\net35\mjjames.ControlLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="mjjames.core">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\mjjames.core.1.0.4693.24875\lib\net35\mjjames.core.dll</HintPath>
+    </Reference>
+    <Reference Include="mjjames.Imaging, Version=1.0.4693.25671, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\mjjames.Imaging.1.0.4693.25671\lib\net35\mjjames.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\Dimebrain.TweetSharp.1.0.0\lib\net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Recaptcha">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\recaptcha.1.0.5.0\lib\.NetFramework 4.0\Recaptcha.dll</HintPath>
+    </Reference>
+    <Reference Include="SanitizerProviders">
+      <HintPath>..\..\..\..\..\MK Software Solutions\KSLPrefab\packages\AjaxControlToolkit.4.1.60919\lib\40\SanitizerProviders\SanitizerProviders.dll</HintPath>
     </Reference>
     <Reference Include="ScriptReferenceProfiler">
       <HintPath>..\..\..\..\Resources\ScriptReferenceProfiler\ScriptReferenceProfiler.dll</HintPath>
@@ -211,9 +231,9 @@
     <Content Include="images\smiley\msn\whatchutalkingabout_smile.gif" />
     <Content Include="images\smiley\msn\wink_smile.gif" />
     <Content Include="images\spacer.gif" />
+    <Content Include="install\install.aspx" />
     <Content Include="javascript\mediagallery.js" />
     <Content Include="javascript\storageservices.js" />
-    <Content Include="mjjames.ControlLibrary.csproj" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="tests\MediaGallery.aspx" />
@@ -257,6 +277,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="install\install.aspx.cs">
+      <DependentUpon>install.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="install\install.aspx.designer.cs">
+      <DependentUpon>install.aspx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\KeyValueRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />
@@ -461,30 +488,20 @@
     <Content Include="subscriptionmanagement.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\classes\ControlLibrary\mjjames.ControlLibrary.csproj">
-      <Project>{2ecfb22d-9c2e-4d08-b3b3-89734c864b77}</Project>
-      <Name>mjjames.ControlLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\classes\Imaging\Imaging.csproj">
-      <Project>{0DC543BE-B98F-4D32-BCFB-C65BACAAF347}</Project>
-      <Name>Imaging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
-      <Project>{B8488B6E-F1E4-4C64-A39D-5C853169DCE5}</Project>
-      <Name>mjjames.core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="admininc_defaults\adminsettings.config" />
-    <Content Include="admininc_defaults\connectionsettings.config" />
+    <Content Include="admininc_defaults\connectionsettings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="admininc_defaults\mjjames.config" />
     <Content Include="admininc_defaults\adminDB.config" />
     <Content Include="Content\Web.config" />
+    <Content Include="AdminSystem.nuspec" />
     <None Include="dataContexts\adminDataContexts.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>adminDataContexts.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="FlickrNet.chm" />
     <None Include="help\admintool.pdf" />
     <Content Include="fckplugins\OnlineVideo\fckplugin.js" />
     <Content Include="fckplugins\OnlineVideo\onlinevideo.gif" />
@@ -496,6 +513,7 @@
     <Content Include="authentication\ResetPassword.aspx" />
     <Content Include="javascript\jquery-1.3.2-vsdoc.js" />
     <Content Include="packages.config" />
+    <Content Include="install\web.config" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
   </ItemGroup>
   <ItemGroup>
@@ -521,12 +539,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\classes\mjjames.core\mjjames.core\mjjames.core.csproj">
-      <Project>{B8488B6E-F1E4-4C64-A39D-5C853169DCE5}</Project>
-      <Name>mjjames.core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -550,4 +562,5 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

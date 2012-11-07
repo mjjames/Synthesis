@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Admin System")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("MK Synthesis")]
+[assembly: AssemblyDescription("CMS backend for the MK Synthesis System")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("mjjames.co.uk")]
-[assembly: AssemblyProduct("AdminSystem")]
-[assembly: AssemblyCopyright("Copyright © 2010")]
+[assembly: AssemblyCompany("MJJames")]
+[assembly: AssemblyProduct("MK Synthesis")]
+[assembly: AssemblyCopyright("Copyright © MJJames 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: log4net.Config.XmlConfigurator(ConfigFile="Log4Net.config", Watch = true)]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("2.0.0.*")]
+[assembly: AssemblyVersion("2.0.*")]
 [assembly: AssemblyFileVersion("2.0.0.0")]

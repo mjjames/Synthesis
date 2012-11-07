@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>mjjames.MKSynthesis</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <projectUrl>http://mjjames.co.uk/mksynthesis</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright MJJames 2012</copyright>
+    <tags>MJJames MKSynthesis</tags>
+    <dependencies>
+      <dependency id="AjaxControlToolkit" version="4.1.60919"  />
+      <dependency id="com.flajaxian.FileUploader" version="1.0.1"  />
+      <dependency id="Dimebrain.TweetSharp" version="1.0.0"  />
+      <dependency id="FCKEditor.Net" version="2.6.3"  />
+      <dependency id="FlickrNet" version="3.5.0"  />
+      <dependency id="Google.GData.AccessControl" version="2.1.0.0"  />
+      <dependency id="Google.GData.Calendar" version="2.1.0.0"  />
+      <dependency id="Google.GData.Client" version="2.1.0.0"  />
+      <dependency id="Google.GData.Extensions" version="2.1.0.0"  />
+      <dependency id="HtmlAgilityPack" version="1.4.6"  />
+      <dependency id="log4net" version="2.0.0"  />
+      <dependency id="Microsoft.AspNet.Mvc" version="4.0.20710.0"  />
+      <dependency id="Microsoft.AspNet.Razor" version="2.0.20710.0"  />
+      <dependency id="Microsoft.AspNet.WebPages" version="2.0.20710.0"  />
+      <dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0"  />
+      <dependency id="mjjames.ControlLibrary" version="1.1.4693.26236"  />
+      <dependency id="mjjames.core" version="1.0.4693.24875"  />
+      <dependency id="mjjames.Imaging" version="1.0.4693.25671"  />
+      <dependency id="Newtonsoft.Json" version="4.5.10"  />
+      <dependency id="recaptcha" version="1.0.5.0"  />
+      <dependency id="Twitter.Bootstrap" version="2.1.1"  />
+    </dependencies>
+  </metadata>
+</package>

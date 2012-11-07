@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 using mjjames.AdminSystem.classes;
+using System.Web.UI;
 
 namespace mjjames.AdminSystem
 {
@@ -13,7 +14,13 @@ namespace mjjames.AdminSystem
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
-
+            ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition
+            {
+                Path = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.min.js",
+                DebugPath = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js",
+                CdnPath = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.min.js",
+                CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js"
+            });
 		}
 
 		protected void Session_Start(object sender, EventArgs e)

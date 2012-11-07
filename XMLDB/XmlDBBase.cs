@@ -286,18 +286,57 @@ namespace mjjames.AdminSystem
         {
 
             var phTabs = new PlaceHolder { ID = "tabsPlaceholder" };
-            var tabContainer = new TabContainer();
+            var tabContainer = new WebControl(HtmlTextWriterTag.Div)
+            {
+                CssClass = "tabbable"
+            };
+            var tabsNavigation = new WebControl(HtmlTextWriterTag.Ul)
+            {
+                CssClass = "nav nav-tabs"
+            };
+            var tabContent = new WebControl(HtmlTextWriterTag.Div)
+            {
+                CssClass = "tab-content"
+            };
+            tabContainer.Controls.Add(tabsNavigation);
+            tabContainer.Controls.Add(tabContent);
+
             if (Table != null)
             {
+                var firstTab = true;
                 foreach (AdminTab tab in Table.Tabs)
                 {
-                    var tpTab = new TabPanel { ID = tab.ID, HeaderText = tab.Label, CssClass = "form-horizontal" };
+                    var tabPane = new WebControl(HtmlTextWriterTag.Div)
+                    {
+                        CssClass = "tab-pane",
+                        ID = tab.ID,
+                        ClientIDMode = ClientIDMode.Static
+                    };
+
+                    var tabNavItem = new WebControl(HtmlTextWriterTag.Li);
+                    var tabNavItemLink = new HyperLink()
+                    {
+                        Text = tab.Label,
+                        NavigateUrl = "#" + tabPane.ClientID,
+                    };
+                    tabNavItemLink.Attributes.Add("data-toggle", "tab");
+
+                    if (firstTab)
+                    {
+                        tabNavItem.CssClass = "active";
+                        firstTab = false;
+                        tabPane.CssClass += " active";
+                    }
+
+                    tabNavItem.Controls.Add(tabNavItemLink);
+                    tabsNavigation.Controls.Add(tabNavItem);
+
                     Logger.LogDebug("Rendering Tab:" + tab.ID);
-                    tpTab.Controls.Add(GenerateControls(tab.Fields));
-                    tabContainer.Tabs.Add(tpTab);
+                    tabPane.Controls.Add(GenerateControls(tab.Fields));
+                    
+                    tabContent.Controls.Add(tabPane);
                 }
             }
-
             phTabs.Controls.Add(tabContainer);
             return phTabs;
         }

@@ -35,10 +35,16 @@ namespace mjjames.AdminSystem.install
                 return;
             }
 
+            var url = siteURL.Text.ToLower();
+            if (!url.EndsWith("/"))
+            {
+                url += "/";
+            }
+
             var site = new site
             {
                 active = true,
-                hostname = siteURL.Text,
+                hostname = url,
                 name = siteName.Text,
                 pages =
                 {

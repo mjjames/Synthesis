@@ -15,6 +15,7 @@
     <link rel="Stylesheet" type="text/css" href="~/content/bootstrap-responsive.css" />
     <link rel="Stylesheet" type="text/css" href="~/content/site.css" />
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="Scripts/bootstrap.min.js" type="text/javascript" ></script>
 </head>
 <body>
     <div class="container">

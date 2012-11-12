@@ -65,7 +65,7 @@ namespace mjjames.AdminSystem
             var keyvalues = new List<KeyValueData>();
             foreach (AdminTab tab in Table.Tabs)
             {
-                TabPanel ourTab = (TabPanel)FindControlRecursive(ourSender.Page, tab.ID);
+                var ourTab = (WebControl)FindControlRecursive(ourSender.Page, tab.ID);
                 if (ourTab == null) continue;
                 foreach (AdminField field in tab.Fields)
                 {

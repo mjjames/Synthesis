@@ -65,4 +65,11 @@
             <hr class="clear" />
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("img[rel=popover]").popover({
+                trigger : 'hover'
+            });
+        });
+    </script>
 </asp:Content>

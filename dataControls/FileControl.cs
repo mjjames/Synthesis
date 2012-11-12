@@ -77,7 +77,7 @@ namespace mjjames.AdminSystem.dataControls
             if (field.Attributes.ContainsKey("preview") && XmlConvert.ToBoolean(field.Attributes["preview"]))
             {
 
-                var previewClass = "previewImg";
+                var previewClass = "previewImg pull-right thumbnail";
                 //if our field stores files to an external provider our preview requires an extra classname
                 if (field.Attributes.ContainsKey("storageservice"))
                 {
@@ -88,21 +88,40 @@ namespace mjjames.AdminSystem.dataControls
                     AlternateText = "No Preview Available",
                     CssClass = previewClass,
                     ID = "image" + field.ID,
-                    Width = 200,
                     ImageUrl = null,
                     BorderColor = System.Drawing.Color.Black,
                     BorderStyle = BorderStyle.Ridge,
-                    BorderWidth = Unit.Pixel(2)
+                    BorderWidth = Unit.Pixel(2),
                 };
 
-                string strDir = ConfigurationManager.AppSettings["uploaddir"];
-                imagePreview.ImageUrl = strDir + ourFileValue;
+                string imageUrl;
+                if (String.IsNullOrWhiteSpace(ourFileValue))
+                {
+                    imageUrl = "~/images/noimage.png";                    
+                }
+                else
+                {
+                    string strDir = ConfigurationManager.AppSettings["uploaddir"];
+                    imageUrl = strDir + ourFileValue;
+                }
+
+                imagePreview.Style.Add("max-height", "50px");
+                UpdateImageSource(imagePreview, imageUrl);
+                imagePreview.Attributes.Add("data-original-title", "Preview: " + field.Label);
+                imagePreview.Attributes.Add("rel", "popover");
+
 
                 fileUpload.ContentTemplateContainer.Controls.Add(imagePreview);
             }
 
             fileUploadPanel.Controls.Add(fileUpload);
             return fileUploadPanel;
+        }
+
+        private static void UpdateImageSource(Image imagePreview, string imageUrl)
+        {
+            imagePreview.ImageUrl = imageUrl;
+            imagePreview.Attributes.Add("data-content", "<img src='" + VirtualPathUtility.ToAbsolute(imageUrl) + "' />");
         }
 
         private void GenerateLocalStorageControl(AdminField field, ScriptManager ourSM, ClientScriptManager csm, UpdatePanel fileUpload)
@@ -243,7 +262,7 @@ namespace mjjames.AdminSystem.dataControls
                 ourHiddenFile.Value = fud.filepath;
             }
             if (ourImage == null) return;
-            ourImage.ImageUrl = strDir + fud.filepath;
+            UpdateImageSource(ourImage, strDir + fud.filepath);
             ourImage.AlternateText = "Preview";
         }
 

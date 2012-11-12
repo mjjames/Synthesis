@@ -122,7 +122,7 @@ public partial class loadimage : System.Web.UI.Page
 
 	private Image LoadErrorImage(string sAction, string sHeight, string sWidth)
 	{
-		Image newImage = Image.FromFile(Server.MapPath("/images/noimage.jpg"));
+		Image newImage = Image.FromFile(Server.MapPath("~/images/noimage.png"));
 
 		Resizer resize = new Resizer();
 

@@ -72,7 +72,7 @@ namespace mjjames.AdminSystem.DataControls
 
 		private static PropertyInfo GetProperty(string fieldID, DataType type, object data)
 		{
-			return data.GetType().GetProperty(fieldID, type == DataType.String ? typeof(string) : typeof(int?));
+			return data.GetType().GetProperty(fieldID);
 		}
 
 		internal enum DataType

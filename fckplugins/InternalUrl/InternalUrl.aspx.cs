@@ -36,7 +36,7 @@ namespace mjjames.AdminSystem.fckplugins.InternalUrl
 			var cssmp = new CustomSqlSiteMapProvider
 							{
 								SiteKey = siteKey,
-                                SiteRootURL = LookupSitePath(siteKey)
+                                SiteRootUrl = LookupSitePath(siteKey)
 							};
 
 			cssmp.Initialize("Admin Internal Site Page Navigation SiteMap", config);

@@ -194,7 +194,7 @@
       <Column Name="title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="value" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="active" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="lookup_media" Member="medias" ThisKey="lookup_key" OtherKey="mediatype_lookup" Type="media" />
       <Association Name="lookup_media_link" Member="media_links" ThisKey="lookup_key" OtherKey="linktype_lookup" Type="media_link" />
       <Association Name="lookup_keyvalue" Member="keyvalues" ThisKey="lookup_key" OtherKey="link_lookup" Type="keyvalue" />

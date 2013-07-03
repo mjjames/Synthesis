@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using System.Web;
 using System.Web.Security;
-using System.Web.UI.HtmlControls;
 
 namespace mjjames.AdminSystem.authentication
 {
@@ -11,6 +9,10 @@ namespace mjjames.AdminSystem.authentication
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			Title = "System Login";
+		    if (string.IsNullOrWhiteSpace(Form.Action))
+		    {
+		        Form.Action = "Default.aspx";
+		    }
 		}
 		/// <summary>
 		/// Validate Our User
@@ -32,17 +34,15 @@ namespace mjjames.AdminSystem.authentication
 		{
 			if (ValidateUser(inputUserName.Value, inputPassword.Value))
 			{
-				FormsAuthenticationTicket tkt = new FormsAuthenticationTicket(1, inputUserName.Value, DateTime.Now, DateTime.Now.AddMinutes(30), false, "Synthesis");
+				var tkt = new FormsAuthenticationTicket(1, inputUserName.Value, DateTime.Now, DateTime.Now.AddMinutes(30), false, "synthesis");
 			
-				string cookiestr = FormsAuthentication.Encrypt(tkt);
-				HttpCookie ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr);
-			
-				ck.Path = FormsAuthentication.FormsCookiePath;
-				Response.Cookies.Add(ck);
+				var cookiestr = FormsAuthentication.Encrypt(tkt);
+				var ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr) {Path = FormsAuthentication.FormsCookiePath};
 
+			    Response.Cookies.Add(ck);
 			
 				string strRedirect = Request["ReturnUrl"] ?? "~/";
-				Response.Redirect(strRedirect, true);
+                Response.Redirect(strRedirect, true);
 			}
 			else
 			{

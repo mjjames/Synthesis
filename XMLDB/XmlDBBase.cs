@@ -332,7 +332,7 @@ namespace mjjames.AdminSystem
 
                     Logger.LogDebug("Rendering Tab:" + tab.ID);
                     tabPane.Controls.Add(GenerateControls(tab.Fields));
-                    
+
                     tabContent.Controls.Add(tabPane);
                 }
             }
@@ -361,7 +361,7 @@ namespace mjjames.AdminSystem
                     CssClass = "pull-right btn-group"
                 };
 
-                var saveButton = new Button { Text = "Save", CommandName = "SaveEdit", CssClass="btn btn-success" };
+                var saveButton = new Button { Text = "Save", CommandName = "SaveEdit", CssClass = "btn btn-success" };
 
 
                 saveButton.Click += SaveEdit;
@@ -370,12 +370,12 @@ namespace mjjames.AdminSystem
                 {
                     saveButton.Click += RedirectToEdit; //this should only work for an insert
                 }
-                var cancelButton = new Button { Text = "Cancel", CommandName = "CancelEdit", CssClass="btn btn-inverse" };
+                var cancelButton = new Button { Text = "Cancel", CommandName = "CancelEdit", CssClass = "btn btn-inverse" };
                 cancelButton.Click += CancelEdit;
 
                 if (Table.EmailButton)
                 {
-                    var emailButton = new Button { Text = "Email", CommandName = "emailButton", CssClass="btn btn-info" };
+                    var emailButton = new Button { Text = "Email", CommandName = "emailButton", CssClass = "btn btn-info" };
                     emailButton.Click += SaveEdit;
                     emailButton.Click += EmailNewsletter;
                     buttonContainer.Controls.Add(emailButton);
@@ -394,7 +394,7 @@ namespace mjjames.AdminSystem
                     buttonContainer.Controls.Add(deleteButton);
                 }
 
-                
+
                 buttonContainer.Controls.Add(cancelButton);
                 formactions.Controls.Add(buttonContainer);
                 ourPage.Controls.Add(formactions);
@@ -577,6 +577,17 @@ namespace mjjames.AdminSystem
                 {
                     selectCommand += "WHERE " + filter;
                 }
+
+                var sortAttributes = Table.Defaults.Where(d => d.Attributes.Any(a => a.Key == "sort"));
+                selectCommand += " ORDER BY ";
+                foreach (var sortItem in sortAttributes)
+                {
+                    selectCommand += string.Format("[{0}] {1} ,", sortItem.ID, sortItem.Attributes["sort"]);
+                }
+
+                var primaryKey = Table.Defaults.First(d => d.Attributes.Any(a => a.Key == "primarykey"));
+                selectCommand += string.Format("[{0}] desc", primaryKey.ID);
+
             }
             return selectCommand;
         }

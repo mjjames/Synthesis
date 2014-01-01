@@ -106,8 +106,7 @@ namespace mjjames.AdminSystem
                 HttpContext.Current.Response.End();
             }
 
-            MultiTenancyEnabled = ConfigurationManager.AppSettings["EnableMultiTenancy"] != null ?
-                                    ConfigurationManager.AppSettings["EnableMultiTenancy"].Equals("true", StringComparison.CurrentCultureIgnoreCase) : false;
+            MultiTenancyEnabled = ConfigurationManager.AppSettings["EnableMultiTenancy"] != null && ConfigurationManager.AppSettings["EnableMultiTenancy"].Equals("true", StringComparison.CurrentCultureIgnoreCase);
 
         }
 
@@ -204,7 +203,7 @@ namespace mjjames.AdminSystem
                 var cultureInfo = Thread.CurrentThread.CurrentCulture;
                 var textInfo = cultureInfo.TextInfo;
                 var controlName = String.Format("mjjames.AdminSystem.dataControls.{0}Control", textInfo.ToTitleCase(field.Type));
-                var ourType = Activator.CreateInstance("mjjames.AdminSystem", controlName);
+                var ourType = Activator.CreateInstance("Synthesis", controlName);
 
                 if (ourType != null)
                 {
@@ -448,7 +447,7 @@ namespace mjjames.AdminSystem
             var cultureInfo = Thread.CurrentThread.CurrentCulture;
             var textInfo = cultureInfo.TextInfo;
             var controlName = String.Format("mjjames.AdminSystem.dataControls.{0}Control", textInfo.ToTitleCase(sFieldType));
-            var ourDType = Activator.CreateInstance("mjjames.AdminSystem", controlName);
+            var ourDType = Activator.CreateInstance("Synthesis", controlName);
 
             object dataValue = null;
             if (ourDType != null)

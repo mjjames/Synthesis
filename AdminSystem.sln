@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminSystem", "AdminSystem.csproj", "{455E86F4-E332-4E73-B4C3-D153CFD66433}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mjjames.ControlLibrary", "..\..\..\classes\ControlLibrary\mjjames.ControlLibrary.csproj", "{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synthesis", "Synthesis.csproj", "{455E86F4-E332-4E73-B4C3-D153CFD66433}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,14 +19,6 @@ Global
 		{455E86F4-E332-4E73-B4C3-D153CFD66433}.non multi site Debug Mode|Any CPU.Build.0 = Debug|Any CPU
 		{455E86F4-E332-4E73-B4C3-D153CFD66433}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{455E86F4-E332-4E73-B4C3-D153CFD66433}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}.Admin Only|Any CPU.ActiveCfg = Admin Only|Any CPU
-		{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}.Admin Only|Any CPU.Build.0 = Admin Only|Any CPU
-		{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}.non multi site Debug Mode|Any CPU.ActiveCfg = non multi site Debug Mode|Any CPU
-		{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}.non multi site Debug Mode|Any CPU.Build.0 = non multi site Debug Mode|Any CPU
-		{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2ECFB22D-9C2E-4D08-B3B3-89734C864B77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

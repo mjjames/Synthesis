@@ -171,6 +171,8 @@
       <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="virtualurl" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="site_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="pagetitle" Type="System.String" DbType="nvarchar(max)" CanBeNull="true" />
+      <Column Name="metadescription" Type="System.String" DbType="nvarchar(max)" CanBeNull="true" />
       <Association Name="site_article" Member="site" ThisKey="site_fkey" OtherKey="site_key" Type="site" IsForeignKey="true" />
     </Type>
   </Table>
@@ -194,7 +196,7 @@
       <Column Name="title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="value" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="active" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="active" Type="System.Boolean" DbType="BIT NOT NULL" CanBeNull="false" />
       <Association Name="lookup_media" Member="medias" ThisKey="lookup_key" OtherKey="mediatype_lookup" Type="media" />
       <Association Name="lookup_media_link" Member="media_links" ThisKey="lookup_key" OtherKey="linktype_lookup" Type="media_link" />
       <Association Name="lookup_keyvalue" Member="keyvalues" ThisKey="lookup_key" OtherKey="link_lookup" Type="keyvalue" />
@@ -265,6 +267,8 @@
       <Column Name="shortdescription" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="thumbnailimage" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="site_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="pagetitle" Type="System.String" DbType="nvarchar(max)" CanBeNull="true" />
+      <Column Name="metadescription" Type="System.String" DbType="nvarchar(max)" CanBeNull="true" />
       <Association Name="site_offer" Member="site" ThisKey="site_fkey" OtherKey="site_key" Type="site" IsForeignKey="true" />
     </Type>
   </Table>
@@ -310,6 +314,8 @@
       <Column Name="video_id" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="url" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="site_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="pagetitle" Type="System.String" DbType="nvarchar(max)" CanBeNull="true" />
+      <Column Name="metadescription" Type="System.String" DbType="nvarchar(max)" CanBeNull="true" />
       <Association Name="project_testimony" Member="testimonies" ThisKey="project_key" OtherKey="project_fkey" Type="testimony" />
       <Association Name="site_project" Member="site" ThisKey="site_fkey" OtherKey="site_key" Type="site" IsForeignKey="true" />
     </Type>

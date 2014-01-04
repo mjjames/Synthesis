@@ -64,4 +64,32 @@ header.hero-unit small {
     background-color: whiteSmoke;
 }
 
+/* copy to clipboard */
+
+div.URLClipboardWrapper
+{
+	clear: none;
+	float: left;
+	height: 16px;
+	left: 310px;
+	margin-left: -16px;
+	position: relative;
+	top: 6px;
+	width: 16px;
+}
+
+div.URLClipboardWrapper img
+{
+	display: block;
+}
+
+div.URLClipboardWrapper embed
+{
+	display: block;
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+
 

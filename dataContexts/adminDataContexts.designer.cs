@@ -5663,6 +5663,8 @@ namespace mjjames.AdminSystem.DataEntities
 		
 		private bool _showinsecondaryfeatured;
 		
+		private bool _linkurlispermenant;
+		
 		private EntityRef<site> _site;
 		
     #region Extensibility Method Definitions
@@ -5717,6 +5719,8 @@ namespace mjjames.AdminSystem.DataEntities
     partial void OnpagetitleChanged();
     partial void OnshowinsecondaryfeaturedChanging(bool value);
     partial void OnshowinsecondaryfeaturedChanged();
+    partial void OnlinkurlispermenantChanging(bool value);
+    partial void OnlinkurlispermenantChanged();
     #endregion
 		
 		public page()
@@ -6205,6 +6209,26 @@ namespace mjjames.AdminSystem.DataEntities
 					this._showinsecondaryfeatured = value;
 					this.SendPropertyChanged("showinsecondaryfeatured");
 					this.OnshowinsecondaryfeaturedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_linkurlispermenant", DbType="Bit")]
+		public bool linkurlispermenant
+		{
+			get
+			{
+				return this._linkurlispermenant;
+			}
+			set
+			{
+				if ((this._linkurlispermenant != value))
+				{
+					this.OnlinkurlispermenantChanging(value);
+					this.SendPropertyChanging();
+					this._linkurlispermenant = value;
+					this.SendPropertyChanged("linkurlispermenant");
+					this.OnlinkurlispermenantChanged();
 				}
 			}
 		}

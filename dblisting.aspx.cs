@@ -10,6 +10,8 @@ using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.dataControls;
 using mjjames.ControlLibrary.WebControls;
 using System.Web;
+using System.Web.UI.HtmlControls;
+using mjjames.ControlLibrary.AdminWebControls;
 
 namespace mjjames.AdminSystem
 {
@@ -142,11 +144,11 @@ namespace mjjames.AdminSystem
             var listfilter = _xmldb.TableDefaults.Find(t => t.Attributes.ContainsKey("listfilter"));
             if (listfilter != null)
             {
-                pageListing.Columns.Add(new HyperLinkField
-                {
-                    Text = "Child " + _xmldb.TableLabel + "s",
-                    DataNavigateUrlFields = new[] { _xmldb.TablePrimaryKeyField },
-                    DataNavigateUrlFormatString = "~/dblisting.aspx?" + listfilter.ID + "={0}&type=" + _sType
+                
+              
+                pageListing.Columns.Add(new TemplateField{
+                    ItemTemplate = new ChildEntityActionsTemplate(DataControlRowType.DataRow, _xmldb.TableLabel, _xmldb.TablePrimaryKeyField, listfilter.ID, _sType),
+                    HeaderText = "Child Pages"
                 });
             }
 
@@ -318,9 +320,6 @@ namespace mjjames.AdminSystem
             }
 
         }
-
-
-
 
     }
 }

@@ -168,6 +168,11 @@ namespace mjjames.AdminSystem
             Table = xmlQuery.FirstOrDefault();
         }
 
+        public virtual string GetQuickEditSiteMapQuery()
+        {
+            throw new NotSupportedException();
+        }
+
 
         #region DBEditor methods
         /// <summary>

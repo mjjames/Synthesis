@@ -286,7 +286,27 @@ namespace mjjames.AdminSystem
 
 		#endregion
 
-
+        override public string GetQuickEditSiteMapQuery()
+        {
+            return "SELECT [page_key] AS [id], page_fkey AS [parent], "+
+                    "Case When [active] = 0 then "+
+	                "   [NavTitle] + ' (Inactive)' "+
+                    "else " +
+                    "   CASE WHEN  [linkurl] = ''  then "+
+                    "   [navtitle] "+
+                    "   ELSE "+
+                    "	    Case When [linkurlispermenant] = 1 then "+
+                    "	    	[navtitle] + ' (P. Redirect)' "+
+                    "	    else "+
+                    "	    	[navtitle] + ' (Redirect)' "+
+                    "	    end "+
+                    "   END " +
+                    "End AS [title] "+
+                    ", CAST([page_key] AS nvarchar) AS [url], '' AS [roles] , '' AS [description] "+
+                    "FROM [pages] "+
+                    "WHERE [site_fkey] = 1 "+
+                    "ORDER BY [parent], [title]";
+        }
 	}
 
 }

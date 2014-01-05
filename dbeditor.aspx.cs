@@ -174,7 +174,7 @@ namespace mjjames.AdminSystem
 				}
 				else
 				{
-					var strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles], '' AS [description] FROM [{4}] WHERE [site_fkey] = @siteKey ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName);
+                    var strQuery = _xmldb.GetQuickEditSiteMapQuery();
 					var strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
 
 					config.Add("query", strQuery);

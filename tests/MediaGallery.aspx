@@ -1,9 +1,4 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MediaGallery.aspx.cs" Inherits="mjjames.AdminSystem.tests.MediaGallery" %>
-<%@ Register TagPrefix="mjjames" Namespace="mjjames" Assembly="mjjames.AdminSystem" %>
-<%@ Register
-Assembly="AjaxControlToolkit" 
-Namespace="AjaxControlToolkit"
-TagPrefix="ajaxToolkit" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 

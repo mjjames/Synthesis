@@ -64,4 +64,200 @@ header.hero-unit small {
     background-color: whiteSmoke;
 }
 
+/* copy to clipboard */
+
+div.URLClipboardWrapper
+{
+	clear: none;
+	float: left;
+	height: 16px;
+	left: 310px;
+	margin-left: -16px;
+	position: relative;
+	top: 6px;
+	width: 16px;
+}
+
+div.URLClipboardWrapper img
+{
+	display: block;
+}
+
+div.URLClipboardWrapper embed
+{
+	display: block;
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+/* photogallery admin */
+
+
+
+.photo, .mediaItem, .insertMediaItem
+{
+	list-style: none;
+	border: 1px solid #BED2EE;	
+	text-align: center;
+	font-size: 0.85em;
+}
+
+.photo img, .mediaItem img, .editmedia img, .mediaItem object, .editmedia object
+{
+	border: 1px solid #BED2EE;
+}
+
+span.buttons
+{
+	text-align: right;
+}
+
+span.buttons input
+{
+	vertical-align: middle;
+}
+
+.editphoto, .editmedia
+{
+	text-align: left;
+}
+
+.mediagallery .accordian .headerText{
+	background: #BED2EE;
+	color: #000;
+	text-align: left;
+}
+
+.mediagallery .accordian .headerText:hover{
+	text-decoration: underline;
+}
+
+.mediagallery .accordian .accordianHeaderSelected .headerText{
+	background: #8799FF;
+	color: #fff;
+}
+
+.photogallery .insertphoto label, .mediagallery .insertMediaItem label {
+	text-align:left;
+}
+
+
+.photogallery, .mediagallery
+{
+	clear: both;
+	margin: 0;
+	padding: 0.5em 0;
+    list-style: none;
+}
+
+.photogallery .photo, .mediagallery .mediaItem
+{
+	width: 160px;
+	float: left;
+	margin: 0 1% 1% 0;
+	padding: 0.5em;
+    position: relative;
+    height: 222px;
+}
+
+.photo p.title, .mediaItem p.title{
+    font-weight: bold;
+}
+
+.photo p.title, .photo p.description, .mediaItem p.title, .mediaItem p.description
+{
+	margin: 0;
+	padding: 0;
+}
+
+.photo img, .mediaItem img, .mediaItem object
+{
+	margin: 0.5em auto;
+	padding: 0;
+	display: block;
+}
+
+.photogallery .insertphoto, .mediagallery .insertMediaItem
+{
+	clear: both;
+
+	margin-top: 0.5em;
+	padding: 0.5em;
+}
+
+.photogallery .insertphoto div.row, .mediagallery .insertMediaItem div.row{
+    margin: 0;
+}
+
+.photogallery .insertphoto label, .mediagallery .insertMediaItem label
+{
+	clear: both;
+}
+
+.photo span.buttons, .mediaItem span.buttons
+{
+	display: block;
+	position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.photo span.buttons .submit, .mediaItem span.buttons .submit
+{
+	margin: 0;
+}
+
+ul.photogallery li.editphoto, ul.mediagallery li.editmedia
+{
+	width: 320px; /* double normal width */
+}
+
+.editphoto label, .editmedia label
+{
+	float: none;
+}
+
+.editphoto, .editmedia
+{
+	position: relative;
+}
+
+.insertphoto, .insertMediaItem
+{
+	width: 340px;
+}
+
+.insertphoto input, .insertphoto textarea, .insertMediaItem input, .insertMediaItem textarea
+{
+	width: 332px;
+}
+
+.editphoto input, .editphoto textarea, .editmedia input, .editmedia textarea
+{
+	width: 155px;
+}
+
+.insertphoto span.buttons{
+    float: right;
+}
+
+.previewWrapper
+{
+	position: absolute;
+	width: 155px;
+	top: 0.5em;
+	right: 0;
+}
+
+.editphoto span.buttons input, .insertphoto span.buttons input, .insertMediaItem span.buttons input, .editmedia span.buttons input
+{
+	width: auto;
+}
+
+.mediagallery .accordian .headerText{
+	padding: 5px;
+}
+
+
 

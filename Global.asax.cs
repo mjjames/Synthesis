@@ -16,9 +16,10 @@ namespace mjjames.AdminSystem
 		{
             ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition
             {
-                Path = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.min.js",
-                DebugPath = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js",
+                Path = "https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.min.js",
+                DebugPath = "https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js",
                 CdnPath = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.min.js",
+                CdnSupportsSecureConnection = true,
                 CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js"
             });
 		}

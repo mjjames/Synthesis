@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Web;
 using System.Web.UI.WebControls;
 using AjaxControlToolkit;
 using mjjames.AdminSystem.classes;
@@ -235,6 +236,12 @@ namespace mjjames.AdminSystem
 			{
 				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
 				Logger.LogError("Page Update Failed", ex);
+#if DEBUG
+                if (HttpContext.Current.Request.IsLocal)
+                {
+                    throw;
+                }
+#endif
 			}
 			//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
 			if (clearSiteMapCache)
@@ -279,7 +286,27 @@ namespace mjjames.AdminSystem
 
 		#endregion
 
-
+        override public string GetQuickEditSiteMapQuery()
+        {
+            return "SELECT [page_key] AS [id], page_fkey AS [parent], "+
+                    "Case When [active] = 0 then "+
+	                "   [NavTitle] + ' (Inactive)' "+
+                    "else " +
+                    "   CASE WHEN  [linkurl] = ''  then "+
+                    "   [navtitle] "+
+                    "   ELSE "+
+                    "	    Case When [linkurlispermenant] = 1 then "+
+                    "	    	[navtitle] + ' (P. Redirect)' "+
+                    "	    else "+
+                    "	    	[navtitle] + ' (Redirect)' "+
+                    "	    end "+
+                    "   END " +
+                    "End AS [title] "+
+                    ", CAST([page_key] AS nvarchar) AS [url], '' AS [roles] , '' AS [description] "+
+                    "FROM [pages] "+
+                    "WHERE [site_fkey] = 1 "+
+                    "ORDER BY [parent], [title]";
+        }
 	}
 
 }

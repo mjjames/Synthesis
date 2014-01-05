@@ -10,6 +10,8 @@ using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.dataControls;
 using mjjames.ControlLibrary.WebControls;
 using System.Web;
+using System.Web.UI.HtmlControls;
+using mjjames.ControlLibrary.AdminWebControls;
 
 namespace mjjames.AdminSystem
 {
@@ -142,11 +144,11 @@ namespace mjjames.AdminSystem
             var listfilter = _xmldb.TableDefaults.Find(t => t.Attributes.ContainsKey("listfilter"));
             if (listfilter != null)
             {
-                pageListing.Columns.Add(new HyperLinkField
-                {
-                    Text = "Child " + _xmldb.TableLabel + "s",
-                    DataNavigateUrlFields = new[] { _xmldb.TablePrimaryKeyField },
-                    DataNavigateUrlFormatString = "~/dblisting.aspx?" + listfilter.ID + "={0}&type=" + _sType
+                
+              
+                pageListing.Columns.Add(new TemplateField{
+                    ItemTemplate = new ChildEntityActionsTemplate(DataControlRowType.DataRow, _xmldb.TableLabel, _xmldb.TablePrimaryKeyField, listfilter.ID, _sType),
+                    HeaderText = "Child Pages"
                 });
             }
 
@@ -272,7 +274,7 @@ namespace mjjames.AdminSystem
                 else
                 {
                     Page.Trace.Write("Site Key:" + Session["userSiteKey"]);
-                    var strQuery = String.Format("SELECT [{0}] AS [id], {1} AS [parent], [{2}] AS [title], CAST([{3}] AS nvarchar) AS [url], '' AS [roles] , '' AS [description] FROM [{4}] WHERE [site_fkey] = @siteKey ORDER BY [parent], [title]", _xmldb.TablePrimaryKeyField, strParent, strTitle, _xmldb.TablePrimaryKeyField, _xmldb.TableName);
+                    var strQuery = _xmldb.GetQuickEditSiteMapQuery();
                     var strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
 
                     config.Add("query", strQuery);
@@ -318,9 +320,6 @@ namespace mjjames.AdminSystem
             }
 
         }
-
-
-
 
     }
 }

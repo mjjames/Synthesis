@@ -22,7 +22,7 @@ namespace mjjames.AdminSystem.dataControls
 			//next mark it as readonly so people don't think they can edit it
 			textbox.ReadOnly = true;
 			textbox.Enabled = false;
-			textbox.CssClass += " URLClipboard";
+			textbox.CssClass += " URLClipboard input-xlarge";
 
 			//we only have a url if we aren't a new page
 			if (PKey > 0)

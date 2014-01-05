@@ -76,6 +76,7 @@ namespace mjjames.AdminSystem.dataControls
 			if (field.Attributes.ContainsKey("required") && field.Attributes["required"] == "1")
 			{
 				validationRules.Add("required:true");
+                ourControl.Attributes.Add("required", "required");
 			}
 
 			if (field.Attributes.ContainsKey("validation"))
@@ -84,12 +85,15 @@ namespace mjjames.AdminSystem.dataControls
 				{
 					case "url":
 						validationRules.Add("url: true");
+				        ourControl.Attributes["type"] = "url";
 						break;
 					case "email":
 						validationRules.Add("email:true");
+				        ourControl.Attributes["type"] = "email";
 						break;
 					case "date":
 						validationRules.Add("date:true");
+                        ourControl.Attributes["type"] = "date";
 						break;
 					default:
 						break;
@@ -101,6 +105,8 @@ namespace mjjames.AdminSystem.dataControls
 			if(field.Attributes.ContainsKey("format") && field.Attributes["format"].Equals("number", StringComparison.InvariantCultureIgnoreCase)){
 				ourValue = GetNumericValue(field, ourPage);
 				ourControl.CssClass = "field number control" + field.ID; //if we of number type then we must overwrie the css class
+			    ourControl.Attributes["Type"] = "number";
+                ourControl.Attributes.Add("step", "1");
 				validationRules.Add("digits:true");
 			}
 			else{

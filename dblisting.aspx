@@ -6,7 +6,7 @@
         AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
         <CompositeScript>
             <Scripts>
-                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" />
                 <asp:ScriptReference Name="MicrosoftAjax.js" />
                 <asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
             </Scripts>
@@ -64,7 +64,7 @@
     </div>
     <script type="text/javascript">
         var deleteCheck = function () {
-            $(".    ").unbind("click.deletecheck").bind("click.deletecheck", function () {
+            $(".buttonDelete").unbind("click.deletecheck").bind("click.deletecheck", function () {
                 var bDelete = confirm("Are You Sure You Want To Delete This Item?");
                 return bDelete;
             });

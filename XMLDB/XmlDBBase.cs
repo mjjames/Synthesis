@@ -310,11 +310,19 @@ namespace mjjames.AdminSystem
                 var firstTab = true;
                 foreach (AdminTab tab in Table.Tabs)
                 {
+                  
+
                     var tabPane = new WebControl(HtmlTextWriterTag.Div)
                     {
                         CssClass = "tab-pane",
                         ID = tab.ID,
                         ClientIDMode = ClientIDMode.Static
+                    }; 
+                    
+                    var updatePanel = new UpdatePanel
+                    {
+                        ID = "updatePanel-" + tab.ID,
+                        ChildrenAsTriggers = true
                     };
 
                     var tabNavItem = new WebControl(HtmlTextWriterTag.Li);
@@ -336,8 +344,8 @@ namespace mjjames.AdminSystem
                     tabsNavigation.Controls.Add(tabNavItem);
 
                     Logger.LogDebug("Rendering Tab:" + tab.ID);
-                    tabPane.Controls.Add(GenerateControls(tab.Fields));
-
+                    tabPane.Controls.Add(updatePanel);
+                    updatePanel.ContentTemplateContainer.Controls.Add(GenerateControls(tab.Fields));
                     tabContent.Controls.Add(tabPane);
                 }
             }

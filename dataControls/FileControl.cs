@@ -35,29 +35,28 @@ namespace mjjames.AdminSystem.dataControls
             ClientScriptManager csm = page.ClientScript;
 
             Panel fileUploadPanel = new Panel();
-            UpdatePanel fileUpload = new UpdatePanel();
             HiddenField fileHidden = new HiddenField();
             Button clearFile = new Button();
 
             fileUploadPanel.CssClass = "field fileuploadWrapper";
-            fileUpload.ID = "panel" + field.ID;
             fileHidden.ID = "control" + field.ID;
             clearFile.ID = "buttonClear" + field.ID;
             clearFile.Click += ClearFileValue;
             clearFile.Visible = false;
+            clearFile.CssClass = "btn btn-danger removeImage";
 
             //if we have a storageservice attribute we need to set up this control to use that not the built in one
             if (field.Attributes.ContainsKey("storageservice"))
             {
-                GenerateStorageServiceControl(field, page, csm, fileUpload);
+                GenerateStorageServiceControl(field, page, csm, fileUploadPanel);
             }
             else
             {
-                GenerateLocalStorageControl(field, ourSM, csm, fileUpload);
+                GenerateLocalStorageControl(field, page, csm, fileUploadPanel);
             }
 
-            fileUpload.ContentTemplateContainer.Controls.Add(fileHidden);
-            fileUpload.ContentTemplateContainer.Controls.Add(clearFile);
+            fileUploadPanel.Controls.Add(fileHidden);
+            fileUploadPanel.Controls.Add(clearFile);
 
 
             PropertyInfo ourProperty = ourPage.GetType().GetProperty(field.ID, typeof(string));
@@ -69,7 +68,7 @@ namespace mjjames.AdminSystem.dataControls
                 fileHidden.Value = ourFileValue;
                 if (!String.IsNullOrEmpty(fileHidden.Value))
                 {
-                    clearFile.Text = "Clear";
+                    clearFile.Text = "Remove Image";
                     clearFile.Visible = true;
                 }
             }
@@ -93,65 +92,65 @@ namespace mjjames.AdminSystem.dataControls
                     BorderStyle = BorderStyle.Ridge,
                     BorderWidth = Unit.Pixel(2),
                 };
-
-                string imageUrl;
-                if (String.IsNullOrWhiteSpace(ourFileValue))
-                {
-                    imageUrl = "~/images/noimage.png";                    
-                }
-                else
-                {
-                    string strDir = ConfigurationManager.AppSettings["uploaddir"];
-                    imageUrl = strDir + ourFileValue;
-                }
+                SetImagePath(ourFileValue, imagePreview);
+                
 
                 imagePreview.Style.Add("max-height", "50px");
-                UpdateImageSource(imagePreview, imageUrl);
                 imagePreview.Attributes.Add("data-original-title", "Preview: " + field.Label);
                 imagePreview.Attributes.Add("rel", "popover");
 
 
-                fileUpload.ContentTemplateContainer.Controls.Add(imagePreview);
+                fileUploadPanel.Controls.Add(imagePreview);
             }
 
-            fileUploadPanel.Controls.Add(fileUpload);
             return fileUploadPanel;
         }
 
         private static void UpdateImageSource(Image imagePreview, string imageUrl)
         {
             imagePreview.ImageUrl = imageUrl;
-            imagePreview.Attributes.Add("data-content", "<img src='" + VirtualPathUtility.ToAbsolute(imageUrl) + "' />");
+            var contentPath = imageUrl.StartsWith("http") ? imageUrl : VirtualPathUtility.ToAbsolute(imageUrl);
+            imagePreview.Attributes.Add("data-content", "<img src='" + contentPath  + "' />");
         }
 
-        private void GenerateLocalStorageControl(AdminField field, ScriptManager ourSM, ClientScriptManager csm, UpdatePanel fileUpload)
+        private void GenerateLocalStorageControl(AdminField field,Page page, ClientScriptManager csm, Panel fileUpload)
         {
-            var ourUploader = new FileUpload();
-            var uploadButton = new Button();
+            ////pull in our storage service js
+            if (!csm.IsClientScriptIncludeRegistered("localstorage"))
+            {
+                csm.RegisterClientScriptInclude("localservice", page.ResolveClientUrl("~/javascript/localstorageservice.js"));
+            }
+            if (!csm.IsClientScriptIncludeRegistered("jquery.form"))
+            {
+                csm.RegisterClientScriptInclude("jquery.form", page.ResolveClientUrl("~/javascript/jquery.form.js"));
+            }
+
+
             var isWithinStorageLimit = IsWithinStorageLimit();
 
-            uploadButton.Click += FileUploader;
-            uploadButton.CommandName = "submit";
+            var divAppendWrapper = new HtmlGenericControl("div"){
+                ID = "filecontrol-" + field.ID,
+                ClientIDMode = System.Web.UI.ClientIDMode.Predictable,
+                InnerHtml = "<input type=\"file\" class=\"input-medium\" id=\"uploaderFile" + field.ID + "\" name=\"file\" /> <input type=\"button\" class=\"btn\" id=\"uploadSubmit" + field.ID +"\" value=\"Upload\"/>" +
+                            "   <div class=\"progress progress-striped active\">" +
+                            "   <div class=\"bar\" ></div> " +
+                            "   </div>"
+            };
+            divAppendWrapper.Attributes["class"] = "uploader";
 
-            csm.RegisterStartupScript(this.GetType(), "filecontrol-" + field.ID, "$('.uploadSubmit" + field.ID + "').click(function(){ if($('.uploaderFile" + field.ID +
-                                                            "')[0].value === ''){ alert('Please Ensure a File Is Provided Before Uploading'); return false; }else{ return true;}});", true);
+            var divNoStorage = new HtmlGenericControl("div")
+            {
+                InnerHtml = "<p> No Storage Space Available</p>"
+            };
 
-            uploadButton.ID = "button" + field.ID;
-            uploadButton.Text = "Upload";
+            //init
+            csm.RegisterStartupScript(this.GetType(), "storageservice-" + field.ID, String.Format("mjjames.LocalStorageService.Init(\"input[id$='uploaderFile{0}']\", \"input[id$='uploadSubmit{0}']\");", field.ID), true);
+    
 
-            uploadButton.CssClass = "uploadSubmit" + field.ID;
-            ourUploader.ID = "file" + field.ID;
-            ourUploader.CssClass = "uploaderFile" + field.ID;
-
-            ourUploader.Enabled = isWithinStorageLimit;
-            uploadButton.Enabled = isWithinStorageLimit;
-
-            fileUpload.ContentTemplateContainer.Controls.Add(ourUploader);
-            fileUpload.ContentTemplateContainer.Controls.Add(uploadButton);
-            fileUpload.UpdateMode = UpdatePanelUpdateMode.Conditional;
-            if (ourSM != null) ourSM.RegisterPostBackControl(uploadButton);
+            fileUpload.Controls.Add(isWithinStorageLimit ? divAppendWrapper : divNoStorage);
         }
 
+     
         private bool IsWithinStorageLimit()
         {
             double maxStorage = 0;
@@ -164,7 +163,7 @@ namespace mjjames.AdminSystem.dataControls
             return totalSize < maxStorage;
         }
 
-        private void GenerateStorageServiceControl(AdminField field, Page page, ClientScriptManager csm, UpdatePanel fileUpload)
+        private void GenerateStorageServiceControl(AdminField field, Page page, ClientScriptManager csm, Panel fileUpload)
         {
             ////pull in our storage service js
             if (!csm.IsClientScriptIncludeRegistered("storageservice"))
@@ -217,6 +216,7 @@ namespace mjjames.AdminSystem.dataControls
                 Path = path,
                 FileAccess = acl
             };
+
             //now create our file uploader and give it the amazon adapter
             var uploader = new FileUploader()
             {
@@ -230,40 +230,29 @@ namespace mjjames.AdminSystem.dataControls
             };
 
             uploader.Adapters.Add(amazonAdapter);
-            fileUpload.ContentTemplateContainer.Controls.Add(uploader);
+            fileUpload.Controls.Add(uploader);
 
         }
 
-        /// <summary>
-        /// Uploads the provided fileupload file
-        /// </summary>
-        /// <param name="sender">Button Calling Upload</param>
-        /// <param name="e"></param>
-        protected void FileUploader(Object sender, EventArgs e)
-        {
-            ///TODO swap this out for mjjames.core edition
-            Button ourSender = (Button)sender;
-
-            FileUpload ourFile = (FileUpload)ourSender.Parent.FindControl(ourSender.ID.Replace("button", "file"));
-            string strDir = ConfigurationManager.AppSettings["uploaddir"];
-
-            if (ourFile == null || ourFile.PostedFile.ContentLength <= 0) return;
-            FileUploadDetails fud = helpers.fileUploader(ourFile, strDir);
-            if (fud.error)
+        private void SetImagePath(string filePath, Image imagePreview){
+            string imageUrl;
+            if (String.IsNullOrWhiteSpace(filePath))
             {
-                LiteralControl labelStatus = new LiteralControl { Text = "Invalid File: " + fud.errormessage };
-                ourSender.Parent.Controls.Add(labelStatus);
-                throw new Exception("File Upload Error: " + fud.errormessage);
+                imageUrl = "~/images/noimage.png";                    
             }
-            Image ourImage = (Image)ourSender.Parent.FindControl(ourSender.ID.Replace("button", "image"));
-            HiddenField ourHiddenFile = (HiddenField)ourSender.Parent.FindControl(ourSender.ID.Replace("button", "control"));
-            if (ourHiddenFile != null)
+            else
             {
-                ourHiddenFile.Value = fud.filepath;
+                if (filePath.StartsWith("http"))
+                {
+                    imageUrl = filePath;
+                }
+                else
+                {
+                    string strDir = ConfigurationManager.AppSettings["uploaddir"];
+                    imageUrl = strDir + filePath;
+                }
             }
-            if (ourImage == null) return;
-            UpdateImageSource(ourImage, strDir + fud.filepath);
-            ourImage.AlternateText = "Preview";
+            UpdateImageSource(imagePreview, imageUrl);
         }
 
         /// <summary>
@@ -278,7 +267,7 @@ namespace mjjames.AdminSystem.dataControls
             Image ourImage = ourSender.Parent.FindControl(ourSender.ID.Replace("buttonClear", "image")) as Image;
             if (ourImage != null)
             {
-                ourImage.Visible = false;
+                SetImagePath("", ourImage);
             }
 
             ourHiddenFile.Value = "";

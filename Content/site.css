@@ -261,3 +261,23 @@ ul.photogallery li.editphoto, ul.mediagallery li.editmedia
 
 
 
+.fileuploadWrapper{
+
+}
+
+.fileuploadWrapper .progress{
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.fileuploadWrapper div.uploader, .fileuploadWrapper img, .fileuploadWrapper .removeImage{
+    display: inline-block;
+    vertical-align: top;
+}
+.fileuploadWrapper .removeImage{
+    margin-left: 10px;
+}
+
+    .fileuploadWrapper img {
+        margin-left: 20px;
+    }

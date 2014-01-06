@@ -6,6 +6,8 @@ using System.Web.Security;
 using System.Web.SessionState;
 using mjjames.AdminSystem.classes;
 using System.Web.UI;
+using System.Web.Routing;
+using mjjames.AdminSystem.App_Start;
 
 namespace mjjames.AdminSystem
 {
@@ -22,6 +24,7 @@ namespace mjjames.AdminSystem
                 CdnSupportsSecureConnection = true,
                 CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js"
             });
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
 		}
 
 		protected void Session_Start(object sender, EventArgs e)

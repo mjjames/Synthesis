@@ -1,21 +1,8 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="true"
+<%@ Page Title="" Language="C#" MasterPageFile="~/AdminSystem.master" AutoEventWireup="True"
 	CodeBehind="SystemSettings.aspx.cs" Inherits="mjjames.AdminSystem.SystemSettings" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-	   <asp:ScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
-        AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
-        <CompositeScript>
-            <Scripts>
-                <asp:scriptreference name="WebForms.js" assembly="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-                <asp:ScriptReference Name="MicrosoftAjax.js" />
-                <asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
-                <asp:ScriptReference name="AjaxControlToolkit.Common.Common.js" assembly="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e"/>
-	            <asp:ScriptReference name="AjaxControlToolkit.ExtenderBase.BaseScripts.js" assembly="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e"/>
-	            <asp:ScriptReference name="AjaxControlToolkit.Tabs.Tabs.js" assembly="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e"/>
-	            <asp:ScriptReference name="AjaxControlToolkit.DynamicPopulate.DynamicPopulateBehavior.js" assembly="AjaxControlToolkit, Version=3.0.30512.20315, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e"/>
-            </Scripts>
-        </CompositeScript>
-    </asp:ScriptManager>
+	
 	<h1 class="listingTitle">
 		<asp:Literal runat="server" ID="dbEditorLabel" />
 		System Settings
@@ -439,10 +426,10 @@
 			</asp:UpdatePanel>
 			<asp:UpdateProgress ID="_updateProgress1" runat="server" AssociatedUpdatePanelID="upSettings"
 				DisplayAfter="500">
-				<progresstemplate>
+                <ProgressTemplate>
 					<p class="loading">
 						Loading ...</p>
-				</progresstemplate>
+				</ProgressTemplate>
 			</asp:UpdateProgress>
 		</div>
 	</div>

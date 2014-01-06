@@ -23,8 +23,8 @@ namespace mjjames.AdminSystem
 			var pKey = 0;
 
 			base.OnInit(e);
-
-			if (Request.QueryString.GetValues("type") != null && Request.QueryString["type"].Length > 0)
+    
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["type"]))
 			{
 				_sType = Request.QueryString["type"];
 			}

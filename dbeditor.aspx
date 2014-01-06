@@ -3,21 +3,6 @@
     CodeBehind="dbeditor.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <AjaxControlToolkit:ToolkitScriptManager ID="scriptmanagerAdmin" runat="server" AllowCustomErrorsRedirect="true"
-        AsyncPostBackTimeout="60" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
-        <CompositeScript>
-            <%--<Scripts>
-				<asp:ScriptReference Name="WebForms.js" Assembly="System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-				<asp:ScriptReference Name="MicrosoftAjax.js" />
-				<asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
-				<asp:ScriptReference Name="Common.Common.js" Assembly="AjaxControlToolkit" />
-				<asp:ScriptReference Name="ExtenderBase.BaseScripts.js" Assembly="AjaxControlToolkit" />
-				<asp:ScriptReference Name="Tabs.Tabs.js" Assembly="AjaxControlToolkit" />
-				<asp:ScriptReference Name="DynamicPopulate.DynamicPopulateBehavior.js"
-					Assembly="AjaxControlToolkit" />
-			</Scripts>--%>
-        </CompositeScript>
-    </AjaxControlToolkit:ToolkitScriptManager>
     <asp:SiteMapDataSource ID="navigationSiteMap" runat="server" ShowStartingNode="True"
         OnLoad="LoadListing" />
     <div class="container">

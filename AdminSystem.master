@@ -1,6 +1,6 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="AdminSystem" CodeBehind="AdminSystem.master.cs" %>
 
-<%@ Register tagPrefix="controls" namespace="mjjames.ControlLibrary.AdminWebControls" assembly="mjjames.ControlLibrary" %>
+<%@ Register TagPrefix="controls" Namespace="mjjames.ControlLibrary.AdminWebControls" Assembly="mjjames.ControlLibrary" %>
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
@@ -14,10 +14,13 @@
     <link rel="Stylesheet" type="text/css" href="~/content/bootstrap-responsive.css" />
     <link rel="Stylesheet" type="text/css" href="~/content/site.css" />
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.min.js" type="text/javascript"></script>
+
 </head>
 <body>
     <div class="container">
         <form id="form1" runat="server">
+            <AjaxControlToolkit:ToolkitScriptManager ID="scriptmanagerAdmin" runat="server" AjaxFrameworkMode="Enabled" AllowCustomErrorsRedirect="true" AsyncPostBackTimeout="60" CombineScripts="true"
+                LoadScriptsBeforeUI="true" ScriptMode="Auto" EnableCdn="false" EnablePageMethods="true" />
             <div class="navbar navbar-inverse navbar-fixed-top">
                 <div class="navbar-inner">
                     <div class="container">

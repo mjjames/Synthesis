@@ -2,14 +2,6 @@
     Inherits="mjjames.AdminSystem.DBUsers" Title="User Administration" CodeBehind="DBUsers.aspx.cs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server" CompositeScript-ScriptMode="Auto" ScriptMode="Auto">
-        <CompositeScript>
-            <Scripts>
-                <asp:ScriptReference Name="MicrosoftAjax.js" />
-                <asp:ScriptReference Name="MicrosoftAjaxWebForms.js" />
-            </Scripts>
-        </CompositeScript>
-    </asp:ScriptManager>
     <div class="container">
         <div class="page-header">
             <h1 class="listingTitle">User Administration

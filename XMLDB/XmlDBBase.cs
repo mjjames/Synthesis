@@ -676,8 +676,12 @@ namespace mjjames.AdminSystem
         {
             //having a primary key at this point means the insert was a success
             if (PKey <= 0) return;
-            var url = String.Format("{0}&{1}={2}", HttpContext.Current.Request.Url, TablePrimaryKeyField, PrimaryKey);
-            HttpContext.Current.Response.Redirect(url, true);
+            var routePath = System.Web.Routing.RouteTable.Routes.GetVirtualPath(HttpContext.Current.Request.RequestContext, "DBEditor", new System.Web.Routing.RouteValueDictionary
+            {
+                {"Type", TableName},
+                {"Key" , PrimaryKey}
+            });
+            HttpContext.Current.Response.Redirect(routePath.VirtualPath, true);
         }
 
         /// <summary>

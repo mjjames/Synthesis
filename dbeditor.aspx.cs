@@ -23,10 +23,9 @@ namespace mjjames.AdminSystem
 			var pKey = 0;
 
 			base.OnInit(e);
-    
-            if (!string.IsNullOrWhiteSpace(Request.QueryString["type"]))
+            if (Page.RouteData.Values.ContainsKey("type"))
 			{
-				_sType = Request.QueryString["type"];
+                _sType = Page.RouteData.Values["type"].ToString();
 			}
 
 			var oh = Activator.CreateInstance(null, "mjjames.AdminSystem.XmlDB" + _sType);
@@ -47,12 +46,13 @@ namespace mjjames.AdminSystem
 				throw exception;
 			}
 
-			_xmldb.TableName = String.IsNullOrEmpty(Request["id"]) ? _sType : Request["id"];
+            var id = Page.RouteData.Values.ContainsKey("id") ? Page.RouteData.Values["id"].ToString() : "";
+            _xmldb.TableName = String.IsNullOrWhiteSpace(id) ? _sType : id;
 
 
-			if (!String.IsNullOrEmpty(Request.QueryString[_xmldb.TablePrimaryKeyField]))
+			if (Page.RouteData.Values.ContainsKey("key"))
 			{
-				sID = Request.QueryString[_xmldb.TablePrimaryKeyField];
+				sID = Page.RouteData.Values["key"].ToString();
 				pkey.Value = sID;
 			}
 
@@ -84,33 +84,31 @@ namespace mjjames.AdminSystem
 				if (pKey > 0)
 				{
 					linkbuttonSubPages.Visible = true;
-					linkbuttonSubPages.NavigateUrl = string.Format("~/dblisting.aspx?{0}={1}&type={2}", field.ID, sID, _sType);
-				}
+                    linkbuttonSubPages.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType, FKey = sID }); 
+                }
 
 				int fKey;
-				if (!String.IsNullOrEmpty(Request.QueryString[field.ID]))
+
+                if (Page.RouteData.Values.ContainsKey("fkey") && Page.RouteData.Values["fkey"] != null)
 				{
-					int.TryParse(Request.QueryString[field.ID], out  fKey);
+					int.TryParse(Page.RouteData.Values["fkey"].ToString(), out  fKey);
 					_xmldb.ForeignKey = fKey;
 				}
 				else
 				{
 					fKey = _xmldb.ForeignKey;
 				}
-
-				linkbuttonBack.NavigateUrl = string.Format("~/dblisting.aspx?{0}={1}&type={2}", field.ID, fKey, _sType);
-
-
+                linkbuttonBack.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType, FKey = fKey }); 
 			}
 			else
 			{
-				linkbuttonBack.NavigateUrl = string.Format("~/dblisting.aspx?type={0}", _sType);
+                linkbuttonBack.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType}); 
 			}
 
-			if (!String.IsNullOrEmpty(Request["id"]))
-			{
-				linkbuttonBack.NavigateUrl += "&id=" + Request.QueryString["id"];
-			}
+            //if (!String.IsNullOrWhiteSpace(id))
+            //{
+            //    linkbuttonBack.NavigateUrl += "&id=" + id;
+            //}
 
 		}
 
@@ -175,8 +173,19 @@ namespace mjjames.AdminSystem
 				else
 				{
                     var strQuery = _xmldb.GetQuickEditSiteMapQuery();
-					var strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
 
+                    //generate a url prefix based on the route
+                    var strURLPrefix = GetRouteUrl("DBEditor", new
+                    {
+                        Type = _sType,
+                        Key = 0,
+                        FKey = 0
+                    });
+                    //but as we pass key and fkey of 0 it will end in /0/0 remove this for the sitemap
+                    //to add the key
+                    strURLPrefix = strURLPrefix.Replace("/0/0", "/");
+
+                        
 					config.Add("query", strQuery);
 					config.Add("urlprefix", strURLPrefix);
 					config.Add("connectionStringName", "ourDatabase");

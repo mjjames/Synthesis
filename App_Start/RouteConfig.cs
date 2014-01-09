@@ -25,16 +25,23 @@ namespace mjjames.AdminSystem.App_Start
             //routes.IgnoreRoute("elmah.axd");
             routes.IgnoreRoute("glimpse.axd");
 
-            //routes.MapPageRoute("DBEditor", "Editor/{type}/{key}/{*fkey}", "~/DBEditor.aspx");
-            //routes.MapPageRoute("DBListing", "Listing/{type}/{key}/{fkey}", "~/DBListing.aspx");
-            
+            routes.MapPageRoute("DBEditor", "editor/{type}/{key}/{*fkey}", "~/DBEditor.aspx", false,
+                                            new RouteValueDictionary { 
+                                                { "fkey", null} 
+                                            });
+
+            routes.MapPageRoute("DBListing", "listing/{type}/{*fkey}", "~/DBListing.aspx", false,
+                                                new RouteValueDictionary { 
+                                                    { "fkey", null } 
+                                                });
+
             //default
             routes.MapRoute("Default", // Route name
                             "{controller}/{action}/{id}", // URL with parameters
                             new { controller = "Home", action = "Index", id = UrlParameter.Optional }
                 );
 
-            
+
         }
     }
 }

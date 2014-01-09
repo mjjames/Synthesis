@@ -27,10 +27,11 @@ namespace mjjames.AdminSystem
 
             base.OnInit(e);
 
-            if (!String.IsNullOrEmpty(Request.QueryString["type"]))
+            if (Page.RouteData.Values.ContainsKey("type"))
             {
-                _sType = Request.QueryString["type"];
+                _sType = Page.RouteData.Values["type"].ToString();
             }
+
             var activator = Activator.CreateInstance(null, "mjjames.AdminSystem.XmlDB" + _sType);
             _xmldb = activator != null ? activator.Unwrap() as XmlDBBase : null;
             if (_xmldb == null)
@@ -40,7 +41,9 @@ namespace mjjames.AdminSystem
                 throw exception;
             }
 
-            _xmldb.TableName = String.IsNullOrEmpty(Request["id"]) ? _sType : Request["id"];
+            var id = Page.RouteData.Values.ContainsKey("id") ? Page.RouteData.Values["id"].ToString() : "";
+
+            _xmldb.TableName = String.IsNullOrWhiteSpace(id) ? _sType : id;
             _xmldb.ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString;
 
             //if we have no site key we have an error - assume this is because of an expired session so log the user out
@@ -85,7 +88,7 @@ namespace mjjames.AdminSystem
             cfSelect.ControlStyle.CssClass = "btn btn-primary btn-small";
 
             pageListing.Columns.Add(cfSelect);
-           
+            var defaultFilterSet = false;
             foreach (AdminField field in _xmldb.TableDefaults.FindAll(t => t.Attributes.ContainsKey("list")))
             {
                 var dcf = new BoundField();
@@ -95,7 +98,18 @@ namespace mjjames.AdminSystem
 
                 if (!Page.IsPostBack && field.Attributes.ContainsKey("listfilter"))
                 {
-                    var p = new QueryStringParameter(field.ID, field.ID);
+                    //we allow one route paramter to act as the default filter key
+                    //however as we allow more than one these will then be querystring parameters
+                    Parameter p;
+                    if (defaultFilterSet)
+                    {
+                        p = new QueryStringParameter(field.ID, field.ID);
+                    }
+                    else
+                    {
+                        p = new RouteParameter(field.ID, "fkey");
+                        defaultFilterSet = true;
+                    }
                     if (!sdsData.SelectParameters.Contains(p))
                     { //if post back this should already be in the params so dont add another one
                         sdsData.SelectParameters.Add(p);
@@ -144,8 +158,6 @@ namespace mjjames.AdminSystem
             var listfilter = _xmldb.TableDefaults.Find(t => t.Attributes.ContainsKey("listfilter"));
             if (listfilter != null)
             {
-                
-              
                 pageListing.Columns.Add(new TemplateField{
                     ItemTemplate = new ChildEntityActionsTemplate(DataControlRowType.DataRow, _xmldb.TableLabel, _xmldb.TablePrimaryKeyField, listfilter.ID, _sType),
                     HeaderText = "Child Pages"
@@ -200,28 +212,36 @@ namespace mjjames.AdminSystem
             string sForeignKeys = String.Empty;
             var listfilter = xmldb.TableDefaults.Find(t => t.Attributes.ContainsKey("listfilter"));
 
-            if (listfilter != null)
+            if (listfilter == null)
             {
-                sForeignKeys = listfilter.ID;
-            }
-            else
-            { //if we have no filter then add is always available
-                buttonAddPage.NavigateUrl = String.Format("{0}{1}", buttonAddPage.NavigateUrl, _sType);
+               //if we have no filter then add is always available
+                buttonAddPage.NavigateUrl = GetRouteUrl("DBEditor", new
+                {
+                    Type = _sType
+                });
                 buttonAddPage.Visible = true;
+                return;
             }
-            if (!String.IsNullOrEmpty(Request.QueryString[sForeignKeys]))
+            var foreignKeyData = Page.RouteData.Values.ContainsKey("fkey") ?  Page.RouteData.Values["fkey"].ToString()  : "";
+            if (!String.IsNullOrWhiteSpace(foreignKeyData))
             {
-                if (!buttonAddPage.NavigateUrl.Contains(sForeignKeys + "="))
+                
+                buttonAddPage.NavigateUrl = GetRouteUrl("DBEditor", new
                 {
-                    buttonAddPage.NavigateUrl = String.Format("{0}{1}&{2}={3}", buttonAddPage.NavigateUrl, _sType, sForeignKeys, Request.QueryString[sForeignKeys]);
-                    buttonAddPage.Visible = true;
-                }
-                if (!linkbuttonBack.NavigateUrl.Contains(xmldb.TablePrimaryKeyField + "="))
-                {
-                    linkbuttonBack.NavigateUrl = String.Format("{0}{1}&{2}={3}", linkbuttonBack.NavigateUrl, _sType, xmldb.TablePrimaryKeyField, Request.QueryString[sForeignKeys]);
-                }
+                    Type = _sType,
+                    FKey = foreignKeyData,
+                    Key = 0
+                });
+                buttonAddPage.Visible = true;
 
-                if (Request.QueryString[sForeignKeys].Equals("0"))
+                linkbuttonBack.NavigateUrl = GetRouteUrl("DBEditor", new
+                {
+                    Type = _sType,
+                    Key = foreignKeyData,
+                    FKey = ""
+                });
+
+                if (foreignKeyData.Equals("0"))
                 {
                     linkbuttonBack.Visible = false;
                     buttonAddPage.Visible = false;
@@ -231,18 +251,22 @@ namespace mjjames.AdminSystem
             {
                 linkbuttonBack.Visible = false;
             }
-            if (!String.IsNullOrEmpty(Request["id"]))
-            {
-                buttonAddPage.NavigateUrl += "&id=" + Request.QueryString["id"];
-            }
+            //var id = Page.RouteData.Values.ContainsKey("id") ? Page.RouteData.Values["id"].ToString() : "";
+            //if (!String.IsNullOrWhiteSpace(id))
+            //{
+            //    buttonAddPage.NavigateUrl += "&id=" + id;
+            //}
 
         }
 
         //on select load up DBEditor
         protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var strURL = String.Format("~/DBEditor.aspx?{0}={1}&{2}", _xmldb.TablePrimaryKeyField, pageListing.SelectedValue, Request.QueryString);
-
+            var strURL = GetRouteUrl("DBEditor", new
+            {
+                Type = _sType,
+                Key = pageListing.SelectedValue
+            });
             Response.Redirect(strURL);
         }
 
@@ -275,7 +299,17 @@ namespace mjjames.AdminSystem
                 {
                     Page.Trace.Write("Site Key:" + Session["userSiteKey"]);
                     var strQuery = _xmldb.GetQuickEditSiteMapQuery();
-                    var strURLPrefix = String.Format("~/DBEditor.aspx?type={0}&{1}=", _sType, _xmldb.TablePrimaryKeyField);
+                    //generate a url prefix based on the route
+                    var strURLPrefix = GetRouteUrl("DBEditor", new
+                    {
+                        Type = _sType,
+                        Key = 0,
+                        FKey = 0
+                    });
+                    //but as we pass key and fkey of 0 it will end in /0/0 remove this for the sitemap
+                    //to add the key
+                    strURLPrefix = strURLPrefix.Replace("/0/0", "/");
+
 
                     config.Add("query", strQuery);
                     config.Add("urlprefix", strURLPrefix);

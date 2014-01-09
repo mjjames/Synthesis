@@ -37,7 +37,7 @@ namespace mjjames.AdminSystem.dataControls
 		{
 			var ourDropDown = new DropDownList { ID = "control" + field.ID };
 
-			var lookupDB = new XmlDBBase(false)
+			var lookupDB = new XmlDBBase(false, false)
 									{
 										ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString,
 										TableName = field.Attributes["lookuptable"]

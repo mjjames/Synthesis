@@ -73,16 +73,17 @@ namespace mjjames.AdminSystem
         public bool TableQuickEdit { get { return Table.QuickEdit; } }
 
         public XmlDBBase()
-            : this(true)
+            : this(true, true)
         {
         }
 
         /// <summary>
         /// constructor
         /// </summary>
-        public XmlDBBase(bool multiTenancyTableEnabled)
+        public XmlDBBase(bool multiTenancyTableEnabled, bool archiveEnabled)
         {
             MultiTenancyTableEnabled = multiTenancyTableEnabled;
+            ArchiveDataEnabled = archiveEnabled;
 
             XMLFilePath = ConfigurationManager.AppSettings["adminConfigXML"];
             try
@@ -716,7 +717,10 @@ namespace mjjames.AdminSystem
             var labelStatus = (Label)FindControlRecursive(ourSender.Page, ("labelStatus"));
             try
             {
-                ArchiveData(PKey);
+                if (ArchiveDataEnabled)
+                {
+                    ArchiveData(PKey);
+                }
 
                 string strDelete = String.Format("DELETE FROM [{0}] WHERE [{1}] = {2}", Table.ID, TablePrimaryKeyField, PKey);
 
@@ -730,9 +734,13 @@ namespace mjjames.AdminSystem
                 {
                     GenericFunctions.ResetSiteMap();
                 }
-
-                var prevPage = ourSender.Page.PreviousPage;
-                ourSender.Page.Response.Redirect(prevPage == null ? "~/" : prevPage.Request.RawUrl, false);
+            
+                var listingUrl =  ourSender.Page.GetRouteUrl("DBListing", new {
+                    Type = this.TableName,
+                    FKey = this.FKey > 0 ? this.FKey.ToString() : ""
+                });
+                
+                ourSender.Page.Response.Redirect(listingUrl, false);
             }
             catch (Exception ex)
             {
@@ -761,6 +769,8 @@ namespace mjjames.AdminSystem
             Inserted,
             Updated
         }
+
+        public bool ArchiveDataEnabled { get; set; }
     }
 
 }

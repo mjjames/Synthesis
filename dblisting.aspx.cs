@@ -45,7 +45,7 @@ namespace mjjames.AdminSystem
 
             _xmldb.TableName = String.IsNullOrWhiteSpace(id) ? _sType : id;
             _xmldb.ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString;
-
+            _xmldb.ArchiveDataEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Synthesis:ArchiveDataEnabled"]);
             //if we have no site key we have an error - assume this is because of an expired session so log the user out
             if (Session["userSiteKey"] == null)
             {
@@ -179,7 +179,10 @@ namespace mjjames.AdminSystem
 
         void SdsDataDeleting(object sender, SqlDataSourceCommandEventArgs e)
         {
-            _xmldb.ArchiveData((int)e.Command.Parameters["@" + _xmldb.TablePrimaryKeyField].Value);
+            if (_xmldb.ArchiveDataEnabled)
+            {
+                _xmldb.ArchiveData((int)e.Command.Parameters["@" + _xmldb.TablePrimaryKeyField].Value);
+            }
         }
 
         //upon deletion of a page reset the sitemap

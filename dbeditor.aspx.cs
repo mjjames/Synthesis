@@ -48,7 +48,7 @@ namespace mjjames.AdminSystem
 
             var id = Page.RouteData.Values.ContainsKey("id") ? Page.RouteData.Values["id"].ToString() : "";
             _xmldb.TableName = String.IsNullOrWhiteSpace(id) ? _sType : id;
-
+            _xmldb.ArchiveDataEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["Synthesis:ArchiveDataEnabled"]);
 
 			if (Page.RouteData.Values.ContainsKey("key"))
 			{

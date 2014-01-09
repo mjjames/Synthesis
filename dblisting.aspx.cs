@@ -220,9 +220,11 @@ namespace mjjames.AdminSystem
                //if we have no filter then add is always available
                 buttonAddPage.NavigateUrl = GetRouteUrl("DBEditor", new
                 {
-                    Type = _sType
+                    Type = _sType,
+                    Key = 0
                 });
                 buttonAddPage.Visible = true;
+                linkbuttonBack.Visible = false;
                 return;
             }
             var foreignKeyData = Page.RouteData.Values.ContainsKey("fkey") ?  Page.RouteData.Values["fkey"].ToString()  : "";

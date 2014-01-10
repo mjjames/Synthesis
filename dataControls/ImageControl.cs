@@ -13,6 +13,7 @@ using mjjames.core;
 using mjjames.core.dataentities;
 using mjjames.AdminSystem.DataControls;
 using mjjames.ControlLibrary;
+using mjjames.ControlLibrary.FileUploaders;
 
 namespace mjjames.AdminSystem.dataControls
 {
@@ -52,7 +53,7 @@ namespace mjjames.AdminSystem.dataControls
                 return panelGallery;
             }
 
-            AdminPhotoGallery gallery = new AdminPhotoGallery(ConfigurationManager.AppSettings["uploaddir"]) { ID = "control" + field.ID };
+            var gallery = new AdminPhotoGallery<AsyncFileUploader>(ConfigurationManager.AppSettings["uploaddir"]) { ID = "control" + field.ID };
             gallery.Attributes.Add("cssclass", "photogalleryContainer");
 
             string sLookupID = field.Attributes.ContainsKey("lookupid") ? field.Attributes["lookupid"] : "thumbnailimage";
@@ -132,18 +133,18 @@ namespace mjjames.AdminSystem.dataControls
 
         static void GalleryLoad(object sender, EventArgs e)
         {
-            AdminPhotoGallery gallery = sender as AdminPhotoGallery;
+            var gallery = sender as AdminPhotoGallery<AsyncFileUploader>;
             ScriptManager ourSM = ScriptManager.GetCurrent((Page)HttpContext.Current.Handler);
             if (gallery.MaximumImages > 0 && gallery.Items.Count >= gallery.MaximumImages) // if we have more than MaximumImages disable the insert row
             {
                 gallery.InsertItemPosition = InsertItemPosition.None;
             }
-            if (ourSM != null && gallery != null) ourSM.RegisterPostBackControl(gallery.InsertItem);
+            if (ourSM != null && gallery != null) ourSM.RegisterAsyncPostBackControl(gallery.InsertItem);
         }
 
         static void GalleryItemUpdating(object sender, ListViewUpdateEventArgs e)
         {
-            AdminPhotoGallery gallery = sender as AdminPhotoGallery;
+            var gallery = sender as AdminPhotoGallery<AsyncFileUploader>;
             if (gallery == null) return;
 
             TextBox title = helpers.FindControlRecursive(gallery.EditItem, "txtTitle") as TextBox;
@@ -170,7 +171,7 @@ namespace mjjames.AdminSystem.dataControls
 
         void GalleryItemInserting(object sender, ListViewInsertEventArgs e)
         {
-            AdminPhotoGallery gallery = sender as AdminPhotoGallery;
+            var gallery = sender as AdminPhotoGallery<AsyncFileUploader>;
             if (gallery != null)
             {
                 TextBox title = helpers.FindControlRecursive(gallery.InsertItem, "txtTitle") as TextBox;

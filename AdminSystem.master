@@ -24,7 +24,7 @@
             <div class="navbar navbar-inverse navbar-fixed-top">
                 <div class="navbar-inner">
                     <div class="container">
-                        <a class="brand" href="~/" runat="server">Synthesis v2.0</a>
+                        <a class="brand" href="~/" runat="server">Synthesis v2.2</a>
                         <div class="nav-collapse collapse">
                             <controls:AdminToolbar runat="server" ID="adminToolbar" AccessLevel="0" Visible="false"
                                 OnInit="SetAccessLevel" />

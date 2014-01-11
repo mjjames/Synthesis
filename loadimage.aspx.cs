@@ -4,154 +4,193 @@ using System.Web;
 using mjjames.Imaging;
 using System.Drawing;
 using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Drawing.Imaging;
 
 public partial class loadimage : System.Web.UI.Page
 {
-	/// <summary>
-	/// Page load method works out whether its a flickr or static image
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	protected void Page_Load(object sender, EventArgs e)
-	{
-		string sPhotoURL = Request.QueryString["image"];
-		string sAction = Request.QueryString["action"];
-		string sHeight = Request.QueryString["height"];
-		string sWidth = Request.QueryString["width"];
-		string sCache = ConfigurationManager.AppSettings["cacheLocation"];
+    /// <summary>
+    /// Page load method works out whether its a flickr or static image
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    protected async void Page_Load(object sender, EventArgs e)
+    {
+        string photoURL = Server.UrlDecode(Request.QueryString["image"]);
+        string action = RouteData.Values["action"].ToString();
+        string height = RouteData.Values["height"].ToString();
+        string width = RouteData.Values["width"].ToString();
+        string cacheLocation = ConfigurationManager.AppSettings["cacheLocation"];
 
-		if (sPhotoURL != null && sCache != null)
-		{
-			LoadImage(sPhotoURL, sAction, sHeight, sWidth, sCache);
-		}
-		else
-		{
-			using (Image ourImage = LoadErrorImage(sAction, sHeight, sWidth))
-			{
-				Response.Clear();
-				Response.ContentType = "image/jpeg";
-				ourImage.Save(Response.OutputStream, System.Drawing.Imaging.ImageFormat.Jpeg);
-			}
-		}
+        int iHeight, iWidth;
+        if (!int.TryParse(width, out iWidth))
+        {
+            iWidth = 320;
+        }
 
-	}
+        if (!int.TryParse(height, out iHeight))
+        {
+            iHeight = 240;
+        }
 
-	/// <summary>
-	/// Tries to load an image resized image from cache, if not resizes image and caches it	
-	/// </summary>
-	private void LoadImage(string sPhotoURL, string sAction, string sHeight, string sWidth, string sCache)
-	{
-		Image newImage = null;
-		string sFileName = Path.GetFileName(sPhotoURL); //cache key only needs filename
-		string sImageCacheKey = sAction + "-" + sHeight + "-" + sWidth + "-" + sFileName;
-		//lots of try catches here - we try to load image from cache, from disk and finally the error one however if something goes wrong
-		//we have to ensure that the newImage gets disposed as we can't use it in a using statement
-		try
-		{
-			try
-			{
-				newImage = Image.FromFile(Server.MapPath(sCache + "/" + sImageCacheKey));
-			}
-			catch (Exception)
-			{
+        if (photoURL != null && cacheLocation != null)
+        {
+            try
+            {
+                await LoadImage(photoURL, action, iHeight, iWidth, cacheLocation);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex);
+                RenderErrorImage(action, iHeight, iWidth);
+            }
+        }
+        else
+        {
+            RenderErrorImage(action, iHeight, iWidth);
+        }
 
-				try
-				{
-					Resizer resize = new Resizer();
-					int iHeight;
-					int iWidth;
+    }
 
-					if (!int.TryParse(sWidth, out iWidth))
-					{
-						iWidth = 320;
-					}
+    private void RenderErrorImage(string action, int height, int width)
+    {
 
-					if (!int.TryParse(sHeight, out iHeight))
-					{
-						iHeight = 240;
-					}
-					newImage = Image.FromFile(Server.MapPath(sPhotoURL));
-					switch (sAction)
-					{
-						case "crop":
-							newImage = resize.CropImage(newImage, iWidth, iHeight);
-							break;
-						case "resize":
-							newImage = resize.ResizeImage(newImage, iWidth, iHeight);
-							break;
-						case "resizecrop":
-							newImage = resize.ResizeCropImage(newImage, iWidth, iHeight);
-							break;
+        using (Image ourImage = LoadErrorImage(action, height, width))
+        {
+            Response.Clear();
+            Response.ContentType = GetContentType(ourImage.RawFormat);
+            ourImage.Save(Response.OutputStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+        }
+    }
 
-					}
+    private string GetContentType(ImageFormat format)
+    {
+        if (format == ImageFormat.Jpeg)
+        {
+            return "image/jpeg";
+        }
+        if (format == ImageFormat.Png)
+        {
+            return "image/png";
+        }
+        return "";
+    }
 
-					newImage.Save(Server.MapPath(sCache) + sImageCacheKey);
-				}
-				catch (Exception)
-				{
-					newImage = LoadErrorImage(sAction, sHeight, sWidth);
-				}
+    /// <summary>
+    /// Tries to load an image resized image from cache, if not resizes image and caches it	
+    /// </summary>
+    private async Task LoadImage(string photoUrl, string action, int height, int width, string cacheLocation)
+    {
+        Image newImage = null;
+        string fileName = Path.GetFileName(photoUrl); //cache key only needs filename
+        string imageCacheKey = action + "-" + height + "-" + width + "-" + fileName;
 
-			}
-			//now we have an image use it responsibly
-			using (newImage)
-			{
-				Response.Clear();
-				Response.ContentType = "image/jpeg";
+        try
+        {
+            newImage = GetImageFromCache(imageCacheKey, cacheLocation);
+            if (newImage == null)
+            {
+                newImage = await GetOriginalImage(photoUrl);
+                newImage = ResizeImage(newImage, imageCacheKey, cacheLocation, width, height, action);
+            }
 
-				Response.BufferOutput = true;
-				using (MemoryStream memStream = new MemoryStream())
-				{
-					newImage.Save(memStream, System.Drawing.Imaging.ImageFormat.Jpeg);
-					memStream.WriteTo(Response.OutputStream);
-				}
-				Response.Cache.SetExpires(DateTime.Now.AddMonths(1));
-				Response.Cache.SetCacheability(HttpCacheability.Public);
-				Response.Cache.SetNoServerCaching();
-			}
-			Response.Flush();
-		}
-		finally
-		{
-			if (newImage != null)
-			{
-				newImage.Dispose();
-			}
-		}
-	}
+            OuputImageToResponse(newImage);
+        }
+        finally
+        {
+            if (newImage != null)
+            {
+                newImage.Dispose();
+            }
+        }
+    }
 
-	private Image LoadErrorImage(string sAction, string sHeight, string sWidth)
-	{
-		Image newImage = Image.FromFile(Server.MapPath("~/images/noimage.png"));
+    private void OuputImageToResponse(Image newImage)
+    {
+        //now we have an image use it responsibly
+        using (newImage)
+        {
+            Response.Clear();
+            Response.ContentType = "image/jpeg";
 
-		Resizer resize = new Resizer();
+            Response.BufferOutput = true;
+            using (MemoryStream memStream = new MemoryStream())
+            {
+                newImage.Save(memStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                memStream.WriteTo(Response.OutputStream);
+            }
+            Response.Cache.SetExpires(DateTime.Now.AddMonths(1));
+            Response.Cache.SetCacheability(HttpCacheability.Public);
+            Response.Cache.SetNoServerCaching();
+        }
+        Response.Flush();
+    }
 
-		int iHeight;
-		int iWidth;
+    private Image ResizeImage(Image newImage, string imageCacheKey, string cacheLocation, int width, int height, string action)
+    {
+        Resizer resize = new Resizer();
 
-		if (!int.TryParse(sWidth, out iWidth))
-		{
-			iWidth = 320;
-		}
+        switch (action)
+        {
+            case "crop":
+                newImage = resize.CropImage(newImage, width, height);
+                break;
+            case "resize":
+                newImage = resize.ResizeImage(newImage, width, height);
+                break;
+            case "resizecrop":
+                newImage = resize.ResizeCropImage(newImage, width, height);
+                break;
 
-		if (!int.TryParse(sHeight, out iHeight))
-		{
-			iHeight = 240;
-		}
+        }
+        var path = Path.Combine(Server.MapPath(cacheLocation), imageCacheKey);
+        newImage.Save(path);
+        return newImage;
+    }
 
-		switch (sAction)
-		{
-			case "crop":
-				newImage = resize.CropImage(newImage, iWidth, iHeight);
-				break;
-			case "resize":
-				newImage = resize.ResizeImage(newImage, iWidth, iHeight);
-				break;
-			case "resizecrop":
-				newImage = resize.ResizeCropImage(newImage, iWidth, iHeight);
-				break;
+    private Image GetImageFromCache(string imageCacheKey, string cacheLocation)
+    {
+        var path = Server.MapPath(Path.Combine(cacheLocation, imageCacheKey));
+        if (File.Exists(path))
+        {
+            return Image.FromFile(path);
+        }
+        return null;
+    }
 
-		}
-		return newImage;
-	}
+    private async Task<Image> GetOriginalImage(string photoURL)
+    {
+        if (photoURL.StartsWith("http"))
+        {
+            var client = new HttpClient();
+            var stream = await client.GetStreamAsync(photoURL);
+            return Image.FromStream(stream);
+        }
+        return Image.FromFile(Server.MapPath(photoURL));
+    }
+
+    private Image LoadErrorImage(string action, int height, int width)
+    {
+        var noImage = Server.MapPath("~/images/noimage.jpg");
+
+        Image newImage = Image.FromFile(noImage);
+
+        Resizer resize = new Resizer();
+
+        switch (action)
+        {
+            case "crop":
+                newImage = resize.CropImage(newImage, width, height);
+                break;
+            case "resize":
+                newImage = resize.ResizeImage(newImage, width, height);
+                break;
+            case "resizecrop":
+                newImage = resize.ResizeCropImage(newImage, width, height);
+                break;
+
+        }
+        return newImage;
+    }
 }

@@ -35,6 +35,8 @@ namespace mjjames.AdminSystem.App_Start
                                                     { "fkey", null } 
                                                 });
 
+            routes.MapPageRoute("ImageResizer", "image/{action}/{height}/{width}", "~/loadimage.aspx");
+
             //default
             routes.MapRoute("Default", // Route name
                             "{controller}/{action}/{id}", // URL with parameters

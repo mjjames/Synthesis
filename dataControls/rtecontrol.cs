@@ -22,7 +22,7 @@ namespace mjjames.AdminSystem.dataControls
 			var fckEditor = new FCKeditor
 			                      	{
 			                      		ID = "control" + field.ID,
-			                      		CustomConfigurationsPath = "/admininc/fckSettings.js?v=1",
+                                        CustomConfigurationsPath = "/admininc/fckSettings.js?v=" + System.Reflection.Assembly.GetAssembly(typeof(mjjames.AdminSystem.Global)).GetName().Version.ToString(),
 			                      		BasePath = "~/fckeditor/",
 			                      		ToolbarCanCollapse = false,
 			                      		ToolbarSet = "mjjames",

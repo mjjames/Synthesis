@@ -55,7 +55,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td style="max-height: 500px; overflow-y: scroll; display: block;">
 						<asp:UpdatePanel ID="treePanel" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional">
 							<ContentTemplate>
 							</ContentTemplate>

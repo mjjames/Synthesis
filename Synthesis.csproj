@@ -117,14 +117,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\WindowsAzure.Storage.2.1.0.4\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="mjjames.ControlLibrary, Version=1.3.5119.25822, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\mjjames.ControlLibrary.1.3\lib\mjjames.ControlLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="mjjames.ControlLibrary.XmlSerializers, Version=1.3.5119.25822, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\mjjames.ControlLibrary.1.3\lib\mjjames.ControlLibrary.XmlSerializers.dll</HintPath>
-    </Reference>
     <Reference Include="mjjames.core, Version=1.1.4862.17052, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\mjjames.Core.1.1\lib\net35\mjjames.core.dll</HintPath>
@@ -590,6 +582,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MJJames\shared\classes\ControlLibrary\mjjames.ControlLibrary.csproj">
+      <Project>{2ecfb22d-9c2e-4d08-b3b3-89734c864b77}</Project>
+      <Name>mjjames.ControlLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

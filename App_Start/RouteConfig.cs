@@ -26,7 +26,7 @@ namespace mjjames.AdminSystem.App_Start
             routes.IgnoreRoute("glimpse.axd");
 
             routes.MapPageRoute("Login", "authentication/login", "~/authentication/default.aspx");
-
+            routes.MapPageRoute("Users", "users", "~/dbusers.aspx");
             routes.MapPageRoute("DBEditor", "editor/{type}/{key}/{*fkey}", "~/DBEditor.aspx", false,
                                             new RouteValueDictionary { 
                                                 { "fkey", null} 

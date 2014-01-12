@@ -13,6 +13,10 @@ namespace mjjames.AdminSystem.authentication
 		    {
 		        Form.Action = "Default.aspx";
 		    }
+            if (!IsPostBack)
+            {
+                returnUrl.Value = Request["ReturnUrl"];
+            }
 		}
 		/// <summary>
 		/// Validate Our User
@@ -41,7 +45,7 @@ namespace mjjames.AdminSystem.authentication
 
 			    Response.Cookies.Add(ck);
 			
-				string strRedirect = Request["ReturnUrl"] ?? "~/";
+				string strRedirect = returnUrl.Value ?? "~/";
                 Response.Redirect(strRedirect, true);
 			}
 			else

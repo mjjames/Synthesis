@@ -33,6 +33,7 @@
                     <div class="control-group">
                         <div class="controls">
                             <input runat="server" id="btnLogon" type="submit" value="Logon" onserverclick="btnLogin_Click" class="submit btn btn-primary btn-large" />
+                            <asp:HiddenField runat="server" ID="returnUrl"/>
                         </div>
                     </div>
                 </div>

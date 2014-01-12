@@ -50,7 +50,11 @@ namespace mjjames.AdminSystem
             if (Session["userSiteKey"] == null)
             {
                 FormsAuthentication.SignOut();
-                Response.Redirect("~/authentication/default.aspx?ReturnUrl=" + Server.UrlEncode(Page.Request.Url.PathAndQuery), true);
+                var authUrl = GetRouteUrl("Login", new
+                {
+                    ReturnUrl = Server.UrlEncode(Page.Request.Url.PathAndQuery)
+                });
+                Response.Redirect(authUrl, true);
             }
 
             _xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());

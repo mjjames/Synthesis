@@ -64,7 +64,11 @@ namespace mjjames.AdminSystem
 			//if we have no site key we have an error - assume this is because of an expired session so log the user out
 			if(Session["userSiteKey"] == null){
 				FormsAuthentication.SignOut();
-				Response.Redirect("~/authentication/default.aspx?ReturnUrl=" + Server.UrlEncode(Page.Request.Url.PathAndQuery), true);
+                var authUrl = GetRouteUrl("Login", new
+                {
+                    ReturnUrl = Server.UrlEncode(Page.Request.Url.PathAndQuery)
+                });
+				Response.Redirect(authUrl , true);
 			}
 			
 			_xmldb.SiteKey = int.Parse(Session["userSiteKey"].ToString());

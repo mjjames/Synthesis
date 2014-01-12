@@ -18,8 +18,12 @@ namespace mjjames.AdminSystem.fckplugins.InternalUrl
 			//if we have no site key we have an error - assume this is because of an expired session so log the user out
 			if (Session["userSiteKey"] == null)
 			{
-				FormsAuthentication.SignOut();
-				Response.Redirect("/admin/authentication/default.aspx?ReturnUrl=" + Server.UrlEncode(Page.Request.Url.PathAndQuery), true);
+                FormsAuthentication.SignOut();
+                var authUrl = GetRouteUrl("Login", new
+                {
+                    ReturnUrl = Server.UrlEncode(Page.Request.Url.PathAndQuery)
+                });
+                Response.Redirect(authUrl, true);
 			}
 		}
 		protected void LoadListing(object sender, EventArgs e)

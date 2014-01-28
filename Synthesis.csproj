@@ -342,6 +342,11 @@
       <DependentUpon>install.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\Rotation.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Repositories\KeyValueRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />
     <Compile Include="classes\SystemSettings.cs" />
@@ -350,7 +355,6 @@
     <Compile Include="classes\TwitterPublisher.cs" />
     <Compile Include="classes\UserAdministration.cs" />
     <Compile Include="classes\generic.cs" />
-    <Compile Include="dao\daoDonations.cs" />
     <Compile Include="Repositories\SiteUsersRepoistory.cs" />
     <Compile Include="dataContexts\adminDataContexts.cs">
       <DependentUpon>adminDataContexts.dbml</DependentUpon>
@@ -450,10 +454,6 @@
     <Compile Include="RecycleBin.aspx.designer.cs">
       <DependentUpon>RecycleBin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\CommentsRepository.cs" />
-    <Compile Include="Repositories\DonationsRepository.cs" />
-    <Compile Include="Repositories\IComments.cs" />
-    <Compile Include="Repositories\IDonation.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\RecycleRepository.cs" />
     <Compile Include="subscriptionmanagement.aspx.cs">
@@ -552,6 +552,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="FlickrNet.chm" />
+    <Content Include="dbchanges\Upgrade 2.2 to 2.3 Admin Tool.sql" />
     <None Include="help\admintool.pdf" />
     <Content Include="fckplugins\OnlineVideo\fckplugin.js" />
     <Content Include="fckplugins\OnlineVideo\onlinevideo.gif" />
@@ -567,6 +568,10 @@
     <None Include="Properties\PublishProfiles\DS1.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Scripts\Web.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

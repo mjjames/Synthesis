@@ -4,7 +4,6 @@ using System.Web.UI.WebControls;
 using mjjames.AdminSystem.DataControls;
 using mjjames.AdminSystem.dataentities;
 using System.Reflection;
-using mjjames.AdminSystem.dao;
 using System.Text;
 using System.Web;
 using System.Collections.Generic;

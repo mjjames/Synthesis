@@ -102,7 +102,7 @@ namespace mjjames.AdminSystem
 
                 if (ourChanges.Inserts.Count > 0)
                 {
-                    labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+                    labelStatus.Text = String.Format("{0} Inserted", Table.Label);
 
                     PKey = ourData.offer_key;
 
@@ -150,14 +150,14 @@ namespace mjjames.AdminSystem
                 }
                 if (ourChanges.Updates.Count > 0)
                 {
-                    labelStatus.Text = String.Format("{0} Updated", Table.ID);
+                    labelStatus.Text = String.Format("{0} Updated", Table.Label);
                 }
 
 
             }
             catch (Exception ex)
             {
-                labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
+                labelStatus.Text = String.Format("{0} Update Failed", Table.Label);
                 Logger.LogError("Update Failed", ex);
             }
         }

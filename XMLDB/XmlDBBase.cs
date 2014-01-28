@@ -744,7 +744,7 @@ namespace mjjames.AdminSystem
             }
             catch (Exception ex)
             {
-                labelStatus.Text = String.Format("{0} Removal Failed", Table.ID);
+                labelStatus.Text = String.Format("{0} Removal Failed", Table.Label);
                 Logger.LogError("Delete Failed", ex);
 
             }

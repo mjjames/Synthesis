@@ -40,15 +40,6 @@ namespace mjjames.AdminSystem.DataContexts
     partial void Insertaspnet_Role(mjjames.AdminSystem.DataEntities.aspnet_Role instance);
     partial void Updateaspnet_Role(mjjames.AdminSystem.DataEntities.aspnet_Role instance);
     partial void Deleteaspnet_Role(mjjames.AdminSystem.DataEntities.aspnet_Role instance);
-    partial void InsertDonatee(mjjames.AdminSystem.DataEntities.Donatee instance);
-    partial void UpdateDonatee(mjjames.AdminSystem.DataEntities.Donatee instance);
-    partial void DeleteDonatee(mjjames.AdminSystem.DataEntities.Donatee instance);
-    partial void InsertDonation(mjjames.AdminSystem.DataEntities.Donation instance);
-    partial void UpdateDonation(mjjames.AdminSystem.DataEntities.Donation instance);
-    partial void DeleteDonation(mjjames.AdminSystem.DataEntities.Donation instance);
-    partial void InsertComment(mjjames.AdminSystem.DataEntities.Comment instance);
-    partial void UpdateComment(mjjames.AdminSystem.DataEntities.Comment instance);
-    partial void DeleteComment(mjjames.AdminSystem.DataEntities.Comment instance);
     partial void Insertarticle(mjjames.AdminSystem.DataEntities.article instance);
     partial void Updatearticle(mjjames.AdminSystem.DataEntities.article instance);
     partial void Deletearticle(mjjames.AdminSystem.DataEntities.article instance);
@@ -97,7 +88,7 @@ namespace mjjames.AdminSystem.DataContexts
     #endregion
 		
 		public AdminDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["abellandscapes_co_uk_multisiteConnectionString"].ConnectionString, mappingSource)
+				base(global::mjjames.AdminSystem.Properties.Settings.Default.abellandscapes_co_uk_multisiteConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -187,30 +178,6 @@ namespace mjjames.AdminSystem.DataContexts
 			get
 			{
 				return this.GetTable<mjjames.AdminSystem.DataEntities.aspnet_Role>();
-			}
-		}
-		
-		public System.Data.Linq.Table<mjjames.AdminSystem.DataEntities.Donatee> Donatees
-		{
-			get
-			{
-				return this.GetTable<mjjames.AdminSystem.DataEntities.Donatee>();
-			}
-		}
-		
-		public System.Data.Linq.Table<mjjames.AdminSystem.DataEntities.Donation> Donations
-		{
-			get
-			{
-				return this.GetTable<mjjames.AdminSystem.DataEntities.Donation>();
-			}
-		}
-		
-		public System.Data.Linq.Table<mjjames.AdminSystem.DataEntities.Comment> Comments
-		{
-			get
-			{
-				return this.GetTable<mjjames.AdminSystem.DataEntities.Comment>();
 			}
 		}
 		
@@ -2299,778 +2266,6 @@ namespace mjjames.AdminSystem.DataEntities
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.donatees")]
-	public partial class Donatee : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _donatees_key;
-		
-		private string _first_name;
-		
-		private string _last_name;
-		
-		private string _address1;
-		
-		private string _address2;
-		
-		private string _address3;
-		
-		private string _address4;
-		
-		private string _postcode;
-		
-		private string _email;
-		
-		private bool _receve_email;
-		
-		private EntitySet<Donation> _donations;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnDonateesKeyChanging(int value);
-    partial void OnDonateesKeyChanged();
-    partial void OnFirstNameChanging(string value);
-    partial void OnFirstNameChanged();
-    partial void OnLastNameChanging(string value);
-    partial void OnLastNameChanged();
-    partial void OnAddress1Changing(string value);
-    partial void OnAddress1Changed();
-    partial void OnAddress2Changing(string value);
-    partial void OnAddress2Changed();
-    partial void OnAddress3Changing(string value);
-    partial void OnAddress3Changed();
-    partial void OnAddress4Changing(string value);
-    partial void OnAddress4Changed();
-    partial void OnPostCodeChanging(string value);
-    partial void OnPostCodeChanged();
-    partial void OnEmailChanging(string value);
-    partial void OnEmailChanged();
-    partial void OnReceiveEmailChanging(bool value);
-    partial void OnReceiveEmailChanged();
-    #endregion
-		
-		public Donatee()
-		{
-			this._donations = new EntitySet<Donation>(new Action<Donation>(this.attach_donations), new Action<Donation>(this.detach_donations));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="donatees_key", Storage="_donatees_key", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int DonateesKey
-		{
-			get
-			{
-				return this._donatees_key;
-			}
-			set
-			{
-				if ((this._donatees_key != value))
-				{
-					this.OnDonateesKeyChanging(value);
-					this.SendPropertyChanging();
-					this._donatees_key = value;
-					this.SendPropertyChanged("DonateesKey");
-					this.OnDonateesKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="first_name", Storage="_first_name", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string FirstName
-		{
-			get
-			{
-				return this._first_name;
-			}
-			set
-			{
-				if ((this._first_name != value))
-				{
-					this.OnFirstNameChanging(value);
-					this.SendPropertyChanging();
-					this._first_name = value;
-					this.SendPropertyChanged("FirstName");
-					this.OnFirstNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="last_name", Storage="_last_name", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string LastName
-		{
-			get
-			{
-				return this._last_name;
-			}
-			set
-			{
-				if ((this._last_name != value))
-				{
-					this.OnLastNameChanging(value);
-					this.SendPropertyChanging();
-					this._last_name = value;
-					this.SendPropertyChanged("LastName");
-					this.OnLastNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="address1", Storage="_address1", DbType="NVarChar(MAX)")]
-		public string Address1
-		{
-			get
-			{
-				return this._address1;
-			}
-			set
-			{
-				if ((this._address1 != value))
-				{
-					this.OnAddress1Changing(value);
-					this.SendPropertyChanging();
-					this._address1 = value;
-					this.SendPropertyChanged("Address1");
-					this.OnAddress1Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="address2", Storage="_address2", DbType="NVarChar(MAX)")]
-		public string Address2
-		{
-			get
-			{
-				return this._address2;
-			}
-			set
-			{
-				if ((this._address2 != value))
-				{
-					this.OnAddress2Changing(value);
-					this.SendPropertyChanging();
-					this._address2 = value;
-					this.SendPropertyChanged("Address2");
-					this.OnAddress2Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="address3", Storage="_address3", DbType="NVarChar(MAX)")]
-		public string Address3
-		{
-			get
-			{
-				return this._address3;
-			}
-			set
-			{
-				if ((this._address3 != value))
-				{
-					this.OnAddress3Changing(value);
-					this.SendPropertyChanging();
-					this._address3 = value;
-					this.SendPropertyChanged("Address3");
-					this.OnAddress3Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="address4", Storage="_address4", DbType="NVarChar(MAX)")]
-		public string Address4
-		{
-			get
-			{
-				return this._address4;
-			}
-			set
-			{
-				if ((this._address4 != value))
-				{
-					this.OnAddress4Changing(value);
-					this.SendPropertyChanging();
-					this._address4 = value;
-					this.SendPropertyChanged("Address4");
-					this.OnAddress4Changed();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="postcode", Storage="_postcode", DbType="NVarChar(8)")]
-		public string PostCode
-		{
-			get
-			{
-				return this._postcode;
-			}
-			set
-			{
-				if ((this._postcode != value))
-				{
-					this.OnPostCodeChanging(value);
-					this.SendPropertyChanging();
-					this._postcode = value;
-					this.SendPropertyChanged("PostCode");
-					this.OnPostCodeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="email", Storage="_email", DbType="NVarChar(MAX)")]
-		public string Email
-		{
-			get
-			{
-				return this._email;
-			}
-			set
-			{
-				if ((this._email != value))
-				{
-					this.OnEmailChanging(value);
-					this.SendPropertyChanging();
-					this._email = value;
-					this.SendPropertyChanged("Email");
-					this.OnEmailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="receve_email", Storage="_receve_email", DbType="Bit NOT NULL")]
-		public bool ReceiveEmail
-		{
-			get
-			{
-				return this._receve_email;
-			}
-			set
-			{
-				if ((this._receve_email != value))
-				{
-					this.OnReceiveEmailChanging(value);
-					this.SendPropertyChanging();
-					this._receve_email = value;
-					this.SendPropertyChanged("ReceiveEmail");
-					this.OnReceiveEmailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Donatee_Donation", Storage="_donations", ThisKey="DonateesKey", OtherKey="DonateeFKey")]
-		public EntitySet<Donation> Donations
-		{
-			get
-			{
-				return this._donations;
-			}
-			set
-			{
-				this._donations.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_donations(Donation entity)
-		{
-			this.SendPropertyChanging();
-			entity.Donatee = this;
-		}
-		
-		private void detach_donations(Donation entity)
-		{
-			this.SendPropertyChanging();
-			entity.Donatee = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.donations")]
-	public partial class Donation : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _donation_key;
-		
-		private int _donatee_fkey;
-		
-		private decimal _amount;
-		
-		private bool _gift_aid;
-		
-		private System.DateTime _donation_date;
-		
-		private EntityRef<Donatee> _donatee;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnDonationKeyChanging(int value);
-    partial void OnDonationKeyChanged();
-    partial void OnDonateeFKeyChanging(int value);
-    partial void OnDonateeFKeyChanged();
-    partial void OnAmountChanging(decimal value);
-    partial void OnAmountChanged();
-    partial void OnGiftAidChanging(bool value);
-    partial void OnGiftAidChanged();
-    partial void OnDonationDateChanging(System.DateTime value);
-    partial void OnDonationDateChanged();
-    #endregion
-		
-		public Donation()
-		{
-			this._donatee = default(EntityRef<Donatee>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="donation_key", Storage="_donation_key", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int DonationKey
-		{
-			get
-			{
-				return this._donation_key;
-			}
-			set
-			{
-				if ((this._donation_key != value))
-				{
-					this.OnDonationKeyChanging(value);
-					this.SendPropertyChanging();
-					this._donation_key = value;
-					this.SendPropertyChanged("DonationKey");
-					this.OnDonationKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="donatee_fkey", Storage="_donatee_fkey", DbType="Int NOT NULL")]
-		public int DonateeFKey
-		{
-			get
-			{
-				return this._donatee_fkey;
-			}
-			set
-			{
-				if ((this._donatee_fkey != value))
-				{
-					this.OnDonateeFKeyChanging(value);
-					this.SendPropertyChanging();
-					this._donatee_fkey = value;
-					this.SendPropertyChanged("DonateeFKey");
-					this.OnDonateeFKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="amount", Storage="_amount", DbType="Money NOT NULL")]
-		public decimal Amount
-		{
-			get
-			{
-				return this._amount;
-			}
-			set
-			{
-				if ((this._amount != value))
-				{
-					this.OnAmountChanging(value);
-					this.SendPropertyChanging();
-					this._amount = value;
-					this.SendPropertyChanged("Amount");
-					this.OnAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="gift_aid", Storage="_gift_aid", DbType="Bit NOT NULL")]
-		public bool GiftAid
-		{
-			get
-			{
-				return this._gift_aid;
-			}
-			set
-			{
-				if ((this._gift_aid != value))
-				{
-					this.OnGiftAidChanging(value);
-					this.SendPropertyChanging();
-					this._gift_aid = value;
-					this.SendPropertyChanged("GiftAid");
-					this.OnGiftAidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="donation_date", Storage="_donation_date", DbType="DateTime NOT NULL")]
-		public System.DateTime DonationDate
-		{
-			get
-			{
-				return this._donation_date;
-			}
-			set
-			{
-				if ((this._donation_date != value))
-				{
-					this.OnDonationDateChanging(value);
-					this.SendPropertyChanging();
-					this._donation_date = value;
-					this.SendPropertyChanged("DonationDate");
-					this.OnDonationDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Donatee_Donation", Storage="_donatee", ThisKey="DonateeFKey", OtherKey="DonateesKey", IsForeignKey=true)]
-		public Donatee Donatee
-		{
-			get
-			{
-				return this._donatee.Entity;
-			}
-			set
-			{
-				Donatee previousValue = this._donatee.Entity;
-				if (((previousValue != value) 
-							|| (this._donatee.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._donatee.Entity = null;
-						previousValue.Donations.Remove(this);
-					}
-					this._donatee.Entity = value;
-					if ((value != null))
-					{
-						value.Donations.Add(this);
-						this._donatee_fkey = value.DonateesKey;
-					}
-					else
-					{
-						this._donatee_fkey = default(int);
-					}
-					this.SendPropertyChanged("Donatee");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.comments")]
-	public partial class Comment : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _comment_key;
-		
-		private System.Nullable<int> _comment_fkey;
-		
-		private int _article_key;
-		
-		private string _email;
-		
-		private string _website;
-		
-		private string _text;
-		
-		private string _username;
-		
-		private EntitySet<Comment> _comments;
-		
-		private EntityRef<Comment> _comment1;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnCommentKeyChanging(int value);
-    partial void OnCommentKeyChanged();
-    partial void OnCommentFKeyChanging(System.Nullable<int> value);
-    partial void OnCommentFKeyChanged();
-    partial void OnArticleKeyChanging(int value);
-    partial void OnArticleKeyChanged();
-    partial void OnEmailChanging(string value);
-    partial void OnEmailChanged();
-    partial void OnWebsiteChanging(string value);
-    partial void OnWebsiteChanged();
-    partial void OnTextChanging(string value);
-    partial void OnTextChanged();
-    partial void OnUserNameChanging(string value);
-    partial void OnUserNameChanged();
-    #endregion
-		
-		public Comment()
-		{
-			this._comments = new EntitySet<Comment>(new Action<Comment>(this.attach_comments), new Action<Comment>(this.detach_comments));
-			this._comment1 = default(EntityRef<Comment>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="comment_key", Storage="_comment_key", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int CommentKey
-		{
-			get
-			{
-				return this._comment_key;
-			}
-			set
-			{
-				if ((this._comment_key != value))
-				{
-					this.OnCommentKeyChanging(value);
-					this.SendPropertyChanging();
-					this._comment_key = value;
-					this.SendPropertyChanged("CommentKey");
-					this.OnCommentKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="comment_fkey", Storage="_comment_fkey", DbType="Int")]
-		public System.Nullable<int> CommentFKey
-		{
-			get
-			{
-				return this._comment_fkey;
-			}
-			set
-			{
-				if ((this._comment_fkey != value))
-				{
-					this.OnCommentFKeyChanging(value);
-					this.SendPropertyChanging();
-					this._comment_fkey = value;
-					this.SendPropertyChanged("CommentFKey");
-					this.OnCommentFKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="article_key", Storage="_article_key", DbType="Int NOT NULL")]
-		public int ArticleKey
-		{
-			get
-			{
-				return this._article_key;
-			}
-			set
-			{
-				if ((this._article_key != value))
-				{
-					this.OnArticleKeyChanging(value);
-					this.SendPropertyChanging();
-					this._article_key = value;
-					this.SendPropertyChanged("ArticleKey");
-					this.OnArticleKeyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="email", Storage="_email", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Email
-		{
-			get
-			{
-				return this._email;
-			}
-			set
-			{
-				if ((this._email != value))
-				{
-					this.OnEmailChanging(value);
-					this.SendPropertyChanging();
-					this._email = value;
-					this.SendPropertyChanged("Email");
-					this.OnEmailChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="website", Storage="_website", DbType="NVarChar(MAX)")]
-		public string Website
-		{
-			get
-			{
-				return this._website;
-			}
-			set
-			{
-				if ((this._website != value))
-				{
-					this.OnWebsiteChanging(value);
-					this.SendPropertyChanging();
-					this._website = value;
-					this.SendPropertyChanged("Website");
-					this.OnWebsiteChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="text", Storage="_text", DbType="Text NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string Text
-		{
-			get
-			{
-				return this._text;
-			}
-			set
-			{
-				if ((this._text != value))
-				{
-					this.OnTextChanging(value);
-					this.SendPropertyChanging();
-					this._text = value;
-					this.SendPropertyChanged("Text");
-					this.OnTextChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="username", Storage="_username", DbType="NVarChar(50)")]
-		public string UserName
-		{
-			get
-			{
-				return this._username;
-			}
-			set
-			{
-				if ((this._username != value))
-				{
-					this.OnUserNameChanging(value);
-					this.SendPropertyChanging();
-					this._username = value;
-					this.SendPropertyChanged("UserName");
-					this.OnUserNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Comment_Comment", Storage="_comments", ThisKey="CommentKey", OtherKey="CommentFKey")]
-		public EntitySet<Comment> Comments
-		{
-			get
-			{
-				return this._comments;
-			}
-			set
-			{
-				this._comments.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Comment_Comment", Storage="_comment1", ThisKey="CommentFKey", OtherKey="CommentKey", IsForeignKey=true)]
-		public Comment comment1
-		{
-			get
-			{
-				return this._comment1.Entity;
-			}
-			set
-			{
-				Comment previousValue = this._comment1.Entity;
-				if (((previousValue != value) 
-							|| (this._comment1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._comment1.Entity = null;
-						previousValue.Comments.Remove(this);
-					}
-					this._comment1.Entity = value;
-					if ((value != null))
-					{
-						value.Comments.Add(this);
-						this._comment_fkey = value.CommentKey;
-					}
-					else
-					{
-						this._comment_fkey = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("comment1");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_comments(Comment entity)
-		{
-			this.SendPropertyChanging();
-			entity.comment1 = this;
-		}
-		
-		private void detach_comments(Comment entity)
-		{
-			this.SendPropertyChanging();
-			entity.comment1 = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.articles")]
 	public partial class article : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -3255,7 +2450,7 @@ namespace mjjames.AdminSystem.DataEntities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_thumbnailimage", DbType="NVarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_thumbnailimage", DbType="NVarChar(255)")]
 		public string thumbnailimage
 		{
 			get
@@ -5470,7 +4665,7 @@ namespace mjjames.AdminSystem.DataEntities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_thumbnailimage", DbType="NVarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_thumbnailimage", DbType="NVarChar(255)")]
 		public string thumbnailimage
 		{
 			get
@@ -5909,7 +5104,7 @@ namespace mjjames.AdminSystem.DataEntities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_thumbnailimage", DbType="NVarChar(128)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_thumbnailimage", DbType="NVarChar(255)")]
 		public string thumbnailimage
 		{
 			get
@@ -6320,6 +5515,8 @@ namespace mjjames.AdminSystem.DataEntities
 		
 		private string _metadescription;
 		
+		private string _thumbnailimage;
+		
 		private EntitySet<testimony> _testimonies;
 		
 		private EntityRef<site> _site;
@@ -6354,6 +5551,8 @@ namespace mjjames.AdminSystem.DataEntities
     partial void OnpagetitleChanged();
     partial void OnmetadescriptionChanging(string value);
     partial void OnmetadescriptionChanged();
+    partial void OnthumbnailimageChanging(string value);
+    partial void OnthumbnailimageChanged();
     #endregion
 		
 		public project()
@@ -6623,6 +5822,26 @@ namespace mjjames.AdminSystem.DataEntities
 					this._metadescription = value;
 					this.SendPropertyChanged("metadescription");
 					this.OnmetadescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_thumbnailimage", DbType="nvarchar(255)")]
+		public string thumbnailimage
+		{
+			get
+			{
+				return this._thumbnailimage;
+			}
+			set
+			{
+				if ((this._thumbnailimage != value))
+				{
+					this.OnthumbnailimageChanging(value);
+					this.SendPropertyChanging();
+					this._thumbnailimage = value;
+					this.SendPropertyChanged("thumbnailimage");
+					this.OnthumbnailimageChanged();
 				}
 			}
 		}

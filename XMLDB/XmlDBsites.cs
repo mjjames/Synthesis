@@ -114,7 +114,7 @@ namespace mjjames.AdminSystem
 
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+					labelStatus.Text = String.Format("{0} Inserted", Table.Label);
 
 
 					PKey = ourData.site_key;
@@ -193,7 +193,7 @@ namespace mjjames.AdminSystem
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", Table.ID);
+					labelStatus.Text = String.Format("{0} Updated", Table.Label);
 				}
 
 				//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
@@ -205,7 +205,7 @@ namespace mjjames.AdminSystem
 			}
 			catch (Exception ex)
 			{
-				labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
+				labelStatus.Text = String.Format("{0} Update Failed", Table.Label);
 				Logger.LogError("Failed Update", ex);
 			}
 

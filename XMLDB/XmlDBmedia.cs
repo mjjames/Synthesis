@@ -195,17 +195,17 @@ namespace mjjames.AdminSystem
                         labelStatus.Text = "Nothing to Save";
                         break;
                     case UpdateType.Inserted:
-                        labelStatus.Text = String.Format("{0} Inserted", Table.ID);
+                        labelStatus.Text = String.Format("{0} Inserted", Table.Label);
                         break;
                     case UpdateType.Updated:
-                        labelStatus.Text = String.Format("{0} Updated", Table.ID);
+                        labelStatus.Text = String.Format("{0} Updated", Table.Label);
                         break;
                 }
 
             }
             catch (Exception ex)
             {
-                labelStatus.Text = String.Format("{0} Update Failed", Table.ID);
+                labelStatus.Text = String.Format("{0} Update Failed", Table.Label);
                 Logger.LogError("Update Error", ex);
             }
         }

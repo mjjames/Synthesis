@@ -1,6 +1,9 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="AdminSystem" CodeBehind="AdminSystem.master.cs" %>
 
 <%@ Register TagPrefix="controls" Namespace="mjjames.ControlLibrary.AdminWebControls" Assembly="mjjames.ControlLibrary" %>
+<script runat="server">
+    System.Version version = System.Reflection.Assembly.GetAssembly(typeof(mjjames.AdminSystem.Global)).GetName().Version;
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
@@ -24,7 +27,7 @@
             <div class="navbar navbar-inverse navbar-fixed-top">
                 <div class="navbar-inner">
                     <div class="container">
-                        <a class="brand" href="~/" runat="server">Synthesis v2.2</a>
+                        <a class="brand" href="~/" runat="server">Synthesis v<%=string.Format("{0}.{1}", version.Major, version.Minor) %></a>
                         <div class="nav-collapse collapse">
                             <controls:AdminToolbar runat="server" ID="adminToolbar" AccessLevel="0" Visible="false"
                                 OnInit="SetAccessLevel" />
@@ -50,7 +53,7 @@
             <p>
                 &copy; <%=DateTime.Now.Year %>
                 <a href="http://mjjames.co.uk" target="_blank">mjjames Technologies</a>
-                Version: <%= System.Reflection.Assembly.GetAssembly(typeof(mjjames.AdminSystem.Global)).GetName().Version.ToString() %>
+                Version: <%= version.ToString() %>
             </p>
             <asp:Panel runat="server" ID="fileStorage" Visible="False" CssClass="fileStorage pull-right">
                 <p>

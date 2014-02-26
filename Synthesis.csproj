@@ -54,11 +54,11 @@
   <ItemGroup>
     <Reference Include="AjaxControlToolkit, Version=4.5.7.1213, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\AjaxControlToolkit.7.1213\lib\45\AjaxControlToolkit.dll</HintPath>
+      <HintPath>packages\AjaxControlToolkit.7.1213\lib\45\AjaxControlToolkit.dll</HintPath>
     </Reference>
     <Reference Include="AjaxMin, Version=5.6.5100.19196, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\AjaxMin.5.6.5100.19204\lib\net40\AjaxMin.dll</HintPath>
+      <HintPath>packages\AjaxMin.5.6.5100.19204\lib\net40\AjaxMin.dll</HintPath>
     </Reference>
     <Reference Include="com.flajaxian.DirectAmazonUploader">
       <HintPath>packages\com.flajaxian.FileUploader.1.0.1\lib\net35\com.flajaxian.DirectAmazonUploader.dll</HintPath>
@@ -71,59 +71,59 @@
     </Reference>
     <Reference Include="FlickrNet, Version=3.8.0.0, Culture=neutral, PublicKeyToken=2491df59efa5d132, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\FlickrNet.3.8.0\lib\net20\FlickrNet.dll</HintPath>
+      <HintPath>packages\FlickrNet.3.8.0\lib\net20\FlickrNet.dll</HintPath>
     </Reference>
     <Reference Include="FredCK.FCKeditorV2">
       <HintPath>packages\FCKEditor.Net.2.6.3\lib\net20\FredCK.FCKeditorV2.dll</HintPath>
     </Reference>
     <Reference Include="Google.GData.AccessControl, Version=2.2.0.0, Culture=neutral, PublicKeyToken=b4b8eb9a7afc8328, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Google.GData.AccessControl.2.2.0.0\lib\Google.GData.AccessControl.dll</HintPath>
+      <HintPath>packages\Google.GData.AccessControl.2.2.0.0\lib\Google.GData.AccessControl.dll</HintPath>
     </Reference>
     <Reference Include="Google.GData.Calendar, Version=2.2.0.0, Culture=neutral, PublicKeyToken=aa6748391206b888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Google.GData.Calendar.2.2.0.0\lib\Google.GData.Calendar.dll</HintPath>
+      <HintPath>packages\Google.GData.Calendar.2.2.0.0\lib\Google.GData.Calendar.dll</HintPath>
     </Reference>
     <Reference Include="Google.GData.Client, Version=2.2.0.0, Culture=neutral, PublicKeyToken=04a59ca9b0273830, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Google.GData.Client.2.2.0.0\lib\Google.GData.Client.dll</HintPath>
+      <HintPath>packages\Google.GData.Client.2.2.0.0\lib\Google.GData.Client.dll</HintPath>
     </Reference>
     <Reference Include="Google.GData.Extensions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0b4c5df2ebf20876, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Google.GData.Extensions.2.2.0.0\lib\Google.GData.Extensions.dll</HintPath>
+      <HintPath>packages\Google.GData.Extensions.2.2.0.0\lib\Google.GData.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="ImageResizer">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\ImageResizer.3.4.2\lib\ImageResizer.dll</HintPath>
+      <HintPath>packages\ImageResizer.3.4.2\lib\ImageResizer.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Data.Edm, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <HintPath>packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Data.OData, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <HintPath>packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+      <HintPath>packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.1.0.4, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\WindowsAzure.Storage.2.1.0.4\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <HintPath>packages\WindowsAzure.Storage.2.1.0.4\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
     <Reference Include="mjjames.ControlLibrary, Version=1.4.5125.30928, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\mjjames.ControlLibrary.1.4\lib\mjjames.ControlLibrary.dll</HintPath>
+      <HintPath>packages\mjjames.ControlLibrary.1.4\lib\mjjames.ControlLibrary.dll</HintPath>
     </Reference>
     <Reference Include="mjjames.ControlLibrary.XmlSerializers, Version=1.4.5125.30928, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\mjjames.ControlLibrary.1.4\lib\mjjames.ControlLibrary.XmlSerializers.dll</HintPath>
+      <HintPath>packages\mjjames.ControlLibrary.1.4\lib\mjjames.ControlLibrary.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="mjjames.core, Version=1.1.4862.17052, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -134,19 +134,19 @@
       <HintPath>packages\mjjames.MKSynthesis.Imaging.1.0\lib\net45\mjjames.Imaging.dll</HintPath>
     </Reference>
     <Reference Include="MKS.GarageManagement.FileStorage">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\MKS.GMS.FileStorage.1.0\lib\MKS.GarageManagement.FileStorage.dll</HintPath>
+      <HintPath>packages\MKS.GMS.FileStorage.1.0\lib\MKS.GarageManagement.FileStorage.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+      <HintPath>packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="Ninject.Web.Common">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+      <HintPath>packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ninject.Web.Mvc">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\Ninject.MVC3.3.0.0.6\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+      <HintPath>packages\Ninject.MVC3.3.0.0.6\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -155,13 +155,11 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
+      <HintPath>packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
@@ -203,7 +201,7 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivator">
-      <HintPath>..\..\..\Users\Michael\Documents\Visual Studio 2013\Projects\abellandscapes.co.uk\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
+      <HintPath>packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +258,7 @@
     <Content Include="images\arrow_rtl.gif" />
     <Content Include="images\clipboard.png" />
     <Content Include="images\noimage.png" />
+    <Content Include="images\pdfpreview.png" />
     <Content Include="images\smiley\msn\angel_smile.gif" />
     <Content Include="images\smiley\msn\angry_smile.gif" />
     <Content Include="images\smiley\msn\broken_heart.gif" />
@@ -342,11 +341,6 @@
       <DependentUpon>install.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\Rotation.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="Repositories\KeyValueRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />
     <Compile Include="classes\SystemSettings.cs" />
@@ -565,13 +559,8 @@
     <Content Include="packages.config" />
     <Content Include="install\web.config" />
     <Content Include="javascript\jquery.form.js" />
-    <None Include="Properties\PublishProfiles\DS1.pubxml" />
     <None Include="Properties\PublishProfiles\Profile1.pubxml" />
     <Content Include="Scripts\Web.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -623,5 +612,4 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>

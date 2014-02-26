@@ -3,6 +3,7 @@ var mjjames = mjjames || {};
 mjjames.LocalStorageService = function () {
     var _fileInputSelector;
     var _fileSubmitSelector;
+    var _mediaType;
 
     var FileUploadError = function () {
         SetUploadStatus("Error");
@@ -24,19 +25,22 @@ mjjames.LocalStorageService = function () {
             case "jpg": case "png": case "gif":
                 RenderPreviewImage(fileName);
                 break;
+            case "pdf":
+                RenderPreviewImage("/admin/images/pdfpreview.png");
+                break;
             default:
                 break;
         }
     };
 
     var RenderPreviewImage = function (fileName) {
-        
+
         var $parent = $(_fileInputSelector).closest("div.fileuploadWrapper");
-        
+
         var $preview = $parent.find("img.previewImg");
         $preview.attr("src", fileName);
         $preview.attr("data-content", "<img src='" + fileName + "' />");
-        
+
     };
 
     var InitUploader = function () {
@@ -52,7 +56,7 @@ mjjames.LocalStorageService = function () {
     var UploadFile = function () {
         SetUploadStatus("Uploading");
         $("form").ajaxSubmit({
-            url: '/admin/files/image/',
+            url: '/admin/files/' + _mediaType + '/',
             method: 'post',
             beforeSend: function () {
                 UploadPercent('0%');
@@ -60,7 +64,7 @@ mjjames.LocalStorageService = function () {
             uploadProgress: function (event, position, total, percentComplete) {
                 UploadPercent(percentComplete + '%');
             },
-            success: function (response, textStatus, XMLHttpRequest) {
+            success: function (response) {
                 //if we dont get any image locations back something has gone wrong its just not thrown a 500 error
                 if (response.length === 0) {
                     FileUploadError();
@@ -72,8 +76,7 @@ mjjames.LocalStorageService = function () {
                 Debug(result.responseText);
                 if (result.status === 401) {
                     UserLoggedOutError();
-                }
-                else {
+                } else {
                     FileUploadError();
                 }
             }
@@ -122,12 +125,14 @@ mjjames.LocalStorageService = function () {
     };
 
     return {
-        Init: function (fileInputSelector, fileSubmitSelector) {
+        Init: function (fileInputSelector, fileSubmitSelector, mediaType) {
             _fileInputSelector = fileInputSelector;
             Debug("File Selector: " + _fileInputSelector);
             _fileSubmitSelector = fileSubmitSelector;
             Debug("File Submit Selector: " + _fileSubmitSelector);
+            _mediaType = mediaType;
+            Debug("Media Type: " + _mediaType);
             InitUploader();
         }
-    }
+    };
 }();

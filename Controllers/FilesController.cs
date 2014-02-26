@@ -46,6 +46,47 @@ namespace mjjames.AdminSystem.Controllers
         }
 
         //
+        // POST: /Files/Media
+        [HttpPost]
+        [ActionName("Media")]
+        public JsonResult AddMedia(HttpPostedFileBase file)
+        {
+            if (file == null)
+            {
+                throw new ArgumentNullException("no file provided", "file");
+            }
+            return AddMedias(new[] { file });
+        }
+
+        //
+        // POST: /Files/File
+        [HttpPost]
+        [ActionName("File")]
+        public JsonResult AddFile(HttpPostedFileBase file)
+        {
+            if (file == null)
+            {
+                throw new ArgumentNullException("no file provided", "file");
+            }
+
+            var validContentTypes = new List<string>
+                {
+                    ".doc",
+                    ".docx",
+                    ".pdf",
+                    ".gif",
+                    ".jpeg",
+                    ".jpg",
+                    ".png", 
+                    ".mp3",
+                    ".wma",
+                    ".m4a"
+                };
+            return UploadFiles(new []{ file }, validContentTypes);
+        }
+
+
+        //
         // POST: /Files/Documents
         [HttpPost]
         [ActionName("Documents")]
@@ -55,11 +96,22 @@ namespace mjjames.AdminSystem.Controllers
                 {
                     ".doc",
                     ".docx",
-                    ".pdf",
-                    ".gif",
-                    ".jpeg",
-                    ".jpg",
-                    ".png"
+                    ".pdf"
+                };
+            return UploadFiles(files, validContentTypes);
+        }
+
+        //
+        // POST: /Files/Medias
+        [HttpPost]
+        [ActionName("Medias")]
+        public JsonResult AddMedias(IEnumerable<HttpPostedFileBase> files)
+        {
+            var validContentTypes = new List<string>
+                {
+                    ".mp3",
+                    ".wma",
+                    ".m4a"
                 };
             return UploadFiles(files, validContentTypes);
         }
@@ -119,7 +171,6 @@ namespace mjjames.AdminSystem.Controllers
         [ActionName("Images")]
         public JsonResult AddImages(IEnumerable<HttpPostedFileBase> files)
         {
-            //todo: load these from config
             var validContentTypes = new List<string>
                 {
                     ".gif",

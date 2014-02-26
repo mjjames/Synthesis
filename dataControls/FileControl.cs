@@ -68,7 +68,7 @@ namespace mjjames.AdminSystem.dataControls
                 fileHidden.Value = ourFileValue;
                 if (!String.IsNullOrEmpty(fileHidden.Value))
                 {
-                    clearFile.Text = "Remove Image";
+                    clearFile.Text = "Remove Item";
                     clearFile.Visible = true;
                 }
             }
@@ -108,8 +108,13 @@ namespace mjjames.AdminSystem.dataControls
 
         private static void UpdateImageSource(Image imagePreview, string imageUrl)
         {
-            imagePreview.ImageUrl = imageUrl;
+            
             var contentPath = imageUrl.StartsWith("http") ? imageUrl : VirtualPathUtility.ToAbsolute(imageUrl);
+            if (contentPath.EndsWith(".pdf"))
+            {
+                contentPath = VirtualPathUtility.ToAbsolute("~/images/pdfpreview.png");
+            }
+            imagePreview.ImageUrl = contentPath;
             imagePreview.Attributes.Add("data-content", "<img src='" + contentPath  + "' />");
         }
 
@@ -143,8 +148,10 @@ namespace mjjames.AdminSystem.dataControls
                 InnerHtml = "<p> No Storage Space Available</p>"
             };
 
+            var fileType = field.Attributes.ContainsKey("mediaType") ? field.Attributes["mediaType"] : "image";
+
             //init
-            csm.RegisterStartupScript(this.GetType(), "storageservice-" + field.ID, String.Format("mjjames.LocalStorageService.Init(\"input[id$='uploaderFile{0}']\", \"input[id$='uploadSubmit{0}']\");", field.ID), true);
+            csm.RegisterStartupScript(this.GetType(), "storageservice-" + field.ID, String.Format("mjjames.LocalStorageService.Init(\"input[id$='uploaderFile{0}']\", \"input[id$='uploadSubmit{0}']\",\"" + fileType + "\");", field.ID), true);
     
 
             fileUpload.Controls.Add(isWithinStorageLimit ? divAppendWrapper : divNoStorage);

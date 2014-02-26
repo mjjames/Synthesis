@@ -229,6 +229,13 @@ namespace mjjames.AdminSystem
                                       select l.lookup_key;
                     filter = String.Format("[mediatype_lookup] = {0}", featuredKey.FirstOrDefault());
                     break;
+                case "downloads":
+                    var downloadKey = from l in AdminDC.lookups
+                                      where l.lookup_id == "download"
+                                         && l.type == "media_type"
+                                      select l.lookup_key;
+                    filter = String.Format("[mediatype_lookup] = {0}", downloadKey.FirstOrDefault());
+                    break;
                 default:
                     filter = "";
                     break;

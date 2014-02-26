@@ -87,11 +87,6 @@ namespace mjjames.AdminSystem.DataContexts
     partial void Deletemarketingsite(mjjames.AdminSystem.DataEntities.marketingsite instance);
     #endregion
 		
-		public AdminDataContext() : 
-				base(global::mjjames.AdminSystem.Properties.Settings.Default.abellandscapes_co_uk_multisiteConnectionString, mappingSource)
-		{
-			OnCreated();
-		}
 		
 		public AdminDataContext(string connection) : 
 				base(connection, mappingSource)

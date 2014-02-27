@@ -213,32 +213,17 @@ namespace mjjames.AdminSystem
         protected override string ApplyDataFilters(string filterName)
         {
             var filter = "";
-            switch (filterName.ToLower())
+            if (filterName.EndsWith("s"))
             {
-                case "podcasts":
-                    var podcastKey = from l in AdminDC.lookups
-                                     where l.lookup_id == "podcast"
-                                        && l.type == "media_type"
-                                     select l.lookup_key;
-                    filter = String.Format("[mediatype_lookup] = {0}", podcastKey.FirstOrDefault());
-                    break;
-                case "featuredpodcasts":
-                    var featuredKey = from l in AdminDC.lookups
-                                      where l.lookup_id == "featuredpodcast"
-                                         && l.type == "media_type"
-                                      select l.lookup_key;
-                    filter = String.Format("[mediatype_lookup] = {0}", featuredKey.FirstOrDefault());
-                    break;
-                case "downloads":
-                    var downloadKey = from l in AdminDC.lookups
-                                      where l.lookup_id == "download"
-                                         && l.type == "media_type"
-                                      select l.lookup_key;
-                    filter = String.Format("[mediatype_lookup] = {0}", downloadKey.FirstOrDefault());
-                    break;
-                default:
-                    filter = "";
-                    break;
+                filterName = filterName.Substring(0, filterName.Length - 1);
+            }
+            var lookupKey = (from l in AdminDC.lookups
+                             where l.lookup_id == filterName.ToLower()
+                             && l.type == "media_type"
+                             select l.lookup_key).FirstOrDefault();
+            if (lookupKey > 0)
+            {
+                filter = String.Format("[mediatype_lookup] = {0}", lookupKey);
             }
             return filter;
         }

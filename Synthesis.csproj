@@ -117,13 +117,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\WindowsAzure.Storage.2.1.0.4\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="mjjames.ControlLibrary, Version=1.4.5125.30928, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="mjjames.ControlLibrary, Version=1.5.5171.39193, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\mjjames.ControlLibrary.1.4\lib\mjjames.ControlLibrary.dll</HintPath>
+      <HintPath>..\..\mjjames\websites\WiganMethodistCircuit\packages\mjjames.ControlLibrary.1.5\lib\mjjames.ControlLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="mjjames.ControlLibrary.XmlSerializers, Version=1.4.5125.30928, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="mjjames.ControlLibrary.XmlSerializers, Version=1.5.5171.39193, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\mjjames.ControlLibrary.1.4\lib\mjjames.ControlLibrary.XmlSerializers.dll</HintPath>
+      <HintPath>..\..\mjjames\websites\WiganMethodistCircuit\packages\mjjames.ControlLibrary.1.5\lib\mjjames.ControlLibrary.XmlSerializers.dll</HintPath>
     </Reference>
     <Reference Include="mjjames.core, Version=1.1.4862.17052, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -27,14 +27,14 @@ namespace mjjames.AdminSystem.App_Start
 
             routes.MapPageRoute("Login", "authentication/login", "~/authentication/default.aspx");
             routes.MapPageRoute("Users", "users", "~/dbusers.aspx");
-            routes.MapPageRoute("DBEditor", "editor/{type}/{key}/{*fkey}", "~/DBEditor.aspx", false,
+            routes.MapPageRoute("DBEditor", "editor/{type}/{key}/{*filter}", "~/DBEditor.aspx", false,
                                             new RouteValueDictionary { 
-                                                { "fkey", null} 
+                                                { "filter", null} 
                                             });
 
-            routes.MapPageRoute("DBListing", "listing/{type}/{*fkey}", "~/DBListing.aspx", false,
+            routes.MapPageRoute("DBListing", "listing/{type}/{*filter}", "~/DBListing.aspx", false,
                                                 new RouteValueDictionary { 
-                                                    { "fkey", null } 
+                                                    { "filter", null } 
                                                 });
 
             routes.MapPageRoute("ImageResizer", "image/{action}/{height}/{width}", "~/loadimage.aspx");

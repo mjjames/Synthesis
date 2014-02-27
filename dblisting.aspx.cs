@@ -41,7 +41,12 @@ namespace mjjames.AdminSystem
                 throw exception;
             }
 
-            var id = Page.RouteData.Values.ContainsKey("id") ? Page.RouteData.Values["id"].ToString() : "";
+            var id = "" + Page.RouteData.Values["filter"]; // != null ? Page.RouteData.Values["filter"].ToString() : "";
+            //we don't allow pages to use filter as a table id name , this is because for pages filter is the fkey
+            if (_sType == "pages")
+            {
+                id = "";
+            }
 
             _xmldb.TableName = String.IsNullOrWhiteSpace(id) ? _sType : id;
             _xmldb.ConnectionString = ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString;
@@ -111,7 +116,7 @@ namespace mjjames.AdminSystem
                     }
                     else
                     {
-                        p = new RouteParameter(field.ID, "fkey");
+                        p = new RouteParameter(field.ID, "filter");
                         defaultFilterSet = true;
                     }
                     if (!sdsData.SelectParameters.Contains(p))
@@ -231,14 +236,14 @@ namespace mjjames.AdminSystem
                 linkbuttonBack.Visible = false;
                 return;
             }
-            var foreignKeyData = Page.RouteData.Values.ContainsKey("fkey") ?  Page.RouteData.Values["fkey"].ToString()  : "";
+            var foreignKeyData = Page.RouteData.Values.ContainsKey("filter") ?  Page.RouteData.Values["filter"].ToString()  : "";
             if (!String.IsNullOrWhiteSpace(foreignKeyData))
             {
                 
                 buttonAddPage.NavigateUrl = GetRouteUrl("DBEditor", new
                 {
                     Type = _sType,
-                    FKey = foreignKeyData,
+                    Filter = foreignKeyData,
                     Key = 0
                 });
                 buttonAddPage.Visible = true;
@@ -247,7 +252,7 @@ namespace mjjames.AdminSystem
                 {
                     Type = _sType,
                     Key = foreignKeyData,
-                    FKey = ""
+                    Filter = ""
                 });
 
                 if (foreignKeyData.Equals("0"))
@@ -313,7 +318,7 @@ namespace mjjames.AdminSystem
                     {
                         Type = _sType,
                         Key = 0,
-                        FKey = 0
+                        Filter = 0
                     });
                     //but as we pass key and fkey of 0 it will end in /0/0 remove this for the sitemap
                     //to add the key

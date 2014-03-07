@@ -16,14 +16,14 @@ namespace mjjames.AdminSystem.classes
 	public class UserAdministration
 	{
 		private readonly AdminDataContext _adc =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
-
+        private string applicationName = "synthesis";
 		public List<ApplicationUser> LoadUsers()
 		{
 			var users = from u in _adc.vw_aspnet_MembershipUsers
 						join ur in _adc.vw_aspnet_UsersInRoles on u.UserId equals ur.UserId
 						where
 							u.ApplicationId.Equals(
-							_adc.vw_aspnet_Applications.Single(a => a.ApplicationName.Equals("/")).ApplicationId)
+                            _adc.vw_aspnet_Applications.Single(a => a.ApplicationName.Equals(applicationName)).ApplicationId)
 						select new ApplicationUser
 								{
 									UserID = u.UserId,
@@ -50,7 +50,7 @@ namespace mjjames.AdminSystem.classes
 			user.UserName = userName;
 
 			//assuming that users can only have one role 
-			_adc.aspnet_UsersInRoles_RemoveUsersFromRoles("/", user.UserName,
+            _adc.aspnet_UsersInRoles_RemoveUsersFromRoles(applicationName, user.UserName,
 														  user.aspnet_UsersInRoles.First().aspnet_Role.RoleName);
 
 
@@ -58,7 +58,7 @@ namespace mjjames.AdminSystem.classes
 				_adc.aspnet_Roles.FirstOrDefault(
 					r => r.RoleId == roleID);
 
-			_adc.aspnet_UsersInRoles_AddUsersToRoles("/", user.UserName, role.RoleName, null);
+            _adc.aspnet_UsersInRoles_AddUsersToRoles(applicationName, user.UserName, role.RoleName, null);
 
 			_adc.SubmitChanges();
 
@@ -107,7 +107,7 @@ namespace mjjames.AdminSystem.classes
 			return (from r in _adc.vw_aspnet_Roles
 					where
 					   r.ApplicationId.Equals(
-					   _adc.vw_aspnet_Applications.Single(a => a.ApplicationName.Equals("/")).ApplicationId)
+                       _adc.vw_aspnet_Applications.Single(a => a.ApplicationName.Equals(applicationName)).ApplicationId)
 					select r).ToList();
 
 		}
@@ -119,7 +119,7 @@ namespace mjjames.AdminSystem.classes
 						select u).FirstOrDefault();
 
 			if (String.IsNullOrEmpty(user.aspnet_Membership.Email)) return false;
-
+            
 			string siteName = ConfigurationManager.AppSettings["SiteName"];
 
 			string resetEmailMessage =

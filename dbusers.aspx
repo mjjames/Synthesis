@@ -202,7 +202,7 @@
                                         <asp:Literal runat="server" ID="_username" Text='<%# Eval("UserName") %>' />
                                     </td>
                                     <td>
-                                        <asp:DropDownList runat="server" ID="_roles" OnInit="LoadRoleData" OnDataBound="SetRole"
+                                        <asp:DropDownList runat="server" CssClass="autoWidth" ID="_roles" OnInit="LoadRoleData" OnDataBound="SetRole"
                                             Enabled="false" />
                                     </td>
                                     <td>
@@ -224,7 +224,7 @@
                                         <asp:TextBox runat="server" ID="_username" Text='<%# Bind("UserName") %>' />
                                     </td>
                                     <td>
-                                        <asp:DropDownList runat="server" ID="_roles" OnInit="LoadRoleData" OnDataBound="SetRole" />
+                                        <asp:DropDownList CssClass="autoWidth" runat="server" ID="_roles" OnInit="LoadRoleData" OnDataBound="SetRole" />
                                     </td>
                                     <td>
                                         <asp:CheckBox runat="server" ID="_lockedOut" Checked='<%# Eval("LockedOut") %>' />

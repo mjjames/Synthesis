@@ -281,3 +281,7 @@ p.loadingTitle {
         position: fixed;
         width: 625px;
     }
+
+     select.autoWidth{
+        width: auto;
+    }

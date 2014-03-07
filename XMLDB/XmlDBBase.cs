@@ -28,7 +28,6 @@ namespace mjjames.AdminSystem
         protected readonly Logger Logger = new Logger("XMLDB");
         protected int SiteFKey;
         protected bool MultiTenancyTableEnabled = true;
-        protected readonly bool MultiTenancyEnabled;
         //private string _tableName;
         /// <summary>
         /// Provide a ConnectionString for the DataSources
@@ -106,9 +105,6 @@ namespace mjjames.AdminSystem
                 HttpContext.Current.Response.Write(string.Format("<h1>{0}</h1><p>{1}</p><p>{2}</p>", "XML DB Error", e.Message, e.InnerException));
                 HttpContext.Current.Response.End();
             }
-
-            MultiTenancyEnabled = ConfigurationManager.AppSettings["EnableMultiTenancy"] != null && ConfigurationManager.AppSettings["EnableMultiTenancy"].Equals("true", StringComparison.CurrentCultureIgnoreCase);
-
         }
 
         /// <summary>
@@ -559,7 +555,7 @@ namespace mjjames.AdminSystem
                 var filter = "";
                 var bMultiWhere = false;
 
-                if (MultiTenancyEnabled && MultiTenancyTableEnabled)
+                if (MultiTenancyTableEnabled)
                 {
                     filter = " [site_fkey] = " + SiteKey;
                     bMultiWhere = true;

@@ -99,7 +99,7 @@ namespace mjjames.AdminSystem
 			var ourData = new page();
 			if (PKey > 0)
 			{
-				ourData = ourPageDataContext.pages.Single(p => p.page_key == PKey);
+				ourData = ourPageDataContext.pages.Single(p => p.page_key == PKey && p.site_fkey == SiteFKey);
 			}
 			var keyvalues = new List<KeyValueData>();
 			foreach (AdminTab tab in Table.Tabs)
@@ -304,7 +304,7 @@ namespace mjjames.AdminSystem
                     "End AS [title] "+
                     ", CAST([page_key] AS nvarchar) AS [url], '' AS [roles] , '' AS [description] "+
                     "FROM [pages] "+
-                    "WHERE [site_fkey] = 1 "+
+                    "WHERE [site_fkey] = "+ SiteKey +
                     "ORDER BY [parent], [title]";
         }
 	}

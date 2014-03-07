@@ -104,10 +104,7 @@ namespace mjjames.AdminSystem
 
 			if (PKey == 0)
 			{
-				if (MultiTenancyEnabled)
-				{
-					ourData.site_fkey = SiteFKey;
-				}
+    			ourData.site_fkey = SiteFKey;
 				ourPageDataContext.marketingsites.InsertOnSubmit(ourData);
 			}
 

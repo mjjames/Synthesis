@@ -69,6 +69,12 @@
     <Reference Include="Dimebrain.TweetSharp">
       <HintPath>packages\Dimebrain.TweetSharp.1.0.0\lib\net35\Dimebrain.TweetSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\..\mjjames\websites\WiganMethodistCircuit\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\..\mjjames\websites\WiganMethodistCircuit\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="FlickrNet, Version=3.8.0.0, Culture=neutral, PublicKeyToken=2491df59efa5d132, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\FlickrNet.3.8.0\lib\net20\FlickrNet.dll</HintPath>

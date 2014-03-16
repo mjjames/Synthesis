@@ -7,10 +7,9 @@ using mjjames.AdminSystem.dataentities;
 
 namespace mjjames.AdminSystem.dataControls
 {
-	public class CheckboxControl : IDataControl
+	public class CheckboxControl : KeyValuePairControl, IDataControl
 	{
-		public int PKey { get; set; }
-
+	
 		public static object GetDataValue(Control ourControl, Type ourType){
 			CheckBox ourCheck = (CheckBox)ourControl;
 			return ourCheck.Checked;
@@ -25,7 +24,7 @@ namespace mjjames.AdminSystem.dataControls
 			if (PKey > 0 && ourProperty != null)
 			{
 				bool ourValue;
-				string ourValueAsString = ourProperty.GetValue(ourPage, null) != null ? ourProperty.GetValue(ourPage, null).ToString() :  String.Empty;
+                string ourValueAsString = GetStringValue(field, ourPage);
 				bool.TryParse(ourValueAsString, out ourValue);
 				ourCheckBox.Checked = ourValue;
 			}

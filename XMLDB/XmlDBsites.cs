@@ -11,6 +11,8 @@ using mjjames.AdminSystem.DataContexts;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using System.Web;
+using mjjames.AdminSystem.Repositories;
+using System.Collections.Generic;
 
 /// <summary>
 /// Summary description for xmlDB
@@ -69,7 +71,7 @@ namespace mjjames.AdminSystem
 			{
 				ourData = ourPageDataContext.sites.Single(p => p.site_key == PKey);
 			}
-
+            var keyvalues = new List<KeyValueData>();
 			foreach (AdminTab tab in Table.Tabs)
 			{
 				var ourTab = (WebControl)FindControlRecursive(ourSender.Page, tab.ID);
@@ -79,6 +81,20 @@ namespace mjjames.AdminSystem
 					Control ourControl = ourTab.FindControl("control" + field.ID);
 
 					if (ourControl == null) continue;
+
+                    //if we are a key value get our data out and stash it for later
+                    if (field.Attributes.ContainsKey("keyvalue"))
+                    {
+                        keyvalues.Add(new KeyValueData
+                        {
+                            LinkKey = PKey,
+                            Value = GetDataValue(ourControl, field.Type, typeof(String)) as String,
+                            LinkTypeID = "pagelookup",
+                            LookupID = field.Attributes["lookupid"]
+                        });
+                        continue;
+                    }
+
 					PropertyInfo ourProperty = ourData.GetType().GetProperty(field.ID);
 					if (ourProperty != null)
 					{
@@ -109,14 +125,12 @@ namespace mjjames.AdminSystem
 			{
 				ChangeSet ourChanges = ourPageDataContext.GetChangeSet();
 
-				labelStatus.Text = "Nothing to Save";
 				ourPageDataContext.SubmitChanges();
-
+                var updateType = UpdateType.None;
 				if (ourChanges.Inserts.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Inserted", Table.Label);
-
-
+                    updateType = UpdateType.Inserted;
+					
 					PKey = ourData.site_key;
 
 					string strPKeyField = TablePrimaryKeyField;
@@ -193,9 +207,32 @@ namespace mjjames.AdminSystem
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
-					labelStatus.Text = String.Format("{0} Updated", Table.Label);
+                    updateType = UpdateType.Updated;
 				}
+                if (keyvalues.Count > 0)
+                {
+                    var keyValueRepository = new KeyValueRepository();
+                    Logger.LogInformation("Updating Key Values");
 
+                    //TODO: updatekeyvalues should return whether it updated anything so we can still set our status to UpdateType.None if needed
+                    keyValueRepository.UpdateKeyValues(keyvalues);
+                    if (updateType.Equals(UpdateType.None))
+                    {
+                        updateType = UpdateType.Updated;
+                    }
+                }
+                switch (updateType)
+                {
+                    case UpdateType.None:
+                        labelStatus.Text = "Nothing to Save";
+                        break;
+                    case UpdateType.Inserted:
+                        labelStatus.Text = String.Format("{0} Inserted", Table.Label);
+                        break;
+                    case UpdateType.Updated:
+                        labelStatus.Text = String.Format("{0} Updated", Table.Label);
+                        break;
+                }
 				//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
 				if (clearSiteMapCache)
 				{

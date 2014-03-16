@@ -25,22 +25,7 @@ namespace mjjames.AdminSystem.DataControls
 		internal string GetStringValueFromKeyValuePair(string lookupID, object ourPage)
 		{
 			var kvr = new KeyValueRepository();
-			var sourceType = String.Empty;
-			switch (ourPage.GetType().Name)
-			{
-				case "page":
-					sourceType = "pagelookup";
-					break;
-				case "project":
-					sourceType = "projectlookup";
-					break;
-				case "marketingsite":
-					sourceType = "marketingsitelookup";
-					break;
-				case "media":
-					sourceType = "medialookup";
-					break;
-			}
+			var sourceType = string.Format("{0}lookup", ourPage.GetType().Name.ToLower());
 			return kvr.GetKeyValue(lookupID, PKey, sourceType);
 		}
 
@@ -64,7 +49,7 @@ namespace mjjames.AdminSystem.DataControls
 
 			if (type == DataType.String)
 			{
-				return (string)property.GetValue(data, null);
+				return Convert.ToString(property.GetValue(data, null));
 			}
 
 			return (property.GetValue(data, null) as int?).ToString();

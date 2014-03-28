@@ -59,35 +59,6 @@ namespace mjjames.AdminSystem
 			_UserLising.DataBind();
 		}
 
-		protected void LoadRoleData(object sender, EventArgs e)
-		{
-			if (!_UserLising.Visible) return;
-			if (_roles == null)
-			{
-				UserAdministration ua = new UserAdministration();
-				_roles = ua.LoadRoles();
-			}
-			DropDownList ddl = sender as DropDownList;
-			if (ddl == null) return;
-
-			ddl.DataSource = _roles;
-			ddl.DataTextField = "RoleName";
-			ddl.DataValueField = "RoleID";
-		}
-
-		protected void SetRole(object sender, EventArgs e)
-		{
-			DropDownList ddl = sender as DropDownList;
-			if (ddl == null) return;
-			ListViewDataItem lvdl = ddl.Parent as ListViewDataItem;
-			if (lvdl == null) return;
-			ApplicationUser user = lvdl.DataItem as ApplicationUser;
-			if (user == null) return;
-			ListItem item = ddl.Items.OfType<ListItem>().SingleOrDefault(i => i.Value.Equals(user.RoleID.ToString()));
-			if (item == null) return;
-			item.Selected = true;
-		}
-
 		protected void EditDataBind(object sender, ListViewEditEventArgs e)
 		{
 			if (!(e.NewEditIndex >= 0)) return;
@@ -110,7 +81,7 @@ namespace mjjames.AdminSystem
 			Guid userID = (Guid)lv.DataKeys[e.ItemIndex].Value;
 			bool lockedOut = ((CheckBox)lv.EditItem.FindControl("_lockedOut")).Checked;
 			string userName = ((TextBox)lv.EditItem.FindControl("_userName")).Text;
-			Guid roleID = new Guid(((DropDownList)lv.EditItem.FindControl("_roles")).SelectedValue);
+			Guid roleID = new Guid(((HiddenField)lv.EditItem.FindControl("_role")).Value);
 
 			UserAdministration ua = new UserAdministration();
 

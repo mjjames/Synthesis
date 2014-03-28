@@ -179,8 +179,6 @@
                                             <th></th>
                                             <th>UserName
                                             </th>
-                                            <th>Role
-                                            </th>
                                             <th>Locked Out?
                                             </th>
                                             <th>Last Login Date
@@ -200,10 +198,7 @@
                                     </td>
                                     <td>
                                         <asp:Literal runat="server" ID="_username" Text='<%# Eval("UserName") %>' />
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList runat="server" CssClass="autoWidth" ID="_roles" OnInit="LoadRoleData" OnDataBound="SetRole"
-                                            Enabled="false" />
+                                        <asp:HiddenField runat="server" ID="_role" Value='<%# Eval("RoleID") %>' />
                                     </td>
                                     <td>
                                         <asp:CheckBox runat="server" ID="_lockedOut" Checked='<%# Eval("LockedOut") %>' Enabled="false" />
@@ -222,9 +217,7 @@
                                     <td></td>
                                     <td>
                                         <asp:TextBox runat="server" ID="_username" Text='<%# Bind("UserName") %>' />
-                                    </td>
-                                    <td>
-                                        <asp:DropDownList CssClass="autoWidth" runat="server" ID="_roles" OnInit="LoadRoleData" OnDataBound="SetRole" />
+                                        <asp:HiddenField runat="server" ID="_role" Value='<%# Eval("RoleID") %>' />
                                     </td>
                                     <td>
                                         <asp:CheckBox runat="server" ID="_lockedOut" Checked='<%# Eval("LockedOut") %>' />

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="abellandscapes.co.uk-multisite" EntityNamespace="mjjames.AdminSystem.DataEntities" ContextNamespace="mjjames.AdminSystem.DataContexts" Class="AdminDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=abellandscapes.co.uk-multisite;Integrated Security=True" SettingsObjectName="mjjames.AdminSystem.Properties.Settings" SettingsPropertyName="abellandscapes_co_uk_multisiteConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=abellandscapes.co.uk-multisite;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="abellandscapes_co_uk_multisiteConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.vw_aspnet_MembershipUsers" Member="vw_aspnet_MembershipUsers">
     <Type Name="vw_aspnet_MembershipUser">
       <Column Name="UserId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
@@ -302,6 +302,7 @@
       <Column Name="name" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="hostname" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="nvarchar(255)" CanBeNull="true" />
       <Association Name="site_article" Member="articles" ThisKey="site_key" OtherKey="site_fkey" Type="article" />
       <Association Name="site_banner" Member="banners" ThisKey="site_key" OtherKey="site_fkey" Type="banner" />
       <Association Name="site_media" Member="medias" ThisKey="site_key" OtherKey="site_fkey" Type="media" />

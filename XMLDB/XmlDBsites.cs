@@ -89,7 +89,7 @@ namespace mjjames.AdminSystem
                         {
                             LinkKey = PKey,
                             Value = GetDataValue(ourControl, field.Type, typeof(String)) as String,
-                            LinkTypeID = "pagelookup",
+                            LinkTypeID = "sitelookup",
                             LookupID = field.Attributes["lookupid"]
                         });
                         continue;

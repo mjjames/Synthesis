@@ -292,7 +292,7 @@ namespace mjjames.AdminSystem
                     "Case When [active] = 0 then "+
 	                "   [NavTitle] + ' (Inactive)' "+
                     "else " +
-                    "   CASE WHEN  [linkurl] = ''  then "+
+                    "   CASE WHEN  [linkurl] = '' OR [linkurl] IS NULL then "+
                     "   [navtitle] "+
                     "   ELSE "+
                     "	    Case When [linkurlispermenant] = 1 then "+

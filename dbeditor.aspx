@@ -37,10 +37,17 @@
                         Visible="true" CssClass="backListing btn btn-link">
 					 &lt; &lt; Back to Listing
                     </asp:HyperLink>
-                    <asp:HyperLink ID="linkbuttonSubPages" runat="server" Style="position: relative"
-                        ToolTip="Show SubItems" Visible="false" CssClass="subPages pull-right btn btn-link">
+                    <span class="pull-right">
+                        <asp:HyperLink ID="linkbuttonSubPages" runat="server" Style="position: relative"
+                            ToolTip="Show SubItems" Visible="false" CssClass="subPages btn btn-link">
 					Sub Items &gt; &gt;
-                    </asp:HyperLink>
+                        </asp:HyperLink>
+                        |
+                        <asp:HyperLink ID="linkButtonAddSubPage" runat="server" Style="position: relative"
+                            ToolTip="Add SubItem" Visible="false" CssClass="subPages btn btn-link">
+					Add Sub Item &gt; &gt;
+                        </asp:HyperLink>
+                    </span>
                 </div>
                 <div id="pageEditor" class="listingTable">
                     <asp:PlaceHolder ID="placeholderTabs" runat="server" />
@@ -53,7 +60,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("img[rel=popover]").popover({
-                trigger : 'hover'
+                trigger: 'hover'
             });
         });
     </script>

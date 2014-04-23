@@ -96,6 +96,13 @@ namespace mjjames.AdminSystem
                 {
                     linkbuttonSubPages.Visible = true;
                     linkbuttonSubPages.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType, Filter = sID });
+                    linkButtonAddSubPage.Visible = true;
+                    linkButtonAddSubPage.NavigateUrl = GetRouteUrl("DBEditor", new
+                    {
+                        Type = _sType,
+                        Key = 0,
+                        Filter = sID
+                    });
                 }
 
                 int fKey;
@@ -109,7 +116,7 @@ namespace mjjames.AdminSystem
                 {
                     fKey = _xmldb.ForeignKey;
                 }
-                linkbuttonBack.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType, Filter = fKey });
+                linkbuttonBack.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType, Filter = fKey }); 
             }
             else
             {
@@ -156,6 +163,9 @@ namespace mjjames.AdminSystem
             }
             linkbuttonSubPages.Text = String.Format("Child {0}s", sName);
             linkbuttonSubPages.ToolTip = String.Format("Show Child {0}s", sName);
+
+            linkButtonAddSubPage.Text = String.Format("Add Child {0}", sName);
+            linkButtonAddSubPage.ToolTip = String.Format("Add Child {0}", sName);
 
         }
 

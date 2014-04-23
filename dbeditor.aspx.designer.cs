@@ -13,15 +13,6 @@ namespace mjjames.AdminSystem {
     public partial class DBEditor {
         
         /// <summary>
-        /// scriptmanagerAdmin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.ToolkitScriptManager scriptmanagerAdmin;
-        
-        /// <summary>
         /// navigationSiteMap control.
         /// </summary>
         /// <remarks>
@@ -83,6 +74,15 @@ namespace mjjames.AdminSystem {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink linkbuttonSubPages;
+        
+        /// <summary>
+        /// linkButtonAddSubPage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink linkButtonAddSubPage;
         
         /// <summary>
         /// placeholderTabs control.

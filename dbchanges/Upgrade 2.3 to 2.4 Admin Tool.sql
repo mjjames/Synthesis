@@ -1,6 +1,8 @@
 ﻿alter table [dbo].[sites]
 add password nvarchar(255) null
 
+go
+
 insert into [dbo].[lookup]
 ([lookup_id], [title], [type], [value], [active])
 values
@@ -30,3 +32,13 @@ insert into [dbo].[lookup]
 ([lookup_id], [title], [type], [value], [active])
 values
 ('marketingsitelookup','Marketing Site Lookup','lookup_type','marketingsitelookup',1)
+
+go
+
+alter table [dbo].[pages]
+alter column [pageid] nvarchar(255) null
+
+alter table [dbo].[pages]
+alter column [linkurl] nvarchar(255) null
+
+go

@@ -4964,7 +4964,7 @@ namespace mjjames.AdminSystem.DataEntities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pageid", DbType="NVarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_pageid", DbType="NVarChar(255)")]
 		public string pageid
 		{
 			get
@@ -5244,7 +5244,7 @@ namespace mjjames.AdminSystem.DataEntities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_linkurl", DbType="NVarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_linkurl", DbType="NVarChar(255)")]
 		public string linkurl
 		{
 			get

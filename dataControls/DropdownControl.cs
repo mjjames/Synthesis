@@ -47,8 +47,13 @@ namespace mjjames.AdminSystem.dataControls
 
 			datasource.FilterExpression = String.Format("{0} = '{1}'", field.Attributes["lookupfilter"], field.Attributes["lookupfiltervalue"]);
 
+            var valueField = lookupDB.TablePrimaryKeyField;
+            if (field.Attributes.ContainsKey("lookupvaluefield"))
+            {
+                valueField = field.Attributes["lookupvaluefield"];
+            }
 			ourDropDown.DataSource = datasource;
-			ourDropDown.DataValueField = lookupDB.TablePrimaryKeyField;
+			ourDropDown.DataValueField = valueField;
 			ourDropDown.DataTextField = field.Attributes["lookuptextfield"];
 			ourDropDown.DataBind();
 			
@@ -65,7 +70,11 @@ namespace mjjames.AdminSystem.dataControls
 			if (PKey > 0 && (ourProperty != null || field.Attributes.ContainsKey("keyvalue")))
 			{
 				string ourValue;
-				if (field.Attributes.ContainsKey("keyvalue"))
+                var lookupType = "numeric";
+                if(field.Attributes.ContainsKey("lookuptype")){
+                    lookupType = field.Attributes["lookuptype"];
+                }
+				if (field.Attributes.ContainsKey("keyvalue") || lookupType != "numeric")
 				{
 					ourValue = GetStringValue(field, ourPage);
 				}

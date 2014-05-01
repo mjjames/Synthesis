@@ -17,7 +17,7 @@ namespace mjjames.AdminSystem.DataControls
 				return null;
 			}
 
-			return field.Attributes.ContainsKey("lookupid") ?
+			return field.Attributes.ContainsKey("lookupid") && field.Attributes.ContainsKey("keyvalue") ?
 					GetStringValueFromKeyValuePair(field.Attributes["lookupid"], ourPage) :
 					GetStringValueFromProperty(field.ID, DataType.String, ourPage);
 		}

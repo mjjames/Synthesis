@@ -11,7 +11,7 @@
 	<meta content="noindex, nofollow" name="robots" />
 
 	<script src="/admin/fckeditor/editor/dialog/common/fck_dialog_common.js" type="text/javascript"></script>
-	<script type="text/javascript" src="http://jsresources.mjjames.co.uk/jquery/jquery.1.3.2.min.js"></script>
+	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.min.js"></script>
 	<script src="internalurl.js" type="text/javascript"></script>
 
 	<link href="/admin/fckeditor/editor/dialog/common/fck_dialog_common.css" rel="stylesheet"

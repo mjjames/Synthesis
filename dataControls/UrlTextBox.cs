@@ -39,15 +39,15 @@ namespace mjjames.AdminSystem.dataControls
 			var csm = page.ClientScript;
 
 			//we use the ClientScriptManager to ensure it all gets loaded properly
-
+            
 			//has it already been registered?
 			if(!csm.IsClientScriptIncludeRegistered("ZeroClipboard")){
 				//register it
-				csm.RegisterClientScriptInclude("ZeroClipboard", "http://jsresources.mjjames.co.uk/zeroclipboard/ZeroClipboard.js");
+				csm.RegisterClientScriptInclude("ZeroClipboard", page.ResolveUrl("~/javascript/zeroclipboard/ZeroClipboard.js"));
 			}
 
 			if(!csm.IsStartupScriptRegistered("ZeroClipboard-" + field.ID)){
-				var script = "ZeroClipboard.setMoviePath( 'http://jsresources.mjjames.co.uk/zeroclipboard/ZeroClipboard10.swf' );$(function(){ var clip = new ZeroClipboard.Client();clip.setText($('input.URLClipboard').val());clip.glue($('img.URLClipboard')[0], $('img.URLClipboard').parent()[0]); function clipboardComplete(client, text){alert('URL has been copied to your clipboard');}clip.addEventListener( 'onComplete', clipboardComplete );});";
+				var script = "ZeroClipboard.setMoviePath('" + page.ResolveUrl("~/javascript/zeroclipboard/ZeroClipboard10.swf") +"');\r\n$(document).ready(function(){ \r\nvar clip = new ZeroClipboard.Client();\r\nclip.setText($('input.URLClipboard').val());\r\nclip.glue($('img.URLClipboard')[0], $('img.URLClipboard').parent()[0]); \r\nfunction clipboardComplete(client, text){\r\nalert('URL has been copied to your clipboard');}\r\nclip.addEventListener( 'onComplete', clipboardComplete );});";
 				csm.RegisterStartupScript(this.GetType(), "ZeroClipboard-" + field.ID, script, true);
 			}
 			
@@ -94,17 +94,8 @@ namespace mjjames.AdminSystem.dataControls
 			//build a config with any settings that effect the url generation
 			var config = GenerateConfig(ourPage, out siteKey);
 
-			var multiTenancyEnabled = ConfigurationManager.AppSettings["EnableMultiTenancy"] != null ?
-									ConfigurationManager.AppSettings["EnableMultiTenancy"].Equals("true", StringComparison.CurrentCultureIgnoreCase) : false;
 			//create a provider
 			var ssmp = new SqlSiteMapProvider();
-			//if multitenancy enabled we need the site key
-			if (multiTenancyEnabled)
-			{
-				//set our sitekey
-				ssmp.SiteKey = siteKey;
-				ssmp.SiteRootURL = LookupSitePath(siteKey);
-			}
 			//initialize and build the sitemap
 			ssmp.Initialize("Admin URL Lookup SiteMap", config);
 			
@@ -161,6 +152,8 @@ namespace mjjames.AdminSystem.dataControls
 			config.Add("connectionStringName", "ourDatabase");
 			//by default urlReWriting Is Off
 			var urlReWritingEnabled = false;
+            //todo: fix this - sitefkey is always available
+            //todo: remove reliance on config manager
 			siteKey = 0;
 			var urlPrefix = "";
 			switch (dataType)
@@ -170,6 +163,7 @@ namespace mjjames.AdminSystem.dataControls
 					var realPage = data as page;
 					siteKey = realPage.site_fkey.HasValue ? realPage.site_fkey.Value : 0;
 					break;
+                
 				case "project":
 					urlPrefix = ConfigurationManager.AppSettings["urlprefixProject"];
 					var realProject = data as project;

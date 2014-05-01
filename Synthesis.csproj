@@ -295,6 +295,9 @@
     <Content Include="javascript\localstorageservice.js" />
     <Content Include="javascript\mediagallery.js" />
     <Content Include="javascript\storageservices.js" />
+    <Content Include="javascript\zeroclipboard\ZeroClipboard.js" />
+    <Content Include="javascript\zeroclipboard\ZeroClipboard.swf" />
+    <Content Include="javascript\zeroclipboard\ZeroClipboard10.swf" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />

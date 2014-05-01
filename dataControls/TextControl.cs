@@ -121,7 +121,7 @@ namespace mjjames.AdminSystem.dataControls
 				var ourSM = ScriptManager.GetCurrent(page);
 				var csm = page.ClientScript;
 				if(!csm.IsClientScriptIncludeRegistered("jQueryValidation")){
-					csm.RegisterClientScriptInclude("jQueryValidation", "http://ajax.microsoft.com/ajax/jquery.validate/1.7/jquery.validate.min.js");
+                    csm.RegisterClientScriptInclude("jQueryValidation", "//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js");
 				}
 				
 				//if we haven't already on document ready setup form validation

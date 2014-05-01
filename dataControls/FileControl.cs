@@ -148,7 +148,7 @@ namespace mjjames.AdminSystem.dataControls
                 InnerHtml = "<p> No Storage Space Available</p>"
             };
 
-            var fileType = field.Attributes.ContainsKey("mediaType") ? field.Attributes["mediaType"] : "image";
+            var fileType = field.Attributes.ContainsKey("mediatype") ? field.Attributes["mediatype"] : "image";
 
             //init
             csm.RegisterStartupScript(this.GetType(), "storageservice-" + field.ID, String.Format("mjjames.LocalStorageService.Init(\"input[id$='uploaderFile{0}']\", \"input[id$='uploadSubmit{0}']\",\"" + fileType + "\");", field.ID), true);

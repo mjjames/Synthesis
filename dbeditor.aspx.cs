@@ -92,19 +92,6 @@ namespace mjjames.AdminSystem
 
             if (field != null)
             {
-                if (pKey > 0)
-                {
-                    linkbuttonSubPages.Visible = true;
-                    linkbuttonSubPages.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType, Filter = sID });
-                    linkButtonAddSubPage.Visible = true;
-                    linkButtonAddSubPage.NavigateUrl = GetRouteUrl("DBEditor", new
-                    {
-                        Type = _sType,
-                        Key = 0,
-                        Filter = sID
-                    });
-                }
-
                 int fKey;
 
                 if (Page.RouteData.Values.ContainsKey("filter") && Page.RouteData.Values["filter"] != null)
@@ -117,6 +104,29 @@ namespace mjjames.AdminSystem
                     fKey = _xmldb.ForeignKey;
                 }
                 linkbuttonBack.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType, Filter = fKey }); 
+
+                if (pKey > 0)
+                {
+                    linkbuttonSubPages.Visible = true;
+                    linkbuttonSubPages.NavigateUrl = GetRouteUrl("DBListing", new { Type = _sType, Filter = sID });
+                    linkButtonAddSubPage.Visible = true;
+                    linkButtonAddSubPage.NavigateUrl = GetRouteUrl("DBEditor", new
+                    {
+                        Type = _sType,
+                        Key = 0,
+                        Filter = sID
+                    });
+                    
+                    linkButtonAddSibling.Visible = true;
+                    linkButtonAddSibling.NavigateUrl = GetRouteUrl("DBEditor", new
+                    {
+                        Type = _sType,
+                        Key = 0,
+                        Filter = fKey
+                    });
+                }
+
+               
             }
             else
             {
@@ -155,6 +165,9 @@ namespace mjjames.AdminSystem
             {
                 linkbuttonBack.Text = String.Format("View sibling {0}s", sName.ToLower());
                 linkbuttonBack.ToolTip = String.Format("View sibling {0}s, these are {0}s that are at the same navigational level as this {0}", sName.ToLower());
+
+                linkButtonAddSibling.Text = String.Format("Add sibling {0}", sName.ToLower());
+                linkButtonAddSibling.ToolTip = String.Format("Add a new sibling {0}, these are {0}s that are at the same navigational level as this {0}", sName.ToLower());
             }
             else
             {

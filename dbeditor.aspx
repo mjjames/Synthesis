@@ -33,10 +33,17 @@
 				<asp:Label ID="labelStatus" Text="Editing" runat="server" CssClass="status"></asp:Label>
                 </h4>
                 <div class="listingTable">
-                    <asp:HyperLink ID="linkbuttonBack" runat="server" Style="position: relative" ToolTip="Back to Listing"
-                        Visible="true" CssClass="backListing btn btn-link">
+                    <span>
+                        <asp:HyperLink ID="linkbuttonBack" runat="server" Style="position: relative" ToolTip="Back to Listing"
+                            Visible="true" CssClass="backListing btn btn-link">
 					 &lt; &lt; Back to Listing
-                    </asp:HyperLink>
+                        </asp:HyperLink>
+                        |
+                        <asp:HyperLink ID="linkButtonAddSibling" runat="server" Style="position: relative" ToolTip="Add Sibling"
+                            Visible="false" CssClass="backListing btn btn-link">
+					        Add Sibling Ite,
+                        </asp:HyperLink>
+                    </span>
                     <span class="pull-right">
                         <asp:HyperLink ID="linkbuttonSubPages" runat="server" Style="position: relative"
                             ToolTip="Show SubItems" Visible="false" CssClass="subPages btn btn-link">

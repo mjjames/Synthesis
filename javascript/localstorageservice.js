@@ -1,41 +1,38 @@
 ﻿
 var mjjames = mjjames || {};
 mjjames.LocalStorageService = function () {
-    var _fileInputSelector;
-    var _fileSubmitSelector;
-    var _mediaType;
-
-    var FileUploadError = function () {
-        SetUploadStatus("Error");
+    
+    var FileUploadError = function (fileSubmitSelector, fileInputSelector) {
+        SetUploadStatus("Error", fileSubmitSelector, fileInputSelector);
         alert("Sorry there has been a problem uploading your file, please try again");
     };
 
-    var UserLoggedOutError = function () {
-        SetUploadStatus("Error");
+    var UserLoggedOutError = function (fileSubmitSelector, fileInputSelector) {
+        SetUploadStatus("Error", fileSubmitSelector, fileInputSelector);
         alert("Sorry, you are currently logged out of the system, please login and try again");
     };
 
-    var FileUploadComplete = function (fileName) {
-        SetUploadStatus("Complete");
+    var FileUploadComplete = function (fileName, fileInputSelector, fileSubmitSelector) {
+        SetUploadStatus("Complete", fileSubmitSelector, fileInputSelector);
         //stash our file in our hidden input
-        $(_fileInputSelector).closest("div.fileuploadWrapper").find(":hidden").val(fileName);
+        $(fileInputSelector).closest("div.fileuploadWrapper").find(":hidden").val(fileName);
         Debug(fileName);
         Debug(String(fileName).substring(fileName.length - 3));
         switch (String(fileName).toLowerCase().substring(fileName.length - 3)) {
             case "jpg": case "png": case "gif":
-                RenderPreviewImage(fileName);
+                RenderPreviewImage(fileName, fileInputSelector);
                 break;
             case "pdf":
-                RenderPreviewImage("/admin/images/pdfpreview.png");
+                RenderPreviewImage("/admin/images/pdfpreview.png", fileInputSelector);
                 break;
             default:
                 break;
         }
     };
 
-    var RenderPreviewImage = function (fileName) {
+    var RenderPreviewImage = function (fileName, fileInputSelector) {
 
-        var $parent = $(_fileInputSelector).closest("div.fileuploadWrapper");
+        var $parent = $(fileInputSelector).closest("div.fileuploadWrapper");
 
         var $preview = $parent.find("img.previewImg");
         $preview.attr("src", fileName);
@@ -43,41 +40,41 @@ mjjames.LocalStorageService = function () {
 
     };
 
-    var InitUploader = function () {
-        $(_fileSubmitSelector).click(function () {
-            if ($(_fileInputSelector).val().length === 0) {
+    var InitUploader = function (fileInputSelector, fileSubmitSelector, mediaType) {
+        $(fileSubmitSelector).click(function () {
+            if ($(fileInputSelector).val().length === 0) {
                 alert("Please Ensure a File Is Provided Before Clicking Upload");
                 return false;
             }
-            return UploadFile();
+            return UploadFile(mediaType, fileInputSelector, fileSubmitSelector);
         });
     };
 
-    var UploadFile = function () {
-        SetUploadStatus("Uploading");
+    var UploadFile = function (mediaType, fileInputSelector, fileSubmitSelector) {
+        SetUploadStatus("Uploading", fileSubmitSelector, fileInputSelector);
         $("form").ajaxSubmit({
-            url: '/admin/files/' + _mediaType + '/',
+            url: '/admin/files/' + mediaType + '/',
             method: 'post',
             beforeSend: function () {
-                UploadPercent('0%');
+                UploadPercent('0%', fileInputSelector);
             },
             uploadProgress: function (event, position, total, percentComplete) {
-                UploadPercent(percentComplete + '%');
+                UploadPercent(percentComplete + '%', fileInputSelector);
             },
             success: function (response) {
                 //if we dont get any image locations back something has gone wrong its just not thrown a 500 error
                 if (response.length === 0) {
-                    FileUploadError();
+                    FileUploadError(fileSubmitSelector, fileInputSelector);
                     return;
                 }
-                FileUploadComplete(response[0]);
+                FileUploadComplete(response[0],fileInputSelector, fileSubmitSelector);
             },
             error: function (result) {
                 Debug(result.responseText);
                 if (result.status === 401) {
-                    UserLoggedOutError();
+                    UserLoggedOutError(fileSubmitSelector, fileInputSelector);
                 } else {
-                    FileUploadError();
+                    FileUploadError(fileSubmitSelector, fileInputSelector);
                 }
             }
         });
@@ -85,13 +82,13 @@ mjjames.LocalStorageService = function () {
         return false;
     };
 
-    var UploadPercent = function (percent) {
-        var $bar = $(_fileInputSelector).siblings("div.progress").find("div.bar");
+    var UploadPercent = function (percent, fileInputSelector) {
+        var $bar = $(fileInputSelector).siblings("div.progress").find("div.bar");
         $bar.css("width", percent);
     };
 
-    var SetUploadStatus = function (status) {
-        var $button = $(_fileSubmitSelector);
+    var SetUploadStatus = function (status, fileSubmitSelector, fileInputSelector) {
+        var $button = $(fileSubmitSelector);
         switch (status) {
             case "Uploading":
                 $button.val("Uploading...");
@@ -100,20 +97,20 @@ mjjames.LocalStorageService = function () {
             case "Complete":
                 $button.val("Complete");
                 setTimeout(function () {
-                    SetUploadStatus("Reset");
-                    $(_fileInputSelector).val('');
+                    SetUploadStatus("Reset", fileSubmitSelector, fileInputSelector);
+                    $(fileInputSelector).val('');
                 }, 3000);
                 break;
             case "Error":
                 $button.val("Error Occurred");
                 setTimeout(function () {
-                    SetUploadStatus("Reset");
+                    SetUploadStatus("Reset", fileSubmitSelector, fileInputSelector);
                 }, 3000);
                 break;
             case "Reset":
                 $button.val("Upload");
                 $button.removeAttr("disabled");
-                UploadPercent('0%');
+                UploadPercent('0%', fileInputSelector);
                 break;
         }
     };
@@ -126,13 +123,10 @@ mjjames.LocalStorageService = function () {
 
     return {
         Init: function (fileInputSelector, fileSubmitSelector, mediaType) {
-            _fileInputSelector = fileInputSelector;
-            Debug("File Selector: " + _fileInputSelector);
-            _fileSubmitSelector = fileSubmitSelector;
-            Debug("File Submit Selector: " + _fileSubmitSelector);
-            _mediaType = mediaType;
-            Debug("Media Type: " + _mediaType);
-            InitUploader();
+            Debug("File Selector: " + fileInputSelector);
+            Debug("File Submit Selector: " + fileSubmitSelector);
+            Debug("Media Type: " + mediaType);
+            InitUploader(fileInputSelector, fileSubmitSelector, mediaType);
         }
     };
 }();

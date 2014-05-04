@@ -564,7 +564,6 @@ namespace mjjames.AdminSystem
                 if (listfields.Find(f => f.Attributes.ContainsKey("listfilter")) != null)
                 {
 
-
                     foreach (var af in listfields.FindAll(lf => lf.Attributes.ContainsKey("listfilter")))
                     {
                         if (bMultiWhere)
@@ -580,12 +579,17 @@ namespace mjjames.AdminSystem
 
                 if (!String.IsNullOrEmpty(Table.Filter))
                 {
+                    if (bMultiWhere)
+                    {
+                        filter += " AND ";
+                    }
+
                     filter += ApplyDataFilters(Table.Filter);
                 }
 
                 if (!String.IsNullOrEmpty(filter))
                 {
-                    selectCommand += "WHERE " + filter;
+                    selectCommand += " WHERE " + filter;
                 }
 
                 var sortAttributes = Table.Defaults.Where(d => d.Attributes.Any(a => a.Key == "sort"));
@@ -675,8 +679,9 @@ namespace mjjames.AdminSystem
             if (PKey <= 0) return;
             var routePath = System.Web.Routing.RouteTable.Routes.GetVirtualPath(HttpContext.Current.Request.RequestContext, "DBEditor", new System.Web.Routing.RouteValueDictionary
             {
-                {"Type", TableName},
-                {"Key" , PrimaryKey}
+                {"Type", Table.Name},
+                {"Key" , PrimaryKey},
+                {"Filter", Table.ID}
             });
             HttpContext.Current.Response.Redirect(routePath.VirtualPath, true);
         }

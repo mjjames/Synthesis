@@ -46,18 +46,22 @@ namespace mjjames.AdminSystem.dataControls
 			var datasource = lookupDB.DataSource(true, true, false, false, false);
 
 			datasource.FilterExpression = String.Format("{0} = '{1}'", field.Attributes["lookupfilter"], field.Attributes["lookupfiltervalue"]);
+           
+            //override the default sort
+            var preSort = datasource.SelectCommand.Split(new []{"ORDER BY"}, StringSplitOptions.RemoveEmptyEntries)[0];
+            datasource.SelectCommand = preSort + " ORDER BY " + field.Attributes["lookuptextfield"];
 
             var valueField = lookupDB.TablePrimaryKeyField;
             if (field.Attributes.ContainsKey("lookupvaluefield"))
             {
                 valueField = field.Attributes["lookupvaluefield"];
             }
-			ourDropDown.DataSource = datasource;
+			
+            ourDropDown.DataSource = datasource;
 			ourDropDown.DataValueField = valueField;
 			ourDropDown.DataTextField = field.Attributes["lookuptextfield"];
 			ourDropDown.DataBind();
 			
-
 			var ourProperty = ourPage.GetType().GetProperty(field.ID);
 			//if we have a render none attribute add an option into the first position that allows the user to not select anything
 			if (field.Attributes.ContainsKey("rendernone"))

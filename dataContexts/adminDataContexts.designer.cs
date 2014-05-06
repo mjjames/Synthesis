@@ -3344,6 +3344,8 @@ namespace mjjames.AdminSystem.DataEntities
 		
 		private System.Nullable<int> _site_fkey;
 		
+		private System.DateTime _publishedonutc;
+		
 		private EntitySet<media_link> _media_links;
 		
 		private EntityRef<lookup> _lookup;
@@ -3370,6 +3372,8 @@ namespace mjjames.AdminSystem.DataEntities
     partial void OnlinkChanged();
     partial void Onsite_fkeyChanging(System.Nullable<int> value);
     partial void Onsite_fkeyChanged();
+    partial void OnpublishedonutcChanging(System.DateTime value);
+    partial void OnpublishedonutcChanged();
     #endregion
 		
 		public media()
@@ -3504,7 +3508,7 @@ namespace mjjames.AdminSystem.DataEntities
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_link", DbType="NVarChar(MAX)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_link", DbType="NVarChar(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public string link
 		{
 			get
@@ -3544,6 +3548,26 @@ namespace mjjames.AdminSystem.DataEntities
 					this._site_fkey = value;
 					this.SendPropertyChanged("site_fkey");
 					this.Onsite_fkeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_publishedonutc", DbType="Date", UpdateCheck=UpdateCheck.Never)]
+		public System.DateTime publishedonutc
+		{
+			get
+			{
+				return this._publishedonutc;
+			}
+			set
+			{
+				if ((this._publishedonutc != value))
+				{
+					this.OnpublishedonutcChanging(value);
+					this.SendPropertyChanging();
+					this._publishedonutc = value;
+					this.SendPropertyChanged("publishedonutc");
+					this.OnpublishedonutcChanged();
 				}
 			}
 		}

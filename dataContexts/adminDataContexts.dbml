@@ -174,8 +174,9 @@
       <Column Name="filename" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="mediatype_lookup" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="active" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="link" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="link" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" UpdateCheck="Never" />
       <Column Name="site_fkey" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="publishedonutc" Type="System.DateTime" DbType="Date" CanBeNull="false" UpdateCheck="Never" />
       <Association Name="media_media_link" Member="media_links" ThisKey="media_key" OtherKey="media_fkey" Type="media_link" />
       <Association Name="lookup_media" Member="lookup" ThisKey="mediatype_lookup" OtherKey="lookup_key" Type="lookup" IsForeignKey="true" />
       <Association Name="site_media" Member="site" ThisKey="site_fkey" OtherKey="site_key" Type="site" IsForeignKey="true" />

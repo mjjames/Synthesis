@@ -42,3 +42,7 @@ alter table [dbo].[pages]
 alter column [linkurl] nvarchar(255) null
 
 go
+
+alter table [dbo].[media]
+add [publishedonutc] datetime default GetUtcDate() not null
+go

@@ -130,6 +130,10 @@ namespace mjjames.AdminSystem
             if (PKey == 0)
             {
                 ourData.site_fkey = SiteFKey;
+                if (ourData.publishedonutc == DateTime.MinValue)
+                {
+                    ourData.publishedonutc = DateTime.UtcNow;
+                }
                 ourPageDataContext.medias.InsertOnSubmit(ourData);
             }
 

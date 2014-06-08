@@ -46,3 +46,15 @@ go
 alter table [dbo].[media]
 add [publishedonutc] datetime default GetUtcDate() not null
 go
+
+alter table [dbo].[media]
+alter column [title] nvarchar(255) null
+go
+
+alter table [dbo].[articles]
+alter column [title] nvarchar(255) null
+go
+
+alter table [dbo].[pages]
+alter column [title] nvarchar(255) null
+go

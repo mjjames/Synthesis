@@ -25,6 +25,15 @@ mjjames.LocalStorageService = function () {
             case "pdf":
                 RenderPreviewImage("/admin/images/pdfpreview.png", fileInputSelector);
                 break;
+            case "doc": case "ocx":
+                RenderPreviewImage("/admin/images/wordpreview.png", fileInputSelector);
+                break;
+            case "xls": case "lsx": case "lsm":
+                RenderPreviewImage("/admin/images/excelpreview.png", fileInputSelector);
+                break;
+            case "ppt": case "ptx":
+                RenderPreviewImage("/admin/images/powerpointpreview.png", fileInputSelector);
+                break;
             default:
                 break;
         }

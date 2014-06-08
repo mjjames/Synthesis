@@ -266,8 +266,10 @@
     <Content Include="images\arrow_ltr.gif" />
     <Content Include="images\arrow_rtl.gif" />
     <Content Include="images\clipboard.png" />
+    <Content Include="images\excelpreview.png" />
     <Content Include="images\noimage.png" />
     <Content Include="images\pdfpreview.png" />
+    <Content Include="images\powerpointpreview.png" />
     <Content Include="images\smiley\msn\angel_smile.gif" />
     <Content Include="images\smiley\msn\angry_smile.gif" />
     <Content Include="images\smiley\msn\broken_heart.gif" />
@@ -291,6 +293,7 @@
     <Content Include="images\smiley\msn\whatchutalkingabout_smile.gif" />
     <Content Include="images\smiley\msn\wink_smile.gif" />
     <Content Include="images\spacer.gif" />
+    <Content Include="images\wordpreview.png" />
     <Content Include="install\install.aspx" />
     <Content Include="javascript\localstorageservice.js" />
     <Content Include="javascript\mediagallery.js" />

@@ -73,6 +73,11 @@ namespace mjjames.AdminSystem.Controllers
                 {
                     ".doc",
                     ".docx",
+                    ".xls",
+                    ".xlsx",
+                    ".xlsm",
+                    ".ppt",
+                    ".pptx",
                     ".pdf",
                     ".gif",
                     ".jpeg",
@@ -82,7 +87,7 @@ namespace mjjames.AdminSystem.Controllers
                     ".wma",
                     ".m4a"
                 };
-            return UploadFiles(new []{ file }, validContentTypes);
+            return UploadFiles(new[] { file }, validContentTypes);
         }
 
 
@@ -96,6 +101,11 @@ namespace mjjames.AdminSystem.Controllers
                 {
                     ".doc",
                     ".docx",
+                    ".xls",
+                    ".xlsx",
+                    ".xlsm",
+                    ".ppt",
+                    ".pptx",
                     ".pdf"
                 };
             return UploadFiles(files, validContentTypes);

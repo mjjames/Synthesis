@@ -114,6 +114,19 @@ namespace mjjames.AdminSystem.dataControls
             {
                 contentPath = VirtualPathUtility.ToAbsolute("~/images/pdfpreview.png");
             }
+            if (contentPath.EndsWith(".doc") || contentPath.EndsWith(".docx"))
+            {
+                contentPath = VirtualPathUtility.ToAbsolute("~/images/wordpreview.png");
+            }
+            if (contentPath.EndsWith(".xls") || contentPath.EndsWith(".xlsx") || contentPath.EndsWith(".xlsm"))
+            {
+                contentPath = VirtualPathUtility.ToAbsolute("~/images/excelpreview.png");
+            }
+            if (contentPath.EndsWith(".ppt") || contentPath.EndsWith(".pptx"))
+            {
+                contentPath = VirtualPathUtility.ToAbsolute("~/images/powerpointpreview.png");
+            }
+
             imagePreview.ImageUrl = contentPath;
             imagePreview.Attributes.Add("data-content", "<img src='" + contentPath  + "' />");
         }

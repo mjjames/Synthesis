@@ -12,7 +12,6 @@ namespace mjjames.AdminSystem
 	public partial class DBUsers : System.Web.UI.Page
 	{
 		private readonly AdminDataContext _adc =new AdminDataContext(ConfigurationManager.ConnectionStrings["ourDatabase"].ConnectionString);
-		private List<vw_aspnet_Role> _roles;
 
 		protected void Page_Load(object sender, EventArgs e)
 		{

@@ -21,7 +21,10 @@ namespace mjjames.AdminSystem.usercontrols
 			//no point working if we aren't logged in
 			if (!Page.User.Identity.IsAuthenticated) return;
 
-			var userSites = new SiteUsersRepository().GetAcitveSitesForUser(Page.User.Identity.Name).ToList();
+			var userSites = new SiteUsersRepository()
+				.GetAcitveSitesForUser(Page.User.Identity.Name)
+				.Distinct()
+				.ToList();
 
 			//if the user only has 0 or 1 sites they don't get a choice in choosing another
 			if (userSites.Count <= 1)
@@ -37,7 +40,7 @@ namespace mjjames.AdminSystem.usercontrols
 
 			//if we have sites then hook them up
 			ddlSites.DataSource = userSites;
-			ddlSites.DataTextField = "hostname";
+			ddlSites.DataTextField = "name";
 			ddlSites.DataValueField = "site_key";
 			ddlSites.DataBind();
 

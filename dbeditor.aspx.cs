@@ -8,6 +8,7 @@ using mjjames.core;
 using System.Collections.Specialized;
 using System.Web.UI.WebControls;
 using mjjames.AdminSystem.dataentities;
+using System.Web;
 
 namespace mjjames.AdminSystem
 {
@@ -229,8 +230,9 @@ namespace mjjames.AdminSystem
                                     {
                                         SiteKey = int.Parse(Session["userSiteKey"].ToString())
                                     };
-
                     cssmp.Initialize("Admin Navigation SiteMap", config);
+                    cssmp.ParentProvider = SiteMap.Provider;
+
                     navigationSiteMap.Provider = cssmp;
 
                     Page.Trace.Write("CUSTOM SITEMAP QUERY: " + strQuery);

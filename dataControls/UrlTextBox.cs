@@ -39,7 +39,7 @@ namespace mjjames.AdminSystem.dataControls
 			var csm = page.ClientScript;
 
 			//we use the ClientScriptManager to ensure it all gets loaded properly
-            
+			
 			//has it already been registered?
 			if(!csm.IsClientScriptIncludeRegistered("ZeroClipboard")){
 				//register it
@@ -95,7 +95,11 @@ namespace mjjames.AdminSystem.dataControls
 			var config = GenerateConfig(ourPage, out siteKey);
 
 			//create a provider
-			var ssmp = new SqlSiteMapProvider();
+			var ssmp = new SqlSiteMapProvider
+			{
+				SiteKey = siteKey,
+				SiteRootURL = LookupSitePath(siteKey)
+			};
 			//initialize and build the sitemap
 			ssmp.Initialize("Admin URL Lookup SiteMap", config);
 			
@@ -152,8 +156,8 @@ namespace mjjames.AdminSystem.dataControls
 			config.Add("connectionStringName", "ourDatabase");
 			//by default urlReWriting Is Off
 			var urlReWritingEnabled = false;
-            //todo: fix this - sitefkey is always available
-            //todo: remove reliance on config manager
+			//todo: fix this - sitefkey is always available
+			//todo: remove reliance on config manager
 			siteKey = 0;
 			var urlPrefix = "";
 			switch (dataType)
@@ -163,7 +167,7 @@ namespace mjjames.AdminSystem.dataControls
 					var realPage = data as page;
 					siteKey = realPage.site_fkey.HasValue ? realPage.site_fkey.Value : 0;
 					break;
-                
+				
 				case "project":
 					urlPrefix = ConfigurationManager.AppSettings["urlprefixProject"];
 					var realProject = data as project;

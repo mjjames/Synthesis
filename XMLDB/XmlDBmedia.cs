@@ -12,6 +12,7 @@ using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
 using System.Collections.Generic;
 using mjjames.AdminSystem.Repositories;
+using mjjames.AdminSystem.Services;
 
 /// <summary>
 /// Summary description for xmlDB
@@ -150,7 +151,10 @@ namespace mjjames.AdminSystem
                 if (ourChanges.Inserts.Count > 0)
                 {
                     updateType = UpdateType.Inserted;
-
+                    AuditLogService.LogItem("Media",
+                       Models.AuditEvent.Created,
+                       HttpContext.Current.User.Identity.Name,
+                       ourData.title);
 
                     PKey = ourData.media_key;
                     //when we do an insert update any keyvalues we have to have the correct primary key
@@ -181,6 +185,10 @@ namespace mjjames.AdminSystem
                 if (ourChanges.Updates.Count > 0)
                 {
                     updateType = UpdateType.Updated;
+                    AuditLogService.LogItem("Media",
+                       Models.AuditEvent.Updated,
+                       HttpContext.Current.User.Identity.Name,
+                       ourData.title);
                 }
                 if (keyvalues.Count > 0)
                 {

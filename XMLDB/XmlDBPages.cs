@@ -11,6 +11,7 @@ using mjjames.AdminSystem.DataContexts;
 using System.Web.Configuration;
 using System.Collections.Generic;
 using mjjames.AdminSystem.Repositories;
+using mjjames.AdminSystem.Services;
 
 namespace mjjames.AdminSystem
 {
@@ -176,6 +177,10 @@ namespace mjjames.AdminSystem
 				if (ourChanges.Inserts.Count > 0)
 				{
 					updateType = UpdateType.Inserted;
+                    AuditLogService.LogItem("Pages",
+                       Models.AuditEvent.Created,
+                       HttpContext.Current.User.Identity.Name,
+                       ourData.navtitle);
 
 					PKey = ourData.page_key;
 					if (ourData.page_fkey != null) FKey = (int)ourData.page_fkey;
@@ -202,6 +207,10 @@ namespace mjjames.AdminSystem
 				}
 				if (ourChanges.Updates.Count > 0)
 				{
+                    AuditLogService.LogItem("Pages",
+                      Models.AuditEvent.Updated,
+                      HttpContext.Current.User.Identity.Name,
+                      ourData.navtitle);
 					updateType = UpdateType.Updated;
 				}
 				if (keyvalues.Count > 0)
@@ -242,7 +251,7 @@ namespace mjjames.AdminSystem
                     throw;
                 }
 #endif
-			}
+			    }
 			//following an insert or an update to particular field we must reset a site's sitemap cache to allow our changes to pull through
 			if (clearSiteMapCache)
 			{

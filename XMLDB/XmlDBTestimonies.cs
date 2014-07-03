@@ -9,6 +9,8 @@ using AjaxControlToolkit;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.DataContexts;
+using mjjames.AdminSystem.Services;
+using System.Web;
 
 /// <summary>
 /// Summary description for xmlDB
@@ -102,7 +104,10 @@ namespace mjjames.AdminSystem
                 if (ourChanges.Inserts.Count > 0)
                 {
                     labelStatus.Text = String.Format("{0} Inserted", Table.Label);
-
+                    AuditLogService.LogItem("Testimonies",
+                     Models.AuditEvent.Created,
+                     HttpContext.Current.User.Identity.Name,
+                     ourData.title);
 
                     PKey = ourData.testimony_key;
 
@@ -126,6 +131,10 @@ namespace mjjames.AdminSystem
                 if (ourChanges.Updates.Count > 0)
                 {
                     labelStatus.Text = String.Format("{0} Updated", Table.Label);
+                    AuditLogService.LogItem("Testimonies",
+                   Models.AuditEvent.Updated,
+                   HttpContext.Current.User.Identity.Name,
+                   ourData.title);
                 }
 
 

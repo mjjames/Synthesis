@@ -11,6 +11,7 @@ using AjaxControlToolkit;
 using System.Web.UI;
 using System.Reflection;
 using System.Data.Linq;
+using mjjames.AdminSystem.Services;
 
 namespace mjjames.AdminSystem
 {
@@ -104,7 +105,10 @@ namespace mjjames.AdminSystem
                 if (ourChanges.Inserts.Count > 0)
                 {
                     labelStatus.Text = String.Format("{0} Inserted", Table.Label);
-
+                    AuditLogService.LogItem("Lookups",
+                        Models.AuditEvent.Created,
+                        HttpContext.Current.User.Identity.Name,
+                        ourData.title);
 
                     PKey = ourData.lookup_key;
 
@@ -130,6 +134,10 @@ namespace mjjames.AdminSystem
                 if (ourChanges.Updates.Count > 0)
                 {
                     labelStatus.Text = String.Format("{0} Updated", Table.Label);
+                    AuditLogService.LogItem("Lookups",
+                        Models.AuditEvent.Updated,
+                        HttpContext.Current.User.Identity.Name,
+                        ourData.title);
                 }
             }
             catch (Exception ex)

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Class="AuditLogDataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="AuditLogItem" Member="AuditLogItems">
+    <Type Name="AuditLogItem">
+      <Column Name="timestamp" Member="Timestamp" Type="System.DateTimeOffset" DbType="datetimeoffset" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="User" Type="System.String" DbType="nvarchar(254)" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="area" Member="Area" Type="System.String" DbType="nvarchar(512)" CanBeNull="false" />
+      <Column Name="details" Member="Details" Type="System.String" DbType="nvarchar(max)" CanBeNull="false" />
+      <Column Name="eventtype" Member="EventType" Type="System.String" DbType="nvarchar(50)" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

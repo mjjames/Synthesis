@@ -72,6 +72,9 @@
     <Reference Include="Elmah">
       <HintPath>..\..\mjjames\websites\WiganMethodistCircuit\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah.Io">
+      <HintPath>..\..\MJJames\WebSites\bsipc\BSIPC\packages\elmah.io.core.1.0.0.38\lib\net40\Elmah.Io.dll</HintPath>
+    </Reference>
     <Reference Include="Elmah.Mvc">
       <HintPath>..\..\mjjames\websites\WiganMethodistCircuit\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
     </Reference>
@@ -237,6 +240,7 @@
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\site.css" />
+    <Content Include="dbchanges\audit log dbchanges.sql" />
     <Content Include="dbchanges\dbchanges.sql" />
     <Content Include="dbchanges\generate-v2-full-database.sql" />
     <Content Include="dbchanges\Upgrade 1.7 to 1.8.1 Admin Tool.sql" />
@@ -333,6 +337,11 @@
     <Compile Include="classes\NavigationSettings.cs" />
     <Compile Include="classes\MediaInfoData.cs" />
     <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="dataContexts\AuditLogDataClasses.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AuditLogDataClasses.dbml</DependentUpon>
+    </Compile>
     <Compile Include="DataControls\MediaControl.cs" />
     <Compile Include="DataControls\SiteusersControl.cs" />
     <Compile Include="DataControls\UrlTextBox.cs" />
@@ -356,6 +365,7 @@
     <Compile Include="install\install.aspx.designer.cs">
       <DependentUpon>install.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuditLogItem.cs" />
     <Compile Include="Models\Rotation.cs" />
     <Compile Include="Repositories\KeyValueRepository.cs" />
     <Compile Include="classes\SQLHelpers.cs" />
@@ -466,6 +476,7 @@
     </Compile>
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\RecycleRepository.cs" />
+    <Compile Include="Services\AuditLogService.cs" />
     <Compile Include="subscriptionmanagement.aspx.cs">
       <DependentUpon>subscriptionmanagement.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -566,6 +577,11 @@
     </None>
     <Content Include="FlickrNet.chm" />
     <Content Include="dbchanges\Upgrade 2.2 to 2.3 Admin Tool.sql" />
+    <Content Include="dataContexts\AuditLogDataClasses.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>AuditLogDataClasses.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="help\admintool.pdf" />
     <Content Include="fckplugins\OnlineVideo\fckplugin.js" />
     <Content Include="fckplugins\OnlineVideo\onlinevideo.gif" />
@@ -603,6 +619,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dataContexts\AuditLogDataClasses.dbml.layout">
+      <DependentUpon>AuditLogDataClasses.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

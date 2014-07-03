@@ -1,4 +1,5 @@
-﻿using System;
+﻿using mjjames.AdminSystem.Services;
+using System;
 using System.Web;
 using System.Web.Security;
 
@@ -44,7 +45,7 @@ namespace mjjames.AdminSystem.authentication
 				var ck = new HttpCookie(FormsAuthentication.FormsCookieName, cookiestr) {Path = FormsAuthentication.FormsCookiePath};
 
 			    Response.Cookies.Add(ck);
-			
+                AuditLogService.LogItem("Authentication", Models.AuditEvent.Login, inputUserName.Value, "");
 				string strRedirect = returnUrl.Value ?? "~/";
                 Response.Redirect(strRedirect, true);
 			}

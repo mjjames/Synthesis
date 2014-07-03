@@ -8,6 +8,8 @@ using mjjames.AdminSystem.DataContexts;
 using mjjames.AdminSystem.DataEntities;
 using mjjames.AdminSystem.Repositories;
 using mjjames.AdminSystem.classes;
+using mjjames.AdminSystem.Services;
+using System.Web;
 
 namespace mjjames.AdminSystem
 {
@@ -120,7 +122,10 @@ namespace mjjames.AdminSystem
 				if (ourChanges.Inserts.Count > 0)
 				{
 					updateType = UpdateType.Inserted;
-
+                    AuditLogService.LogItem("MarketingSites",
+                        Models.AuditEvent.Created,
+                        HttpContext.Current.User.Identity.Name,
+                        ourData.name);
 
 					PKey = ourData.marketingsite_key;
 					//when we do an insert update any keyvalues we have to have the correct primary key
@@ -155,6 +160,10 @@ namespace mjjames.AdminSystem
 				if (ourChanges.Updates.Count > 0)
 				{
 					updateType = UpdateType.Updated;
+                    AuditLogService.LogItem("MarketingSites",
+                        Models.AuditEvent.Updated,
+                        HttpContext.Current.User.Identity.Name,
+                        ourData.name);
 				}
 
 				if (keyvalues.Count > 0)

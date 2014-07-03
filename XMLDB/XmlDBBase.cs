@@ -12,6 +12,7 @@ using AjaxControlToolkit;
 using mjjames.AdminSystem.classes;
 using mjjames.AdminSystem.dataentities;
 using mjjames.AdminSystem.DataContexts;
+using mjjames.AdminSystem.Services;
 
 namespace mjjames.AdminSystem
 {
@@ -728,6 +729,10 @@ namespace mjjames.AdminSystem
                 Logger.LogDebug("Deleting Item: " + strDelete);
 
                 ourPageDataContext.ExecuteQuery<object>(strDelete);
+                AuditLogService.LogItem(TableName,
+                    Models.AuditEvent.Deleted,
+                    HttpContext.Current.User.Identity.Name,
+                    string.Format("Deleted {0} with key {1}", TableLabel, PKey));
 
                 labelStatus.Text = String.Format("{0} Removed", Table.ID);
                 // if we delete a page we need to reset the sitemap
